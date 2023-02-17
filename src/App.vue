@@ -1,10 +1,36 @@
 <template>
+  <!--导航栏-->
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to='/home'>首页</router-link>
+    <router-link to='/about'>关于</router-link>
   </nav>
-  <router-view/>
+  <!--路由-->
+  <router-view />
 </template>
+
+<script>
+import { reactive, toRefs } from 'vue'
+// import { reactive, toRefs, computed } from 'vue'
+// import { useRoute } from 'vue-router'
+export default {
+  components: {},
+  props: {},
+  emits: [],
+
+  setup () {
+    const state = reactive({})
+
+    return {
+      ...toRefs(state)
+      // routes
+    }
+  },
+
+  data () {
+    return {}
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
