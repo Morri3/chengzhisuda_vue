@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <!--导航栏-->
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <!--路由-->
-    <router-view/>
-  </div>
+  <!--导航栏-->
+  <nav>
+    <router-link to='/home'>首页</router-link>
+    <router-link to='/about'>关于</router-link>
+  </nav>
+  <!--路由-->
+  <router-view />
 </template>
 
 <script>
@@ -15,16 +13,12 @@ import { reactive, toRefs } from 'vue'
 // import { reactive, toRefs, computed } from 'vue'
 // import { useRoute } from 'vue-router'
 export default {
-  components: {
-  },
-  props: {
-  },
-  emits: [
-  ],
+  components: {},
+  props: {},
+  emits: [],
 
   setup () {
-    const state = reactive({
-    })
+    const state = reactive({})
 
     return {
       ...toRefs(state)
@@ -33,14 +27,12 @@ export default {
   },
 
   data () {
-    return {
-
-    }
+    return {}
   }
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
