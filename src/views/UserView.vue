@@ -1,6 +1,6 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="user">
+    <h1>哈哈哈哈</h1>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ import { reactive, toRefs, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default {
-  name: 'AboutView',
+  name: 'HomeView',
   components: {
   },
   setup () {

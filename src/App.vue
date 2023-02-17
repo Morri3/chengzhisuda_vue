@@ -3,26 +3,38 @@
   <nav>
     <router-link to='/home'>首页</router-link>
     <router-link to='/about'>关于</router-link>
+    <router-link to='/user'>用户</router-link>
   </nav>
+  <!--面包屑组件-->
+  <BreadConfig></BreadConfig>
   <!--路由-->
   <router-view />
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
-// import { reactive, toRefs, computed } from 'vue'
+import { reactive, toRefs, onMounted } from 'vue'
 // import { useRoute } from 'vue-router'
+import BreadConfig from '@/components/BreadConfig.vue'
+
 export default {
-  components: {},
+  components: {
+    BreadConfig
+  },
   props: {},
   emits: [],
 
   setup () {
-    const state = reactive({})
+    // const route = useRoute() // 使用路由
+    const state = reactive({
+
+    })
+
+    onMounted(() => {
+      // console.log(route.matched)
+    })
 
     return {
       ...toRefs(state)
-      // routes
     }
   },
 
