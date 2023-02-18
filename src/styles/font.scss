@@ -1,111 +1,48 @@
 // 阿里妈妈数黑体
 @font-face {
-  font-family: "阿里妈妈数黑体 Bold";font-weight: 700;src: url("./bYT-A3qJz9NtXZgq_hIHt.woff2") format("woff2"),
-  url("./bYT-A3qJz9NtXZgq_hIHt.woff") format("woff");
+  font-family: "Alimama_ShuHeiTi_Bold";font-weight: 700;src: url("/public/font/Alimama_ShuHeiTi_Bold.woff2") format("woff2"),
+  url("/public/font/Alimama_ShuHeiTi_Bold.woff") format("woff");
   font-display: swap;
-  // font-family: '阿里妈妈数黑体 Bold';font-weight: 700;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/VLhrs7u1AbkxTrQr3lPBt.woff2") format("woff2"),
-  // url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/kF2Qg4rgPlOFkDnZJ3dOE.woff") format("woff");
-  // font-display: swap;
 }
 // 阿里妈妈东方大楷
 @font-face {
-  font-family: '阿里妈妈东方大楷 Regular';font-weight: 400;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/1kn5AKwmQC1gwftx7lcov.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/GJeD8fQW0OEoy2aRMC3L2.woff") format("woff");
+  font-family: "Alimama_DongFangDaKai_Regular";font-weight: 400;src: url("/public/font/Alimama_DongFangDaKai_Regular.woff2") format("woff2"),
+  url("/public/font/Alimama_DongFangDaKai_Regular.woff") format("woff");
   font-display: swap;
 }
 // 站酷高端黑
 @font-face {
-  font-family: '站酷高端黑 Regular';font-weight: 400;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/Ig5X6sdKuaMjBScVDJfta.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/z4ncyjTZ8f7NicSTNSNe_.woff") format("woff");
+  font-family: "zcool-gdh_Regular";font-weight: 400;src: url("/public/font/zcool-gdh_Regular.ttf");
   font-display: swap;
 }
-// 仓耳渔阳体 W05
+// 仓耳渔阳体 W01
 @font-face {
-  font-family: '仓耳渔阳体 W05';font-weight: 400;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/ZUI8xvCPfu4ZMro3eiCIL.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/iCFCe8i2AwvEQUNp9ILPi.woff") format("woff");
+  font-family: "TsangerYuYangT_W01_W01";font-weight: 400;src: url("/public/font/TsangerYuYangT_W01_W01.ttf");
   font-display: swap;
 }
-// 仓耳渔阳体 W04
+// 仓耳渔阳体 W02
 @font-face {
-  font-family: '仓耳渔阳体 W04';font-weight: 400;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/VZ9ptpShcXGOMm6Ym2uI4.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/Px98sai7OnkKFH5wUaqo5.woff") format("woff");
+  font-family: "TsangerYuYangT_W02_W02";font-weight: 400;src: url("/public/font/TsangerYuYangT_W02_W02.ttf");
   font-display: swap;
 }
 // 仓耳渔阳体 W03
 @font-face {
-  font-family: '仓耳渔阳体 W03';font-weight: 400;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/qnswdpwq158up7N9HGViS.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/LfjD1RXODRXzit8PnnLJO.woff") format("woff");
+  font-family: "TsangerYuYangT_W02_W02";font-weight: 400;src: url("/public/font/TsangerYuYangT_W03_W03.ttf");
   font-display: swap;
 }
-// 思源黑体 Extralight
+// 仓耳渔阳体 W04
 @font-face {
-  font-family: '思源黑体 ExtraLight';font-weight: 250;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/z5mgT4-mbyJUZmSdfBDa_.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/Xya-hVBWrf5dDGxUvg3PJ.woff") format("woff");
+  font-family: "TsangerYuYangT_W02_W02";font-weight: 400;src: url("/public/font/TsangerYuYangT_W04_W04.ttf");
   font-display: swap;
 }
-// 思源黑体 Light
+// 仓耳渔阳体 W05
 @font-face {
-  font-family: '思源黑体 Light';font-weight: 300;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/Tb96Uk_V1PpQJ9_mV-udb.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/c26sS85a3_lsf2gdmKeVX.woff") format("woff");
+  font-family: "TsangerYuYangT_W02_W02";font-weight: 400;src: url("/public/font/TsangerYuYangT_W05_W05.ttf");
   font-display: swap;
 }
-// 思源黑体 Normal
+// 钉钉进步体
 @font-face {
-  font-family: '思源黑体 Normal';font-weight: 350;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/RVm_tO40dv8NY0HTxWzKL.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/iWd_zzNRKsqnUm1VCxTVa.woff") format("woff");
-  font-display: swap;
-}
-// 思源黑体 Regular
-@font-face {
-  font-family: '思源黑体 Regular';font-weight: 400;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/tg2wmTfDPTK06HGdU5vx2.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/SCBlCBSUNp4KfgvoL8XcS.woff") format("woff");
-  font-display: swap;
-}
-// 思源黑体 Medium
-@font-face {
-  font-family: '思源黑体 Medium';font-weight: 500;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/WSQs9dV-zlxkM0f2CZBcO.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/gRUpT5tLAX31vVz07PnMf.woff") format("woff");
-  font-display: swap;
-}
-// 思源黑体 Bold
-@font-face {
-  font-family: '思源黑体 Bold';font-weight: 700;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/MV4Ph_-x6cDy3Ad7qai9x.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/FyqLrB69v4sQpKXzPq5Dw.woff") format("woff");
-  font-display: swap;
-}
-// 思源宋体 ExtraLight
-@font-face {
-  font-family: '思源宋体 ExtraLight';font-weight: 250;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/WMrmrXjFZaldrR24OuGOx.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/fYGlkcH456EBpzul6MYgC.woff") format("woff");
-  font-display: swap;
-}
-// 思源宋体 Light
-@font-face {
-  font-family: '思源宋体 Light';font-weight: 300;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/rEizxHAcv-40USD8nlOf7.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/KGmULRMQtF4a_qsOYbXaH.woff") format("woff");
-  font-display: swap;
-}
-// 思源宋体 Regular
-@font-face {
-  font-family: '思源宋体 Regular';font-weight: 400;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/5kFoXSCIDS0DJXDNWbgtt.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/BK_cz71lSovE_JlowWpmH.woff") format("woff");
-  font-display: swap;
-}
-// 思源宋体 Medium
-@font-face {
-  font-family: '思源宋体 Medium';font-weight: 500;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/h8dOJpRKXCmgG-c8fjQ6y.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/EwglX3t2OJJPOLqFQWgOz.woff") format("woff");
-  font-display: swap;
-}
-// 思源宋体 SemiBold
-@font-face {
-  font-family: '思源宋体 SemiBold';font-weight: 600;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/xCvB0DPeN15bJ-FxXF_gU.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/p-KrbvUYvo4t-LJNrpyaC.woff") format("woff");
-  font-display: swap;
-}
-// 思源宋体 Bold
-@font-face {
-  font-family: '思源宋体 Bold';font-weight: 700;src: url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/Z31H2MtGgkXVGra58qe_O.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/DKfIZXfemZDW/eK4EWolZ24AQFP3Q7hye5.woff") format("woff");
+  font-family: "DingTalk_JinBuTi_Regular";font-weight: 400;src: url("/public/font/DingTalk_JinBuTi_Regular.woff2") format("woff2"),
+  url("/public/font/DingTalk_JinBuTi_Regular.woff") format("woff");
   font-display: swap;
 }

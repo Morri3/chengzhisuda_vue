@@ -51,7 +51,7 @@ export default {
   left: 10px;
 
   .breadcrumb-item{
-    font-family: '阿里妈妈数黑体 Bold';
+    font-family: 'DingTalk_JinBuTi_Regular';
     font-size: 16px;
   }
 }
