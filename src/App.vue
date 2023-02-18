@@ -4,6 +4,7 @@
     <router-link to='/home'>首页</router-link>
     <router-link to='/about'>关于</router-link>
     <router-link to='/user'>用户</router-link>
+    <router-link to='/user/signup'>报名</router-link>
   </nav>
   <!--面包屑组件-->
   <BreadConfig></BreadConfig>

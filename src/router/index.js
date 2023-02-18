@@ -10,7 +10,8 @@ const routes = [
         name: 'home',
         component: () => import('../views/HomeView.vue'),
         meta: {
-          title: '首页'
+          title: '首页',
+          level: 1
         }
       },
       {
@@ -18,7 +19,8 @@ const routes = [
         name: 'about',
         component: () => import('../views/AboutView.vue'),
         meta: {
-          title: '关于'
+          title: '关于',
+          level: 1
         }
       },
       {
@@ -26,8 +28,20 @@ const routes = [
         name: 'user',
         component: () => import('../views/UserView.vue'),
         meta: {
-          title: '用户'
-        }
+          title: '用户',
+          level: 1
+        },
+        children: [
+          {
+            path: '/user/signup',
+            name: 'signup',
+            component: () => import('../views/SignupView.vue'),
+            meta: {
+              title: '报名',
+              level: 2
+            }
+          }
+        ]
       }
     ]
   }

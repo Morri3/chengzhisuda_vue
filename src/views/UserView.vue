@@ -6,20 +6,20 @@
 
 <script>
 import { reactive, toRefs, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+// import { useRoute } from 'vue-router'
 
 export default {
   name: 'HomeView',
   components: {
   },
   setup () {
-    const route = useRoute() // 使用路由
+    // const route = useRoute() // 使用路由
     const state = reactive({
 
     })
 
     onMounted(() => {
-      console.log(route.matched)
+      // console.log(route.matched)
     })
 
     const handleClick = () => {
