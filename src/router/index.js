@@ -3,46 +3,46 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/login',
     children: [
       {
-        path: '/home',
-        name: 'home',
-        component: () => import('../views/HomeView.vue'),
+        path: '/login',
+        name: 'login',
+        component: () => import('../views/LogAndReg/LoginView.vue'),
         meta: {
-          title: '首页',
+          title: '登录页',
           level: 1
         }
-      },
-      {
-        path: '/about',
-        name: 'about',
-        component: () => import('../views/AboutView.vue'),
-        meta: {
-          title: '关于',
-          level: 1
-        }
-      },
-      {
-        path: '/user',
-        name: 'user',
-        component: () => import('../views/UserView.vue'),
-        meta: {
-          title: '用户',
-          level: 1
-        },
-        children: [
-          {
-            path: '/user/signup',
-            name: 'signup',
-            component: () => import('../views/SignupView.vue'),
-            meta: {
-              title: '报名',
-              level: 2
-            }
-          }
-        ]
       }
+      // {
+      //   path: '/reg',
+      //   name: 'reg',
+      //   component: () => import('../views/AboutView.vue'),
+      //   meta: {
+      //     title: '注册页',
+      //     level: 1
+      //   }
+      // },
+      // {
+      //   path: '/user',
+      //   name: 'user',
+      //   component: () => import('../views/UserView.vue'),
+      //   meta: {
+      //     title: '用户',
+      //     level: 1
+      //   },
+      //   children: [
+      //     {
+      //       path: '/user/signup',
+      //       name: 'signup',
+      //       component: () => import('../views/SignupView.vue'),
+      //       meta: {
+      //         title: '报名',
+      //         level: 2
+      //       }
+      //     }
+      //   ]
+      // }
     ]
   }
 ]

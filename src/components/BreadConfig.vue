@@ -47,7 +47,7 @@ export default {
   width:auto;
   height:auto;
   position:fixed;
-  top: 10px;
+  top: 70px;
   left: 10px;
 
   .breadcrumb-item{
