@@ -1,57 +1,67 @@
 <template>
-  <!--导航栏-->
-  <!-- <nav>
-    <router-link to='/home'>首页</router-link>
-    <router-link to='/about'>关于</router-link>
-    <router-link to='/user'>用户</router-link>
-    <router-link to='/user/signup'>报名</router-link>
-  </nav> -->
-  <!--顶部状态栏-->
-  <div class="top-box">
-    <div class="title">城职速达</div>
-    <div class="log-box">
-      <img class="icon" src="" alt=""/>
+  <div>
+    <!--顶部状态栏-->
+    <div class="top-box">
+      <div class="title">城职速达</div>
+      <div class="log-box">
+        <img class="icon" src="" alt=""/>
 
-      <el-dropdown class="hover">
-        <span class="status">未登录</span>
-        <template #dropdown>
-          <el-dropdown-menu class="menu">
-            <el-dropdown-item @click="login()" class="btn">登录</el-dropdown-item>
-            <el-dropdown-item @click="reg()">注册</el-dropdown-item>
-            <el-dropdown-item @click="cancel()">登出</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+        <el-dropdown class="hover">
+          <span class="status">未登录</span>
+          <template #dropdown>
+            <el-dropdown-menu class="menu">
+              <el-dropdown-item @click="login()" class="btn">登录</el-dropdown-item>
+              <el-dropdown-item @click="reg()" class="btn">注册</el-dropdown-item>
+              <el-dropdown-item @click="cancel()" v-if="isLogin === true" class="btn">登出</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
     </div>
-    <div class="drop-"></div>
+
+    <!--正文部分路由-->
+    <div class="outer-box">
+      <router-view></router-view>
+    </div>
+
+    <!--面包屑组件-->
+    <BreadConfig v-show="routes"/>
   </div>
-  <!--登录页-->
-  <div class="outer-box">
-    <LoginView></LoginView>
-  </div>
-  <!--面包屑组件-->
-  <BreadConfig></BreadConfig>
-  <!--路由-->
-  <!-- <router-view /> -->
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from 'vue'
-// import { useRoute } from 'vue-router'
+import { reactive, toRefs, onMounted, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import BreadConfig from '@/components/BreadConfig.vue'
-import LoginView from '@/views/LogAndReg/LoginView.vue'
 
 export default {
   components: {
-    BreadConfig, LoginView
+    BreadConfig
   },
   props: {},
   emits: [],
 
   setup () {
-    // const route = useRoute() // 使用路由
+    const router = useRouter() // 使用路由
+    const route = useRoute() // 使用路由
     const state = reactive({
+      isLogin: true
+    })
 
+    // const key = computed(() => {
+    //   return route.path + Math.random()
+    // })
+
+    // 是否显示面包屑
+    const routes = computed(() => {
+      let res = null
+      if (route.path === '/home' || route.path === '/login' || route.path === '/reg') {
+        // 不显示
+        res = false
+      } else {
+        res = true
+      }
+      return res
     })
 
     onMounted(() => {
@@ -60,21 +70,31 @@ export default {
 
     const login = () => {
       console.log('登录', '跳转进行登录')
+      router.push({ // 跳转到登录界面
+        path: '/login'
+      })
     }
 
     const reg = () => {
       console.log('注册', '跳转进行注册')
+      router.push({ // 跳转到注册界面
+        path: '/reg'
+      })
     }
 
     const cancel = () => {
       console.log('登出', '跳转进行登出')
+      // 调api
     }
 
     return {
       ...toRefs(state),
       login,
       reg,
-      cancel
+      cancel,
+      routes
+      // ,
+      // key
     }
   },
 
@@ -152,6 +172,7 @@ export default {
       }
       .menu{
         margin-top: 20px;
+        //这里是错的，要改
         ::v-deep .el-dropdown-menu__item:focus,::v-deep .el-dropdown-menu__item:not(.is-disabled) {
           &:hover {
             border: none !important;
@@ -171,6 +192,14 @@ export default {
   top: 54px;
   left: 0;
   right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn{
+  cursor: pointer; // 小手的样式
 }
 
 nav {

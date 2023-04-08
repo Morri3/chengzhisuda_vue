@@ -4,35 +4,44 @@
       <div class="title">手机号码</div>
       <el-input class="input" v-model="user.phone" placeholder="请输入手机号码" clearable />
     </div>
+
     <div class="line-2">
       <div class="title">密&nbsp;&nbsp;&nbsp;&nbsp;码</div>
       <el-input class="input" v-model="user.pwd" type="password" placeholder="请输入密码" show-password/>
     </div>
+
     <div class="line-3">
       <div class="button" @click="login()">开启兼职之旅</div>
     </div>
-    <div class="time">2023年1月16日 13:03:40，星期一，欢迎您！</div>
+
+    <CurTime class="time" :color="curTime.color"></CurTime>
   </div>
 </template>
 
 <script>
 import { reactive, toRefs, onMounted } from 'vue'
-// import { useRoute } from 'vue-router'
+// import { useRouter } from 'vue-router'
+import CurTime from '@/components/CurTime.vue'
+import router from '@/router'
 
 export default {
   name: 'LoginView',
-  components: {},
+  components: {
+    CurTime
+  },
   props: {},
   emits: [],
   setup () {
-    // const route = useRoute() // 使用路由
-    // const phone = ref('')
-    // const pwd = ref('')
+    // const router = useRouter() // 使用路由
 
     const state = reactive({
       user: {
         phone: '',
-        pwd: ''
+        pwd: '',
+        token: ''
+      },
+      curTime: { // 时间的样式
+        color: 'white'
       }
     })
 
@@ -41,6 +50,19 @@ export default {
 
     const login = () => {
       console.log('login', '点击了登录按钮')
+      console.log('手机号', state.user.phone)
+      console.log('密码', state.user.pwd)
+
+      // 调api
+
+      // 跳转到首页
+      router.push({
+        path: '/home',
+        query: {
+          account: state.user.phone, // 将用户的账号传过去
+          token: state.user.token
+        }
+      })
     }
 
     return {
@@ -58,7 +80,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-image: url('/public/img/logandreg/背景（紫粉）.png');
+  background-image: url('/public/img/logandreg/背景（橙紫）.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
 
@@ -109,6 +131,7 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      cursor: pointer; // 小手样式
     }
   }
 
@@ -116,14 +139,10 @@ export default {
     width: auto;
     height: auto;
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     left: 0;
     right: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    color:#ffffff;
+    background:none;
   }
 }
 </style>
