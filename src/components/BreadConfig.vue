@@ -1,6 +1,7 @@
 <template>
   <div class="breadcrumb">
-    <img class="icon" :src="require('../../public/img/utils/icon_right.png')" alt=""/>
+    <img class="back" :src="'/img/utils/icon_back.png'" alt="" @click="back()"/>
+    <img class="icon" :src="'/img/utils/icon_right.png'" alt=""/>
     <el-breadcrumb separator="-">
       <el-breadcrumb-item class="breadcrumb-item" :to="{ path: item.path }" v-for="(item, index) in list" :key="index">
         {{ item.meta.title }}
@@ -13,7 +14,7 @@
 
 <script>
 import { reactive, toRefs, watch, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import CurTime from '@/components/CurTime.vue'
 
 export default {
@@ -25,6 +26,7 @@ export default {
   emits: [],
   setup () {
     const route = useRoute() // 使用路由
+    const router = useRouter() // 使用路由
 
     const state = reactive({
       list: [], // 路由数组
@@ -47,8 +49,14 @@ export default {
       }, { immediate: true }
     )
 
+    // 返回到上一页
+    const back = () => {
+      router.go(-1)
+    }
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      back
     }
   }
 }
@@ -67,6 +75,13 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center; // 垂直居中
+
+  .back{
+    width: 20px;
+    height:20px;
+    margin-left: 30px;
+    cursor: pointer; // 小手的样式
+  }
 
   .icon{
     width: 20px;

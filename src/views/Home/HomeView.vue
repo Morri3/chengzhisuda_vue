@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div class="left-box">
-      <img class="logo" :src="require('../../../public/img/home/logo.png')" alt="" />
+      <img class="logo" :src="'/img/home/logo.png'" alt="" />
     </div>
 
     <div class="right-box">
@@ -15,12 +15,12 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, toRefs, onMounted, onBeforeMount } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import CurTime from '@/components/CurTime.vue'
 
 export default {
-  name: 'LoginView',
+  name: 'HomeView',
   components: {
     CurTime
   },
@@ -28,6 +28,7 @@ export default {
   emits: [],
   setup () {
     const router = useRouter() // 使用路由
+    const route = useRoute() // 使用路由
 
     const state = reactive({
       user: {
@@ -37,7 +38,7 @@ export default {
       },
       picBox: [
         { src: require('../../../public/img/home/卡片-兼职管理.png'), name: '兼职管理', url: '/parttime' },
-        { src: require('../../../public/img/home/卡片-兼职点评.png'), name: '兼职点评', url: '/comment' },
+        { src: require('../../../public/img/home/卡片-兼职点评.png'), name: '兼职点评', url: '/markcomment' },
         { src: require('../../../public/img/home/卡片-用户信息管理.png'), name: '用户信息管理', url: '/users' },
         { src: require('../../../public/img/home/卡片-用户行为分析.png'), name: '用户行为分析', url: '/behavior' },
         { src: require('../../../public/img/home/卡片-个人中心.png'), name: '个人中心', url: '/userhome' },
@@ -49,6 +50,19 @@ export default {
     })
 
     onMounted(() => {
+      console.log(route.query)
+      state.user.phone = route.query.phone
+      state.user.pwd = route.query.pwd
+      state.user.token = route.query.token
+      state.user.isLogin = route.query.isLogin
+    })
+
+    onBeforeMount(() => {
+      console.log(route.query)
+      state.user.phone = route.query.phone
+      state.user.pwd = route.query.pwd
+      state.user.token = route.query.token
+      state.user.isLogin = route.query.isLogin
     })
 
     const jumpTo = (item) => {

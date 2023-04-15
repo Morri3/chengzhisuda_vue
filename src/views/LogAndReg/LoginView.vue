@@ -23,6 +23,9 @@ import { reactive, toRefs, onMounted } from 'vue'
 // import { useRouter } from 'vue-router'
 import CurTime from '@/components/CurTime.vue'
 import router from '@/router'
+import theAxios from 'axios'
+import { ElNotification } from 'element-plus'
+import { useStore } from 'vuex'
 
 export default {
   name: 'LoginView',
@@ -33,6 +36,7 @@ export default {
   emits: [],
   setup () {
     // const router = useRouter() // 使用路由
+    const store = useStore()
 
     const state = reactive({
       user: {
@@ -50,19 +54,63 @@ export default {
 
     const login = () => {
       console.log('login', '点击了登录按钮')
-      console.log('手机号', state.user.phone)
-      console.log('密码', state.user.pwd)
 
       // 调api
+      const user = {
+        telephone: state.user.phone,
+        pwd: state.user.pwd
+      }
+      console.log('输入的账号密码', user)
+      theAxios.post('http://114.55.239.213:8087/login/emp', user)
+        .then(res => {
+          console.log('登陆接口的返回数据', res.data.data)
 
-      // 跳转到首页
-      router.push({
-        path: '/home',
-        query: {
-          account: state.user.phone, // 将用户的账号传过去
-          token: state.user.token
-        }
-      })
+          if (res.data.data.memo === '不存在该兼职发布者') {
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该兼职发布者',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '密码或账号错误，请检查后重新输入') {
+            ElNotification({
+              title: '出错啦',
+              message: '密码或账号错误，请检查后重新输入',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '登录成功') {
+            // 将token赋值给state.user，并存到store中
+            state.user.token = res.data.data.token
+            state.user.isLogin = true
+            store.commit('setUserLoginInfo', state.user)
+            console.log('getUserLoginInfo', store.state.user)
+
+            // 跳转到首页
+            router.push({
+              path: '/home',
+              query: {
+                phone: state.user.phone, // 将用户的账号传过去
+                pwd: state.user.pwd,
+                token: state.user.token,
+                isLogin: state.user.isLogin
+              }
+            })
+
+            ElNotification({
+              title: '成功啦',
+              message: '登录成功',
+              type: 'success',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
 
     return {

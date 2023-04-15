@@ -3,7 +3,7 @@
     <div class="menu-bg">
       <!--item1-->
       <div class="menu-item" @click="changeRoute('/home')" :class="sub0 === true ? 'bg-1' : ''">
-        <img class="icon" :src="require('../../public/img/menu/icon_home.png')" alt=""/>
+        <img class="icon" :src="'/img/menu/icon_home.png'" alt=""/>
         <div class="name">首页</div>
       </div>
 
@@ -11,9 +11,9 @@
 
       <!--item2-->
       <div class="menu-item">
-        <img class="icon" :src="require('../../public/img/menu/icon_parttime.png')" alt=""/>
+        <img class="icon" :src="'/img/menu/icon_parttime.png'" alt=""/>
         <div class="name">兼职管理</div>
-        <img class="down" id="icon1" :src="require('../../public/img/menu/icon_down.png')" alt="" @click="openItem('兼职管理')"/>
+        <img class="down" id="icon1" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('兼职管理')"/>
       </div>
       <div class="divider" v-show="sub.sub1"></div>
       <div class="menu-subitem-first" @click="changeRoute('/parttime/list')" v-show="sub.sub1"
@@ -29,16 +29,16 @@
 
       <!--item3-->
       <div class="menu-item">
-        <img class="icon" :src="require('../../public/img/menu/icon_callback.png')" alt=""/>
+        <img class="icon" :src="'/img/menu/icon_callback.png'" alt=""/>
         <div class="name">兼职点评</div>
-        <img class="down" id="icon2" :src="require('../../public/img/menu/icon_down.png')" alt="" @click="openItem('兼职点评')"/>
+        <img class="down" id="icon2" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('兼职点评')"/>
       </div>
       <div class="divider" v-show="sub.sub2"></div>
-      <div class="menu-subitem-first" @click="changeRoute('/comment/mark')" v-show="sub.sub2"
+      <div class="menu-subitem-first" @click="changeRoute('/markcomment/mark')" v-show="sub.sub2"
         :class="item.item3 === true ? 'bg-2' : ''">
         <div class="name">评分信息</div>
       </div>
-      <div class="menu-subitem" @click="changeRoute('/comment/comment')" v-show="sub.sub2"
+      <div class="menu-subitem" @click="changeRoute('/markcomment/comment')" v-show="sub.sub2"
         :class="item.item4 === true ? 'bg-2' : ''">
         <div class="name">评论信息</div>
       </div>
@@ -47,9 +47,9 @@
 
       <!--item4-->
       <div class="menu-item">
-        <img class="icon" :src="require('../../public/img/menu/icon_userhome.png')" alt=""/>
+        <img class="icon" :src="'/img/menu/icon_userhome.png'" alt=""/>
         <div class="name">个人中心</div>
-        <img class="down" id="icon3" :src="require('../../public/img/menu/icon_down.png')" alt="" @click="openItem('个人中心')"/>
+        <img class="down" id="icon3" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('个人中心')"/>
       </div>
       <div class="divider" v-show="sub.sub3"></div>
       <div class="menu-subitem-first" @click="changeRoute('/userhome')" v-show="sub.sub3"

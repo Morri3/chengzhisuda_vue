@@ -25,11 +25,6 @@
         </el-button>
       </div>
 
-      <el-button class="publish" type="primary" round color="#B886F8" :dark="true" @click="publish()">
-        <el-icon class="icon-add"><Plus /></el-icon>
-        <div class="title">发布兼职</div>
-      </el-button>
-
       <div class="main-box">
 
         <!--表格-->
@@ -46,59 +41,45 @@
 
             <!--以下5个普通列-->
             <el-table-column prop="id" label="序号" width="55" align="center"/>
-            <el-table-column prop="name" label="兼职名称" width="280" sortable align="center"/>
-            <el-table-column prop="num" label="报名/录用/名额数" width="140" align="center"/>
+            <el-table-column prop="name" label="兼职名称" width="270" sortable align="center"/>
+            <el-table-column prop="username" label="用户名" width="100" align="center"/>
 
-            <!--用插槽-->
-            <el-table-column prop="status" label="兼职状态" width="120" align="center">
+            <!--星级，用插槽-->
+            <el-table-column prop="mark" label="星级" width="420" align="center">
               <template v-slot="scope">
-                <el-tag class="status" :type="scope.row.status.type">{{ scope.row.status.value }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="update_time" label="更新时间" width="210" align="center"/>
-
-            <!--自定义单元格内容（按钮），用插槽-->
-            <el-table-column prop="op" label="操作" width="230" align="center">
-              <template #default="scope">
-                <div class="btn-box">
-                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" @click="detail(scope)">
-                    <div class="title">详情</div>
-                  </el-button>
-                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" @click="edit(scope)">
-                    <div class="title">编辑</div>
-                  </el-button>
-                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" @click="undercarriage(scope)">
-                    <div class="title">下架</div>
-                  </el-button>
+                <div class="mark-box">
+                  <div class="line-1">
+                    <el-tag class="total-tag" type="danger" size="small">总体评分</el-tag>
+                    <div class="total">{{ scope.row.mark.total }}分</div>
+                  </div>
+                  <div class="line-2">
+                    <el-tag class="mark-tag" type="primary">专业契合度</el-tag>
+                    <div class="value">{{ scope.row.mark.pf }}分</div>
+                    <el-tag class="mark-tag-2" type="primary">薪资水平</el-tag>
+                    <div class="value">{{ scope.row.mark.pl }}分</div>
+                  </div>
+                  <div class="line-3">
+                    <el-tag class="mark-tag" type="success">工作环境</el-tag>
+                    <div class="value">{{ scope.row.mark.we }}分</div>
+                    <el-tag class="mark-tag-2" type="success">闲时待遇</el-tag>
+                    <div class="value">{{ scope.row.mark.lt }}分</div>
+                  </div>
+                  <div class="line-4">
+                    <el-tag class="mark-tag" type="warning">岗前培训</el-tag>
+                    <div class="value">{{ scope.row.mark.pt }}分</div>
+                    <el-tag class="mark-tag-2" type="warning">总体收获满意度</el-tag>
+                    <div class="value">{{ scope.row.mark.ods }}分</div>
+                    <el-tag class="mark-tag-3" type="warning">专业技能满意度</el-tag>
+                    <div class="value">{{ scope.row.mark.dsps }}分</div>
+                  </div>
                 </div>
               </template>
             </el-table-column>
+
+            <!--评分时间-->
+            <el-table-column prop="mark_time" label="评分时间" width="180" align="center"></el-table-column>
           </el-table>
         </div>
-
-        <!--分页器-->
-        <!-- <div class="paging"> -->
-          <!-- <el-pagination
-            @size-change="changeSize"
-            @current-change="changCur"
-            :current-page="pageNum"
-            :page-size="pageSize"
-            layout="prev, pager, next"
-            :total="totalNum"
-            :pager-count="pagerCount"
-          >
-          </el-pagination> -->
-
-          <!-- <el-pagination
-            background
-            layout="prev, pager, next, ->"
-            :total="totalNum"
-            :page-size="pageSize"
-            :pager-count="pagerCount"
-            next-text=">"
-            prev-text="<"
-          /> -->
-        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -115,7 +96,7 @@ import MainMenu from '@/components/MainMenu.vue'
 // import RouterView from '../RouterView.vue'
 
 export default {
-  name: 'ParttimeView',
+  name: 'MarkView',
   components: {
     MainMenu
     // ,RouterView
@@ -145,11 +126,6 @@ export default {
       statusList: [], // 状态下拉框
       categoryList: [], // 种类下拉框
       genderList: [] // 性别下拉框
-      // // 分页数据
-      // pageNum: 1, // 当前页数
-      // pageSize: 5, // 每页显示item数
-      // pagerCount: 3, // 分页器中最大显示多少页
-      // totalNum: 10 // item总数
     })
 
     onBeforeMount(() => {
@@ -160,24 +136,7 @@ export default {
       console.log('调api取数据')
     }
 
-    // // 当每页条数改变时，重新赋值pagenum，再请求一次数据
-    // const changeSize = (curPage) => {
-    //   state.pageSize = curPage
-    //   getParttimeList()
-    //   console.log(`每页 ${curPage} 条`)
-    // }
-
-    // // 选择下一页或者跳到第几页，重新赋值pagenum，再请求一次数据
-    // const changeCur = (curPage) => {
-    //   state.pageNum = curPage
-    //   getParttimeList()
-    //   console.log(`当前页: ${curPage}`)
-    // }
-
     onMounted(() => {
-      setTimeout(() => {
-        select()
-      }, 3000) // 延时3s，不然会报toggleRowSelection的错误
     })
 
     // 表格
@@ -186,126 +145,38 @@ export default {
       {
         id: '1',
         name: '图书馆学生助理',
-        num: '10/4/8',
-        status: {
-          type: 'primary',
-          value: '已发布'
+        username: 'asf',
+        mark: {
+          total: 8,
+          pf: 1,
+          pl: 1,
+          we: 1,
+          lt: 1,
+          pt: 1,
+          ods: 1,
+          dsps: 1
         },
-        update_time: '2023-02-01 12:00:02',
+        mark_time: '2023-02-01 12:00:02',
         checked: false
       },
       {
         id: '2',
-        name: 'Jack',
-        address: 'No. 189, Grove s',
-        status: {
-          type: 'primary',
-          value: '已发布'
+        name: '图书馆学生助理',
+        username: 'asfasd',
+        mark: {
+          total: 8,
+          pf: 1,
+          pl: 1,
+          we: 1,
+          lt: 1,
+          pt: 1,
+          ods: 1,
+          dsps: 1
         },
-        update_time: '2023-02-01 12:00:03',
-        checked: false
-      },
-      {
-        id: '3',
-        name: 'Mark',
-        address: 'No. 189, Grove St, ',
-        status: {
-          type: 'danger',
-          value: '已招满'
-        },
-        update_time: '2023-02-01 12:00:04',
-        checked: false
-      },
-      {
-        id: '4',
-        name: 'Jack',
-        address: 'No. 189, Grove s',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:03',
-        checked: false
-      },
-      {
-        id: '5',
-        name: 'Mark',
-        address: 'No. 189, Grove St, ',
-        status: {
-          type: 'warning',
-          value: '已结束'
-        },
-        update_time: '2023-02-01 12:00:04',
-        checked: false
-      },
-      {
-        id: '6',
-        name: 'Tom',
-        num: 'No. 189, Groos Angeles',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:02',
-        checked: false
-      },
-      {
-        id: '2',
-        name: 'Jack',
-        address: 'No. 189, Grove s',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:03',
-        checked: false
-      },
-      {
-        id: '3',
-        name: 'Mark',
-        address: 'No. 189, Grove St, ',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:04',
-        checked: false
-      },
-      {
-        id: '2',
-        name: 'Jack',
-        address: 'No. 189, Grove s',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:03',
-        checked: false
-      },
-      {
-        id: '3',
-        name: 'Mark',
-        address: 'No. 189, Grove St, ',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:04',
+        mark_time: '2023-02-01 12:00:02',
         checked: false
       }
     ])
-
-    const selectAll = row => { // 全选
-      parttimeList.value.forEach(item => {
-        item.checked = !!row[0]
-      })
-    }
-
-    const select = () => { // 反选
-      parttimeList.value.forEach(item => {
-        tableRef.value.toggleRowSelection(item, item.checked)
-      })
-    }
 
     const detail = (scope) => { // 详情按钮
       console.log('scope', scope)
@@ -358,11 +229,7 @@ export default {
       openItem,
       tableRef,
       parttimeList,
-      selectAll,
-      select,
       getParttimeList,
-      // changeSize,
-      // changeCur,
       detail,
       secondRoutes,
       publish
@@ -379,7 +246,7 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-image: url('/public/img/logandreg/背景（黄绿）.png');
+  background-image: url('/public/img/logandreg/背景（橙黄）.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   margin-top: 54px;
@@ -401,6 +268,8 @@ export default {
       margin-bottom: 45px;
     }
   }
+
+  //右边区域
   .right-box{
     width: 80%;
     height: calc( 100% - 54px - 54px );
@@ -411,6 +280,7 @@ export default {
     justify-content: center;
     align-items: center;
 
+    //搜索区域
     .top-box{
       width: 90%;
       height: 10%;
@@ -479,40 +349,7 @@ export default {
       }
     }
 
-    .publish{
-      width: 100px;
-      height: 40px;
-      color: #ffffff;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 2px 2px 2px #898989;//阴影
-      position: absolute;
-      right: 8.4%;
-      top: 26.5%;
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      .icon-add{
-        width: 40px;
-        height: 40px;
-      }
-      .title{
-        font-weight: 600;
-        font-size: 14px;
-        color: #ffffff;
-        font-family: zcool-TsangerYuYangT_W04_W04;
-        margin-left: -5px;
-        margin-right: 5px;
-      }
-    }
-    .publish:hover,.publish:focus {
-      background: #a72af0;
-      border: none;
-    }
-
+    //表格区域
     .main-box{
       width: 90%;
       height: 80%;
@@ -532,31 +369,182 @@ export default {
         flex-direction: column;
         align-items: center;
 
-        .btn-box{
+        //评分表格
+        .mark-box{
           width: 100%;
           height: auto;
           display: flex;
-          flex-direction: row;
-          align-items: center;
+          flex-direction: column;
+          //align-items: center;
           justify-content: center;
 
-          .btn{
-            width: 65px;
-            height: 30px;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
+          //第一行
+          .line-1{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center; // 垂直居中
 
-            .title{
-              font-weight: 600;
+            .total-tag{
+              width: 60px;
+              height: 20px;
+              font-weight: 400;
               font-size: 14px;
-              color: #ffffff;
+              color: #ff5d5d;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+            .total{
+              width: auto;
+              height: auto;
+              margin-left: 5px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #000000;
               font-family: zcool-TsangerYuYangT_W04_W04;
             }
           }
-          .btn:hover,.btn:focus {
-            background: #a72af0;
-            border: none;
+
+          //第一行
+          .line-1{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center; // 垂直居中
+
+            .total-tag{
+              width: auto;
+              height: 20px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #ff5d5d;
+              padding: 0 5px;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+            .total{
+              width: auto;
+              height: auto;
+              margin-left: 5px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #000000;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+          }
+
+          //第2行
+          .line-2{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center; // 垂直居中
+
+            .mark-tag{
+              width: auto;
+              height: 20px;
+              font-weight: 400;
+              font-size: 12px;
+              color: #5d93ff;
+              padding: 0 5px;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+            .value{
+              width: auto;
+              height: auto;
+              margin-left: 5px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #000000;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+            .mark-tag-2{
+              width: auto;
+              height: 20px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #5d93ff;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+              padding: 0 5px;
+              margin-left: 20px;
+            }
+          }
+
+          //第3行
+          .line-3{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center; // 垂直居中
+
+            .mark-tag{
+              width: auto;
+              height: 20px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #3dda0e;
+              padding: 0 5px;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+            .value{
+              width: auto;
+              height: auto;
+              margin-left: 5px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #000000;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+            .mark-tag-2{
+              width: auto;
+              height: 20px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #3dda0e;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+              padding: 0 5px;
+              margin-left: 20px;
+            }
+          }
+
+          //第4行
+          .line-4{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center; // 垂直居中
+
+            .mark-tag{
+              width: auto;
+              height: 20px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #f98c17;
+              padding: 0 5px;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+            .value{
+              width: auto;
+              height: auto;
+              margin-left: 5px;
+              font-weight: 400;
+              font-size: 14px;
+              color: #000000;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+            }
+            .mark-tag-2,.mark-tag-3{
+              width: auto;
+              height: 20px;
+              font-weight: 400;
+              font-size: 11px;
+              color: #f98c17;
+              font-family: zcool-TsangerYuYangT_W04_W04;
+              padding: 0 5px;
+              margin-left: 20px;
+            }
           }
         }
       }

@@ -79,6 +79,7 @@
           <el-col :span="8">
             <el-input class="content-2" v-model="unit.area" placeholder="请输入单位地点" style="width: 280px;"/>
           </el-col>
+          <!--发布兼职按钮-->
           <el-button class="publish" type="primary" round color="#B886F8" :dark="true" @click="publish(parttime, unit)">
             <div class="title">发布兼职</div>
           </el-button>
@@ -114,6 +115,7 @@ export default {
         sub2: false,
         sub3: false
       },
+      // 兼职的配置数据
       parttime: {
         id: 0, // 兼职的id
         settlement: {
@@ -138,6 +140,7 @@ export default {
         slogan: '',
         worktime: ''
       },
+      // 单位的配置数据
       unit: {
         id: 0, // 单位的id
         name: '',
@@ -182,6 +185,7 @@ export default {
 
       // 调api，发布兼职
 
+      // 跳转
       router.push({
         path: '/parttime/list'
       })

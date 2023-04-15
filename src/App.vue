@@ -2,7 +2,7 @@
   <div>
     <!--顶部状态栏-->
     <div class="top-box">
-      <div class="title">城职速达</div>
+      <div class="title" @click="refresh()">城职速达</div>
       <div class="log-box">
         <img class="icon" src="" alt=""/>
 
@@ -10,9 +10,12 @@
           <span class="status">未登录</span>
           <template #dropdown>
             <el-dropdown-menu class="menu">
-              <el-dropdown-item @click="login()" class="btn">登录</el-dropdown-item>
+              <el-dropdown-item @click="login()" v-if="user === null || (user !== null && user.isLogin === false)"
+                class="btn">登录</el-dropdown-item>
               <el-dropdown-item @click="reg()" class="btn">注册</el-dropdown-item>
-              <el-dropdown-item @click="cancel()" v-if="isLogin === true" class="btn">登出</el-dropdown-item>
+              <el-dropdown-item @click="cancel()" v-if="user.isLogin === true" class="btn">
+                登出
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -30,9 +33,12 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted, computed } from 'vue'
+import { reactive, toRefs, onMounted, computed, onBeforeMount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import BreadConfig from '@/components/BreadConfig.vue'
+import { useStore } from 'vuex'
+import theAxios from 'axios'
+import { ElNotification } from 'element-plus'
 
 export default {
   components: {
@@ -44,13 +50,10 @@ export default {
   setup () {
     const router = useRouter() // 使用路由
     const route = useRoute() // 使用路由
-    const state = reactive({
-      isLogin: true
-    })
+    const store = useStore()
 
-    // const key = computed(() => {
-    //   return route.path + Math.random()
-    // })
+    const state = reactive({
+    })
 
     // 是否显示面包屑
     const routes = computed(() => {
@@ -64,8 +67,49 @@ export default {
       return res
     })
 
+    watch(
+      () => store.state.user,
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          // // store获取isLogin为true的用户
+          // for (let i = 0; i < store.state.user.length; i++) {
+          //   if (store.state.user[i].isLogin === true) {
+          //     state.user = store.state.user[i]
+          //     break
+          //   }
+          // }
+          // // if (state.user.isLogin !== null) {
+          // console.log('当前用户', state.user)
+
+          // store获取isLogin为true的用户
+          state.user = store.state.user
+          console.log('当前用户', state.user)
+        }
+      }
+    )
+
+    onBeforeMount(() => {
+    })
+
+    // 从store中获取用户信息，计算属性实现store中的user变化后，这里就能响应到，从而改变状态
+    const user = computed(() => {
+      const u = store.state.user
+      return u
+    })
+
     onMounted(() => {
-      // console.log(route.matched)
+      // // store获取isLogin为true的用户
+      // for (let i = 0; i < store.state.user.length; i++) {
+      //   if (store.state.user[i].isLogin === true) {
+      //     state.user = store.state.user[i]
+      //     break
+      //   }
+      // }
+      // // if (state.user.isLogin !== null) {
+      // console.log('当前用户', state.user)
+      // // } else {
+      // //   console.log('当前用户', 'null')
+      // // }
     })
 
     const login = () => {
@@ -85,6 +129,43 @@ export default {
     const cancel = () => {
       console.log('登出', '跳转进行登出')
       // 调api
+      theAxios.post('http://114.55.239.213:8087/logout/stu', {
+        input_telephone: state.user.phone
+      })
+        .then(res => {
+          console.log('登出接口的返回数据', res.data.data)
+
+          if (res.data.data === '用户登出失败') {
+            ElNotification({
+              title: '出错啦',
+              message: '用户登出失败',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data === '用户登出成功') {
+            // 更新isLogin，并存到store中
+            state.user.isLogin = false
+            store.commit('setUserLoginInfo', state.user)
+            console.log('getUserLoginInfo', store.state.user)
+
+            // 跳转到首页
+            router.push({
+              path: '/home'
+            })
+
+            ElNotification({
+              title: '成功啦',
+              message: '用户登出成功',
+              type: 'success',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
 
     return {
@@ -92,14 +173,9 @@ export default {
       login,
       reg,
       cancel,
-      routes
-      // ,
-      // key
+      routes,
+      user
     }
-  },
-
-  data () {
-    return {}
   }
 }
 </script>
@@ -136,6 +212,7 @@ export default {
     font-size: 20px;
     color: #000000;
     font-family: Alimama_ShuHeiTi_Bold;
+    cursor: pointer;
   }
   .log-box{
     width: 95px;
