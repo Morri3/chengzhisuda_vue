@@ -5,7 +5,6 @@ export default createStore({
     item: {},
     sub: {},
     sub0: '',
-    // user: [] // 用户信息
     user: {} // 用户信息
   },
   getters: {
@@ -34,10 +33,12 @@ export default createStore({
       //   // 没登陆过，push进去
       //   state.user.push(user)
       // }
+      // 单用户
       state.user.phone = user.phone
       state.user.pwd = user.pwd
       state.user.token = user.token
       state.user.isLogin = user.isLogin
+      state.user.username = user.username
     }
   },
   actions: {

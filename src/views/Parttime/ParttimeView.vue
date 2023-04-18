@@ -34,20 +34,19 @@
 
         <!--表格-->
         <div class="table">
-          <el-table :data="parttimeList" ref="tableRef" height="350" style="width: 100%"
-            @select-all="selectAll" :default-sort="{ prop: 'name', order: 'ascending' }"
+          <el-table :data="parttimeList" ref="tableRef" height="350" style="width: 100%" v-if="ready"
             :header-cell-style="{ background: '#B886F8', color: '#ffffff' }" align="center">
             <!--复选框，用插槽-->
-            <el-table-column type="selection" width="30" align="center">
+            <!-- <el-table-column type="selection" width="30" align="center">
               <template #default="scope">
                 <el-checkbox v-model="scope.row.checked" @change="select"/>
                </template>
-            </el-table-column>
+            </el-table-column> -->
 
             <!--以下5个普通列-->
-            <el-table-column prop="id" label="序号" width="55" align="center"/>
-            <el-table-column prop="name" label="兼职名称" width="280" sortable align="center"/>
-            <el-table-column prop="num" label="报名/录用/名额数" width="140" align="center"/>
+            <el-table-column prop="pId" label="序号" width="55" align="center" :fixed="true"/>
+            <el-table-column prop="positionName" label="兼职名称" width="280" sortable align="center"/>
+            <el-table-column prop="nums" label="报名/录用/名额数" width="140" align="center"/>
 
             <!--用插槽-->
             <el-table-column prop="status" label="兼职状态" width="120" align="center">
@@ -55,7 +54,7 @@
                 <el-tag class="status" :type="scope.row.status.type">{{ scope.row.status.value }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="update_time" label="更新时间" width="210" align="center"/>
+            <el-table-column prop="updateTime" label="更新时间" width="210" align="center"/>
 
             <!--自定义单元格内容（按钮），用插槽-->
             <el-table-column prop="op" label="操作" width="230" align="center">
@@ -64,10 +63,11 @@
                   <el-button class="btn" type="primary" round color="#B886F8" :dark="true" @click="detail(scope)">
                     <div class="title">详情</div>
                   </el-button>
-                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" @click="edit(scope)">
+                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" v-if="scope.row.status.value === '已发布'" @click="edit(scope)">
                     <div class="title">编辑</div>
                   </el-button>
-                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" @click="undercarriage(scope)">
+                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" v-if="scope.row.status.value === '已发布' || scope.row.status.value === '已招满'"
+                    @click="undercarriage(scope)">
                     <div class="title">下架</div>
                   </el-button>
                 </div>
@@ -75,30 +75,6 @@
             </el-table-column>
           </el-table>
         </div>
-
-        <!--分页器-->
-        <!-- <div class="paging"> -->
-          <!-- <el-pagination
-            @size-change="changeSize"
-            @current-change="changCur"
-            :current-page="pageNum"
-            :page-size="pageSize"
-            layout="prev, pager, next"
-            :total="totalNum"
-            :pager-count="pagerCount"
-          >
-          </el-pagination> -->
-
-          <!-- <el-pagination
-            background
-            layout="prev, pager, next, ->"
-            :total="totalNum"
-            :page-size="pageSize"
-            :pager-count="pagerCount"
-            next-text=">"
-            prev-text="<"
-          /> -->
-        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -112,6 +88,9 @@
 import { ref, reactive, toRefs, onMounted, onBeforeMount, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import MainMenu from '@/components/MainMenu.vue'
+import theAxios from 'axios'
+import { ElNotification } from 'element-plus'
+import store from '@/store'
 // import RouterView from '../RouterView.vue'
 
 export default {
@@ -144,12 +123,10 @@ export default {
       },
       statusList: [], // 状态下拉框
       categoryList: [], // 种类下拉框
-      genderList: [] // 性别下拉框
-      // // 分页数据
-      // pageNum: 1, // 当前页数
-      // pageSize: 5, // 每页显示item数
-      // pagerCount: 3, // 分页器中最大显示多少页
-      // totalNum: 10 // item总数
+      genderList: [], // 性别下拉框
+      parttimeList: [], // 兼职列表数据(表格显示用)
+      parttimeAllInfoList: [], // 兼职列表详细信息
+      ready: true // 用于刷新页面
     })
 
     onBeforeMount(() => {
@@ -157,161 +134,135 @@ export default {
     })
 
     const getParttimeList = () => {
-      console.log('调api取数据')
+      console.log('开始调api获取兼职数据...')
+
+      theAxios.get('http://114.55.239.213:8087/parttime/emp/get_own?emp_id=' + store.state.user.phone)
+        .then(res => {
+          console.log('获取兼职接口的返回数据', res.data.data)
+
+          // 获取第一个item，判断
+          const first = res.data.data[0]
+          if (first.memo === '该账号不存在') {
+            ElNotification({
+              title: '出错啦',
+              message: '该账号不存在',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (first.memo === '请检查输入') {
+            ElNotification({
+              title: '出错啦',
+              message: '请检查输入',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (first.memo === '兼职获取成功') {
+            for (let i = 0; i < res.data.data.length; i++) {
+              // 根据状态判断tag的类型
+              let statusType = ''
+              if (res.data.data[i].position_status === '已发布') {
+                statusType = 'primary'
+              } else if (res.data.data[i].position_status === '已招满') {
+                statusType = 'danger'
+              } else if (res.data.data[i].position_status === '已结束') {
+                statusType = 'warning'
+              }
+
+              // 构造json对象
+              const parttime = {
+                positionName: res.data.data[i].position_name,
+                pId: res.data.data[i].p_id,
+                nums: res.data.data[i].num_signup + '/' + res.data.data[i].num_employment + '/' + res.data.data[i].num_total,
+                status: {
+                  type: statusType,
+                  value: res.data.data[i].position_status
+                },
+                updateTime: res.data.data[i].update_time ? res.data.data[i].update_time : '尚未更新'
+              }
+              state.parttimeList.push(parttime) // 数组中添加当前遍历的兼职
+              state.parttimeAllInfoList.push(res.data.data[i]) // 整个兼职数据存入该数组
+            }
+            console.log('所有兼职数据', state.parttimeList)
+            console.log('所有兼职详细数据', state.parttimeAllInfoList)
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
 
-    // // 当每页条数改变时，重新赋值pagenum，再请求一次数据
-    // const changeSize = (curPage) => {
-    //   state.pageSize = curPage
-    //   getParttimeList()
-    //   console.log(`每页 ${curPage} 条`)
-    // }
-
-    // // 选择下一页或者跳到第几页，重新赋值pagenum，再请求一次数据
-    // const changeCur = (curPage) => {
-    //   state.pageNum = curPage
-    //   getParttimeList()
-    //   console.log(`当前页: ${curPage}`)
-    // }
-
     onMounted(() => {
-      setTimeout(() => {
-        select()
-      }, 3000) // 延时3s，不然会报toggleRowSelection的错误
     })
 
     // 表格
     const tableRef = ref()
-    const parttimeList = ref([ // 数据
-      {
-        id: '1',
-        name: '图书馆学生助理',
-        num: '10/4/8',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:02',
-        checked: false
-      },
-      {
-        id: '2',
-        name: 'Jack',
-        address: 'No. 189, Grove s',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:03',
-        checked: false
-      },
-      {
-        id: '3',
-        name: 'Mark',
-        address: 'No. 189, Grove St, ',
-        status: {
-          type: 'danger',
-          value: '已招满'
-        },
-        update_time: '2023-02-01 12:00:04',
-        checked: false
-      },
-      {
-        id: '4',
-        name: 'Jack',
-        address: 'No. 189, Grove s',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:03',
-        checked: false
-      },
-      {
-        id: '5',
-        name: 'Mark',
-        address: 'No. 189, Grove St, ',
-        status: {
-          type: 'warning',
-          value: '已结束'
-        },
-        update_time: '2023-02-01 12:00:04',
-        checked: false
-      },
-      {
-        id: '6',
-        name: 'Tom',
-        num: 'No. 189, Groos Angeles',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:02',
-        checked: false
-      },
-      {
-        id: '2',
-        name: 'Jack',
-        address: 'No. 189, Grove s',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:03',
-        checked: false
-      },
-      {
-        id: '3',
-        name: 'Mark',
-        address: 'No. 189, Grove St, ',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:04',
-        checked: false
-      },
-      {
-        id: '2',
-        name: 'Jack',
-        address: 'No. 189, Grove s',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:03',
-        checked: false
-      },
-      {
-        id: '3',
-        name: 'Mark',
-        address: 'No. 189, Grove St, ',
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        update_time: '2023-02-01 12:00:04',
-        checked: false
-      }
-    ])
-
-    const selectAll = row => { // 全选
-      parttimeList.value.forEach(item => {
-        item.checked = !!row[0]
-      })
-    }
-
-    const select = () => { // 反选
-      parttimeList.value.forEach(item => {
-        tableRef.value.toggleRowSelection(item, item.checked)
-      })
-    }
 
     const detail = (scope) => { // 详情按钮
-      console.log('scope', scope)
+      console.log('路由传递的数据', JSON.stringify(state.parttimeAllInfoList[scope.$index]))
+
+      // 跳转
       router.push({
-        path: '/parttime/list/detail'
+        path: '/parttime/list/detail',
+        query: {
+          dataList: JSON.stringify(state.parttimeAllInfoList[scope.$index]), // 当前行所在下标对应的兼职数据
+          type: 0 // 表示从兼职列表页进入详情页
+        }
       })
+    }
+
+    // 下架
+    const undercarriage = (scope) => {
+      console.log('开始下架兼职...')
+      state.ready = false
+      // 发布兼职输入的dto
+      const input = {
+        op_id: store.state.user.phone,
+        p_id: scope.row.pId
+      }
+      // 调api，下架兼职
+      theAxios.post('http://114.55.239.213:8087/parttime/undercarriage', input)
+        .then(res => {
+          console.log('下架兼职接口的返回数据', res.data.data)
+
+          if (res.data.data.memo === '非兼职负责人不能操作') {
+            ElNotification({
+              title: '出错啦',
+              message: '非兼职负责人不能操作',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不存在该兼职发布者') {
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该兼职发布者',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '下架成功') {
+            console.log('下架的兼职信息', res.data.data)
+
+            // 跳转到兼职首页
+            router.push({
+              path: '/parttime'
+            })
+
+            ElNotification({
+              title: '成功啦',
+              message: '下架成功',
+              type: 'success',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          }
+          state.ready = true
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
 
     // 菜单打开
@@ -347,7 +298,7 @@ export default {
 
     // 发布兼职
     const publish = () => {
-      console.log('点击了发布兼职')
+      console.log('欢迎您发布兼职')
       router.push({
         path: '/parttime/publish'
       })
@@ -357,15 +308,11 @@ export default {
       ...toRefs(state),
       openItem,
       tableRef,
-      parttimeList,
-      selectAll,
-      select,
       getParttimeList,
-      // changeSize,
-      // changeCur,
       detail,
       secondRoutes,
-      publish
+      publish,
+      undercarriage
     }
   }
 }

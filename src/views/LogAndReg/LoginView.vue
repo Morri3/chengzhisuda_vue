@@ -83,19 +83,25 @@ export default {
             })
           } else if (res.data.data.memo === '登录成功') {
             // 将token赋值给state.user，并存到store中
-            state.user.token = res.data.data.token
-            state.user.isLogin = true
-            store.commit('setUserLoginInfo', state.user)
+            const theUser = {
+              token: res.data.data.token,
+              isLogin: true,
+              username: res.data.data.emp_name,
+              phone: res.data.data.telephone,
+              pwd: res.data.data.pwd
+            }
+            store.commit('setUserLoginInfo', theUser)
             console.log('getUserLoginInfo', store.state.user)
 
             // 跳转到首页
             router.push({
               path: '/home',
               query: {
-                phone: state.user.phone, // 将用户的账号传过去
-                pwd: state.user.pwd,
-                token: state.user.token,
-                isLogin: state.user.isLogin
+                phone: theUser.phone, // 将用户的账号传过去
+                pwd: theUser.pwd,
+                token: theUser.token,
+                isLogin: theUser.isLogin,
+                username: theUser.username
               }
             })
 

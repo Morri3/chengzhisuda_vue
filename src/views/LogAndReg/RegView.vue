@@ -2,7 +2,7 @@
   <div class="box">
     <div class="line-1">
       <div class="title">手机号码</div>
-      <el-input class="input" v-model="user.phone" placeholder="请输入手机号码" clearable />
+      <el-input class="input" v-model="user.phone" :maxLength="11" placeholder="请输入手机号码" clearable />
     </div>
 
     <div class="line-2">
@@ -49,7 +49,7 @@
 
     <div class="line-9">
       <div class="title">工&nbsp;&nbsp;&nbsp;&nbsp;号</div>
-      <el-input class="input" v-model="user.jno" placeholder="请输入工号"/>
+      <el-input class="input" v-model="user.jno" :maxLength="6" placeholder="请输入工号"/>
     </div>
 
     <div class="line-10">
@@ -143,6 +143,7 @@ export default {
       }
     }
 
+    // 获取格式化日期
     const getFormatDate = (input) => {
       if (input === '' || !input) {
         return ''

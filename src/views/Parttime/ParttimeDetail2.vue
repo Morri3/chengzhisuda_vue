@@ -16,7 +16,7 @@
         <!--line1-->
         <div class="line-1">
           <div class="title">点评信息</div>
-          <div class="update-time">最近更新于2023年1月17日 08:28:39</div>
+          <!-- <div class="update-time">最近更新于{{parttime.createTime}}</div> -->
         </div>
         <!--line2-->
         <div class="line-2">
@@ -78,7 +78,7 @@
             text-color="#ff9900" clearable size="large"
           />
           <div class="num">{{mark.dsps}} 分</div>
-          <el-button class="prior" type="primary" round color="#B886F8" :dark="true" @click="priorPage(parttime, unit)">
+          <el-button class="prior" type="primary" round color="#B886F8" :dark="true" @click="priorPage()">
             <div class="title">上一页</div>
           </el-button>
         </div>
@@ -89,8 +89,10 @@
 
 <script>
 import { reactive, toRefs, onMounted, onBeforeMount } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import MainMenu from '@/components/MainMenu.vue'
+import theAxios from 'axios'
+import { ElNotification } from 'element-plus'
 
 export default {
   name: 'ParttimeDetail2',
@@ -101,6 +103,7 @@ export default {
   emits: [],
   setup () {
     const router = useRouter() // 使用路由
+    const route = useRoute() // 使用路由
 
     const state = reactive({
       user: {
@@ -113,55 +116,53 @@ export default {
         sub2: false,
         sub3: false
       },
-      parttime: {
-        id: 1, // 兼职的id
-        settlement: {
-          type: 'primary',
-          value: '学期结'
-        },
-        category: {
-          type: 'warning',
-          value: '学生助理'
-        },
-        status: {
-          type: 'primary',
-          value: '已发布'
-        },
-        name: 'name',
-        salary: 'salary',
-        area: 'area',
-        exp: 'exp',
-        content: 'content',
-        requirement: 'requirement',
-        ddl: 'ddl',
-        slogan: 'slogan',
-        worktime: 'worktime'
-      },
-      unit: {
-        id: 1, // 单位的id
-        name: 'name',
-        descriptions: 'descriptions',
-        area: 'area',
-        jobNums: 0
-      },
-      mark: { // 评分
-        total: 8,
-        pf: 7,
-        pl: 9,
-        we: 8,
-        lt: 8,
-        pt: 6,
-        ods: 3,
-        dsps: 10
-      }
+      parttime: {},
+      unit: {},
+      mark: {} // 评分
     })
 
     onBeforeMount(() => {
-      getParttimeList() // 调api获取数据
+      getData() // 获取数据
     })
 
-    const getParttimeList = () => {
-      console.log('调api取数据')
+    const getData = () => {
+      console.log('获取上一页传来的数据', JSON.parse(route.query.parttime))
+      console.log('获取上一页传来的数据', JSON.parse(route.query.unit))
+      state.parttime = JSON.parse(route.query.parttime)
+      state.unit = JSON.parse(route.query.unit)
+
+      // 调api根据p_id获取评分信息
+      theAxios.get('http://114.55.239.213:8087/mark/getAll?p_id=' + state.parttime.id)
+        .then(res => {
+          console.log('登陆接口的返回数据', res.data.data)
+
+          if (res.data.data.memo === '获取成功') {
+            const theMark = {
+              total: res.data.data.total_score,
+              pf: res.data.data.pf,
+              pl: res.data.data.pl,
+              we: res.data.data.we,
+              lt: res.data.data.lt,
+              pt: res.data.data.pt,
+              ods: res.data.data.ods,
+              dsps: res.data.data.dsps,
+              createTime: res.data.data.create_time
+            }
+            state.mark = theMark
+            console.log('当前兼职评分数据', state.mark)
+          } else if (res.data.data.memo === '获取失败') {
+            ElNotification({
+              title: '出错啦',
+              message: '获取失败',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
 
     onMounted(() => {
@@ -186,19 +187,21 @@ export default {
     }
 
     // 上一页
-    const priorPage = (parttime, unit) => {
-      console.log('填写的parttime', parttime)
-      console.log('填写的unit', unit)
-
+    const priorPage = () => {
       router.push({
-        path: '/parttime/list/detail'
+        path: '/parttime/list/detail',
+        query: {
+          parttime: JSON.stringify(state.parttime), // 将这两个传过去，当点击上一页时，将这两个传回来
+          unit: JSON.stringify(state.unit),
+          type: 1
+        }
       })
     }
 
     return {
       ...toRefs(state),
       openItem,
-      getParttimeList,
+      getData,
       priorPage
     }
   }
@@ -344,19 +347,19 @@ export default {
             align-items: center;
         }
         .content{
-            width:40px;
+            width:108px;
             height: 30px;
             margin-left: 20px;
 
-            font-weight: 400;
+            font-weight: 700;
             font-size: 16px;
-            color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
-            text-align: center;
+            color: #7e04e1;
+            font-family: zcool-TsangerYuYangT_W05_W05;
+
+            text-align: left;
             display: flex;
             flex-direction: row;
-            justify-content: center;
-            align-items: center;
+            align-items: center; // 垂直居中
         }
       }
       .line-9{

@@ -55,6 +55,7 @@ export default {
       state.user.pwd = route.query.pwd
       state.user.token = route.query.token
       state.user.isLogin = route.query.isLogin
+      state.user.username = route.query.username
     })
 
     onBeforeMount(() => {
@@ -63,6 +64,7 @@ export default {
       state.user.pwd = route.query.pwd
       state.user.token = route.query.token
       state.user.isLogin = route.query.isLogin
+      state.user.username = route.query.username
     })
 
     const jumpTo = (item) => {

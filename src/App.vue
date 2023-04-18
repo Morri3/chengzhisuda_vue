@@ -7,12 +7,16 @@
         <img class="icon" src="" alt=""/>
 
         <el-dropdown class="hover">
-          <span class="status">未登录</span>
+          <span class="username">{{user.username ? user.username : '未登录'}}</span>
           <template #dropdown>
             <el-dropdown-menu class="menu">
-              <el-dropdown-item @click="login()" v-if="user === null || (user !== null && user.isLogin === false)"
-                class="btn">登录</el-dropdown-item>
-              <el-dropdown-item @click="reg()" class="btn">注册</el-dropdown-item>
+              <el-dropdown-item @click="login()" v-if="user === null ||
+                (user !== null && user.isLogin === false)" class="btn">
+                登录
+              </el-dropdown-item>
+              <el-dropdown-item @click="reg()" class="btn">
+                注册
+              </el-dropdown-item>
               <el-dropdown-item @click="cancel()" v-if="user.isLogin === true" class="btn">
                 登出
               </el-dropdown-item>
@@ -68,24 +72,6 @@ export default {
     })
 
     watch(
-      () => store.state.user,
-      (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          // // store获取isLogin为true的用户
-          // for (let i = 0; i < store.state.user.length; i++) {
-          //   if (store.state.user[i].isLogin === true) {
-          //     state.user = store.state.user[i]
-          //     break
-          //   }
-          // }
-          // // if (state.user.isLogin !== null) {
-          // console.log('当前用户', state.user)
-
-          // store获取isLogin为true的用户
-          state.user = store.state.user
-          console.log('当前用户', state.user)
-        }
-      }
     )
 
     onBeforeMount(() => {
@@ -98,18 +84,6 @@ export default {
     })
 
     onMounted(() => {
-      // // store获取isLogin为true的用户
-      // for (let i = 0; i < store.state.user.length; i++) {
-      //   if (store.state.user[i].isLogin === true) {
-      //     state.user = store.state.user[i]
-      //     break
-      //   }
-      // }
-      // // if (state.user.isLogin !== null) {
-      // console.log('当前用户', state.user)
-      // // } else {
-      // //   console.log('当前用户', 'null')
-      // // }
     })
 
     const login = () => {
@@ -129,8 +103,8 @@ export default {
     const cancel = () => {
       console.log('登出', '跳转进行登出')
       // 调api
-      theAxios.post('http://114.55.239.213:8087/logout/stu', {
-        input_telephone: state.user.phone
+      theAxios.post('http://114.55.239.213:8087/logout/emp', {
+        input_telephone: store.state.user.phone
       })
         .then(res => {
           console.log('登出接口的返回数据', res.data.data)
@@ -145,8 +119,14 @@ export default {
             })
           } else if (res.data.data === '用户登出成功') {
             // 更新isLogin，并存到store中
-            state.user.isLogin = false
-            store.commit('setUserLoginInfo', state.user)
+            const theUser = {
+              phone: '',
+              token: '',
+              username: '',
+              pwd: '',
+              isLogin: false
+            }
+            store.commit('setUserLoginInfo', theUser)
             console.log('getUserLoginInfo', store.state.user)
 
             // 跳转到首页
@@ -168,11 +148,15 @@ export default {
         })
     }
 
+    const refresh = () => {
+    }
+
     return {
       ...toRefs(state),
       login,
       reg,
       cancel,
+      refresh,
       routes,
       user
     }
@@ -210,9 +194,9 @@ export default {
     margin-right: 583px;
     font-weight: 500;
     font-size: 20px;
-    color: #000000;
+    color: #ffe7ab;
+    box-shadow: 3px 3px 1px #c7bdad;//阴影
     font-family: Alimama_ShuHeiTi_Bold;
-    cursor: pointer;
   }
   .log-box{
     width: 95px;
@@ -238,7 +222,7 @@ export default {
       padding-left: 5px;
       padding-top: 23px;
 
-      .status{
+      .username{
         width: auto;
         height: auto;
         font-size: 14px;
