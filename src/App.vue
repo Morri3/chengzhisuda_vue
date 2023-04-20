@@ -14,7 +14,8 @@
                 (user !== null && user.isLogin === false)" class="btn">
                 登录
               </el-dropdown-item>
-              <el-dropdown-item @click="reg()" class="btn">
+              <el-dropdown-item @click="reg()" v-if="user === null ||
+              (user !== null && user.isLogin === false)" class="btn">
                 注册
               </el-dropdown-item>
               <el-dropdown-item @click="cancel()" v-if="user.isLogin === true" class="btn">
@@ -131,7 +132,7 @@ export default {
 
             // 跳转到首页
             router.push({
-              path: '/home'
+              path: '/'
             })
 
             ElNotification({

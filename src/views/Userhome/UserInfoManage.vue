@@ -51,7 +51,7 @@
             </div>
             <div class="line-6">
               <div class="jobnums-text">招聘数量</div>
-              <div class="jobnums">{{unit.jobnums}}</div>
+              <div class="jobnums">{{unit.jobNums}}</div>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
               <div class="emails-text">邮箱</div>
               <div class="emails">{{user.emails}}</div>
               <div class="phone-text">手机号码</div>
-              <div class="phone">{{user.phone}}</div>
+              <div class="phone">{{user.telephone}}</div>
             </div>
           </div>
 
@@ -89,8 +89,11 @@
 
 <script>
 import { reactive, toRefs, onMounted, onBeforeMount } from 'vue'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import MainMenu from '@/components/MainMenu.vue'
+import theAxios from 'axios'
+import { ElNotification } from 'element-plus'
+import { useStore } from 'vuex'
 
 export default {
   name: 'UserInfoManage',
@@ -100,20 +103,21 @@ export default {
   props: {},
   emits: [],
   setup () {
-    const router = useRouter() // 使用路由
+    // const route = useRoute() // 使用路由
+    const store = useStore()
 
     const state = reactive({
       // 用户信息
       user: {
-        phone: '18968966599',
-        pwd: '',
-        token: '',
-        emails: '111@163.com',
-        username: 'aaa',
-        gender: '男',
-        age: 23,
-        jno: 'J00000',
-        head: '/img/userhome/icon_head1.jpeg'
+        // phone: '18968966599',
+        // pwd: '',
+        // token: '',
+        // emails: '111@163.com',
+        // username: 'aaa',
+        // gender: '男',
+        // age: 23,
+        // jno: 'J00000',
+        // head: '/img/userhome/icon_head1.jpeg'
       },
       sub: { // 控制二级菜单的开关
         sub1: false,
@@ -122,23 +126,82 @@ export default {
       },
       // 单位的配置数据
       unit: {
-        id: 0, // 单位的id
-        name: 'aaa',
-        descriptions: '这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述',
-        area: '这是地点这是地点这是地点这是地点这是地点这是地点',
-        jobnums: 10
-      }
+        // id: 0, // 单位的id
+        // name: 'aaa',
+        // descriptions: '这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述',
+        // area: '这是地点这是地点这是地点这是地点这是地点这是地点',
+        // jobnums: 10
+      },
+      nocontent: false // 是否显示404内容
     })
 
     onBeforeMount(() => {
-      getParttimeList() // 调api获取数据
     })
 
-    const getParttimeList = () => {
-      console.log('调api取数据')
+    const getUserData = () => {
+      // 调api
+      theAxios.get('http://114.55.239.213:8087/users/info/get_emp?telephone=' + store.state.user.phone)
+        .then(res => {
+          console.log('用户信息接口的返回数据', res.data.data)
+
+          if (res.data.data.memo === '该账号不存在') {
+            state.nocontent = true
+            ElNotification({
+              title: '注意啦',
+              message: '该账号不存在',
+              type: 'warning',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '获取成功') {
+            state.nocontent = false
+
+            let theGender = ''
+            if (res.data.data.gender === 1) {
+              theGender = '男'
+            } else {
+              theGender = '女'
+            }
+            const obj1 = {
+              username: res.data.data.emp_name,
+              gender: theGender,
+              emails: res.data.data.emails,
+              age: res.data.data.age,
+              telephone: res.data.data.telephone,
+              jno: res.data.data.jno,
+              head: res.data.data.head ? res.data.data.head : '/img/userhome/icon_head1.jpeg'
+            }
+
+            const obj2 = {
+              name: res.data.data.unit_name,
+              descriptions: res.data.data.unit_descriptions,
+              area: res.data.data.unit_loc,
+              jobNums: res.data.data.job_nums
+            }
+
+            // 赋值
+            state.user = obj1
+            state.unit = obj2
+            console.log('用户信息', state.user)
+            console.log('单位信息', state.unit)
+
+            ElNotification({
+              title: '成功啦',
+              message: '获取成功',
+              type: 'success',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          }
+          state.ready = true
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
 
     onMounted(() => {
+      getUserData() // 调api获取数据
     })
 
     // 菜单打开
@@ -159,18 +222,6 @@ export default {
       }
     }
 
-    // 发布兼职
-    const publish = (id) => {
-      console.log('发布的兼职的信息', id)
-
-      // 调api，发布兼职
-
-      // 跳转
-      router.push({
-        path: '/parttime/list'
-      })
-    }
-
     const modifyInfo = (user, unit) => {
     }
 
@@ -183,8 +234,7 @@ export default {
     return {
       ...toRefs(state),
       openItem,
-      getParttimeList,
-      publish,
+      getUserData,
       modifyInfo,
       modifyPwd,
       appIntroduction
@@ -610,7 +660,7 @@ export default {
               height: auto;
               font-weight: 400;
               font-size: 16px;
-              color: #000000;
+              color: #ff1eff;
               font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
               margin-left: 10px;

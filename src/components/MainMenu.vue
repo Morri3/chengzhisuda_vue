@@ -154,9 +154,9 @@ export default {
     watch(
       () => [state.sub.sub1, state.sub.sub2, state.sub.sub3],
       (newValue, oldValue) => {
-        var cur = [0, 0, 0]
+        const cur = [0, 0, 0]
         for (let i = 0; i < 3; i++) {
-          var icon = document.getElementById(`icon${i + 1}`) // 对应的图标,使用了模板字符串
+          const icon = document.getElementById(`icon${i + 1}`) // 对应的图标,使用了模板字符串
           if (newValue[i] === true) {
             cur[i] = (cur[i] - 180) % 360
           }

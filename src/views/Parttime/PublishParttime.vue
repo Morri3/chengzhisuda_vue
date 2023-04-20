@@ -197,14 +197,13 @@ export default {
         '无需经验，有培训', '1至5次经验', '1个月', '1个学期', '1学年'
       ],
       datetimerange: [], // 时间选择器的时间范围
-      active: 1, // 时间线的进度
-      // 必填项是否已填
-      colorVal: '#d5b5ff'
+      active: 1 // 时间线的进度
     })
 
     onBeforeMount(() => {
       state.active = 1 // 初始化时间线进度
       getUserInfo() // 调api获取数据
+      getUnitInfo()
     })
 
     const getUserInfo = () => {
@@ -238,57 +237,7 @@ export default {
       if (state.parttime.name === '') {
         //
       }
-      // 调api，根据op_id找到unit信息
-      theAxios.get('http://114.55.239.213:8087/parttime/unit/get?op_id=' + state.user.phone)
-        .then(res => {
-          console.log('获取单位信息接口的返回数据', res.data.data)
 
-          if (res.data.data.memo === '请检查输入信息') {
-            ElNotification({
-              title: '出错啦',
-              message: '请检查输入信息',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '不存在该单位') {
-            ElNotification({
-              title: '出错啦',
-              message: '不存在该单位',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '不存在该兼职发布者') {
-            ElNotification({
-              title: '出错啦',
-              message: '不存在该兼职发布者',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '获取单位信息成功') {
-            // 构造对象
-            const theUnit = {
-              id: res.data.data.u_id,
-              name: res.data.data.unit_name,
-              descriptions: res.data.data.descriptions,
-              area: res.data.data.loc,
-              jobNums: res.data.data.job_nums
-            }
-            state.unit = theUnit
-            console.log('当前兼职发布者所在单位信息', state.unit)
-
-            // 调发布函数
-            publishInfo()
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    }
-
-    const publishInfo = () => {
       // 转换结付方式
       let settlement = ''
       if (state.parttime.settlement === 1) {
@@ -334,6 +283,14 @@ export default {
               position: 'top-right', // 右上
               offset: 60
             })
+          } else if (res.data.data.memo === '该兼职发布者不存在单位') {
+            ElNotification({
+              title: '出错啦',
+              message: '该兼职发布者不存在单位',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
           } else if (res.data.data.memo === '发布成功') {
             console.log('发布的兼职信息', res.data.data)
 
@@ -363,6 +320,54 @@ export default {
       })
     }
 
+    const getUnitInfo = () => {
+      // 调api，根据op_id找到unit信息
+      theAxios.get('http://114.55.239.213:8087/parttime/unit/get?op_id=' + state.user.phone)
+        .then(res => {
+          console.log('获取单位信息接口的返回数据', res.data.data)
+
+          if (res.data.data.memo === '请检查输入信息') {
+            ElNotification({
+              title: '出错啦',
+              message: '请检查输入信息',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不存在该单位') {
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该单位',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不存在该兼职发布者') {
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该兼职发布者',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '获取单位信息成功') {
+            // 构造对象
+            const theUnit = {
+              id: res.data.data.u_id,
+              name: res.data.data.unit_name,
+              descriptions: res.data.data.descriptions,
+              area: res.data.data.loc,
+              jobNums: res.data.data.job_nums
+            }
+            state.unit = theUnit
+            console.log('当前兼职发布者所在单位信息', state.unit)
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
+
     const changeBorder = () => {
       state.colorVal = '#d5b5ff'
     }
@@ -373,7 +378,7 @@ export default {
       getUserInfo,
       publish,
       changeBorder,
-      publishInfo
+      getUnitInfo
     }
   }
 }

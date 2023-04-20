@@ -29,24 +29,17 @@
 
         <!--表格-->
         <div class="table">
-          <el-table :data="parttimeList" ref="tableRef" height="350" style="width: 100%"
-            @select-all="selectAll" :default-sort="{ prop: 'name', order: 'ascending' }"
+          <el-table :data="commentList" ref="tableRef" height="350" style="width: 100%;"
             :header-cell-style="{ background: '#B886F8', color: '#ffffff' }" align="center">
-            <!--复选框，用插槽-->
-            <el-table-column type="selection" width="30" align="center">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.checked" @change="select"/>
-               </template>
-            </el-table-column>
 
             <!--以下5个普通列-->
             <el-table-column prop="id" label="序号" width="55" align="center"/>
-            <el-table-column prop="name" label="兼职名称" width="270" sortable align="center"/>
+            <el-table-column prop="pName" label="兼职名称" width="270" sortable align="center"/>
             <el-table-column prop="username" label="用户名" width="100" align="center"/>
-            <el-table-column prop="comment" label="评论内容" width="420" align="center"/>
+            <el-table-column prop="content" label="评论内容" width="420" align="center"/>
 
-            <!--评分时间-->
-            <el-table-column prop="mark_time" label="评分时间" width="180" align="center"/>
+            <!--评论时间-->
+            <el-table-column prop="commentTime" label="评论时间" width="180" align="center"/>
           </el-table>
         </div>
       </div>
@@ -60,8 +53,11 @@
 
 <script>
 import { ref, reactive, toRefs, onMounted, onBeforeMount, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import MainMenu from '@/components/MainMenu.vue'
+import theAxios from 'axios'
+import { ElNotification } from 'element-plus'
+import { useStore } from 'vuex'
 // import RouterView from '../RouterView.vue'
 
 export default {
@@ -73,8 +69,9 @@ export default {
   props: {},
   emits: [],
   setup () {
-    const router = useRouter() // 使用路由
+    // const router = useRouter() // 使用路由
     const route = useRoute() // 使用路由
+    const store = useStore()
 
     const state = reactive({
       user: {
@@ -94,47 +91,115 @@ export default {
       },
       statusList: [], // 状态下拉框
       categoryList: [], // 种类下拉框
-      genderList: [] // 性别下拉框
+      genderList: [], // 性别下拉框
+      commentList: [], // 评论列表
+      nocontent: false // 是否显示404内容
     })
 
     onBeforeMount(() => {
-      getParttimeList() // 调api获取数据
     })
 
-    const getParttimeList = () => {
-      console.log('调api取数据')
+    const getCommentList = () => {
+      // 调api
+      theAxios.get('http://114.55.239.213:8087/comments/emp/getSome?emp_id=' + store.state.user.phone)
+        .then(res => {
+          console.log('评论数据接口的返回数据', res.data.data)
+
+          let flag = false
+          for (let i = 0; i < res.data.data.length; i++) {
+            if (res.data.data[i].memo === '获取成功') {
+              flag = true
+            }
+          }
+          if (flag === false) {
+            // 说明没数据
+            const theRes = res.data.data[0]
+            if (theRes.memo === '该报名尚未评论') {
+              state.nocontent = true
+              ElNotification({
+                title: '注意啦',
+                message: '该报名尚未评论',
+                type: 'warning',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (theRes.memo === '该兼职尚未报名') {
+              state.nocontent = true
+              ElNotification({
+                title: '出错啦',
+                message: '该兼职尚未报名',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (theRes.memo === '暂无负责的兼职') {
+              state.nocontent = true
+              ElNotification({
+                title: '出错啦',
+                message: '暂无负责的兼职',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (theRes.memo === '请检出输入') {
+              state.nocontent = true
+              ElNotification({
+                title: '出错啦',
+                message: '请检出输入',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            }
+          } else {
+            // 有数据
+            if (res.data.data.length > 0) {
+              const list = []
+              res.data.data.forEach(v => {
+                // 遍历
+                if (v.memo === '获取成功') {
+                  // 获取成功的才加入到列表
+                  list.push({
+                    id: v.c_id, // 评论id
+                    content: v.content,
+                    commentTime: v.create_time, // 评论时间
+                    username: v.username,
+                    pName: v.p_name,
+                    stuId: v.user_id,
+                    sId: v.s_id
+                  })
+                }
+              })
+              // list赋值给markList
+              state.commentList = list
+              console.log('评论列表数据', state.commentList)
+
+              ElNotification({
+                title: '成功啦',
+                message: '获取成功',
+                type: 'success',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+
+              // router.push({
+              //   path: '/parttime/signup'
+              // })
+            }
+          }
+          state.ready = true
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
 
     onMounted(() => {
+      getCommentList() // 调api获取数据
     })
 
     // 表格
     const tableRef = ref()
-    const parttimeList = ref([ // 数据
-      {
-        id: '1',
-        name: '图书馆学生助理',
-        username: 'asf',
-        comment: '这是评论内容这是评论内容这是评论内容',
-        mark_time: '2023-02-01 12:00:02',
-        checked: false
-      },
-      {
-        id: '2',
-        name: '图书馆学生助理',
-        username: 'asfasd',
-        comment: '这是测试评论内容这是评论内容这是评论内容这是评论内容这是评论内容这是评论内容',
-        mark_time: '2023-02-01 12:00:02',
-        checked: false
-      }
-    ])
-
-    const detail = (scope) => { // 详情按钮
-      console.log('scope', scope)
-      router.push({
-        path: '/parttime/list/detail'
-      })
-    }
 
     // 菜单打开
     const openItem = (item) => {
@@ -167,23 +232,12 @@ export default {
       return res
     })
 
-    // 发布兼职
-    const publish = () => {
-      console.log('点击了发布兼职')
-      router.push({
-        path: '/parttime/publish'
-      })
-    }
-
     return {
       ...toRefs(state),
       openItem,
       tableRef,
-      parttimeList,
-      getParttimeList,
-      detail,
-      secondRoutes,
-      publish
+      getCommentList,
+      secondRoutes
     }
   }
 }
