@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box" v-if="secondRoutes">
     <!--菜单-->
     <div class="left-box">
       <MainMenu class="menu-box"/>
@@ -71,7 +71,7 @@
 
           <!--操作部分-->
           <div class="operation">
-            <el-button class="modify-info" type="warning" round color="#FFCC71" :dark="true" @click="modifyInfo(user, info)">
+            <el-button class="modify-info" type="warning" round color="#FFCC71" :dark="true" @click="modifyInfo(user, unit)">
               <div class="title">个人信息修改</div>
             </el-button>
             <el-button class="modify-pwd" type="warning" round color="#FFCC71" :dark="true" @click="modifyPwd(user)">
@@ -85,11 +85,15 @@
       </div>
     </div>
   </div>
+
+  <div class="box" v-else>
+    <router-view/>
+  </div>
 </template>
 
 <script>
-import { reactive, toRefs, onMounted, onBeforeMount } from 'vue'
-// import { useRouter } from 'vue-router'
+import { reactive, toRefs, onMounted, onBeforeMount, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import MainMenu from '@/components/MainMenu.vue'
 import theAxios from 'axios'
 import { ElNotification } from 'element-plus'
@@ -103,7 +107,8 @@ export default {
   props: {},
   emits: [],
   setup () {
-    // const route = useRoute() // 使用路由
+    const router = useRouter() // 使用路由
+    const route = useRoute() // 使用路由
     const store = useStore()
 
     const state = reactive({
@@ -125,20 +130,15 @@ export default {
         sub3: false
       },
       // 单位的配置数据
-      unit: {
-        // id: 0, // 单位的id
-        // name: 'aaa',
-        // descriptions: '这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述',
-        // area: '这是地点这是地点这是地点这是地点这是地点这是地点',
-        // jobnums: 10
-      },
+      unit: {},
       nocontent: false // 是否显示404内容
     })
 
     onBeforeMount(() => {
+      getUserData(2)
     })
 
-    const getUserData = () => {
+    const getUserData = (type) => {
       // 调api
       theAxios.get('http://114.55.239.213:8087/users/info/get_emp?telephone=' + store.state.user.phone)
         .then(res => {
@@ -156,12 +156,26 @@ export default {
           } else if (res.data.data.memo === '获取成功') {
             state.nocontent = false
 
+            // 处理性别
             let theGender = ''
             if (res.data.data.gender === 1) {
               theGender = '男'
             } else {
               theGender = '女'
             }
+
+            // 处理头像
+            let theHead = ''
+            if (res.data.data.head === null || res.data.data.head === undefined || res.data.data.head === '0') {
+              if (theGender === '男') {
+                theHead = '/img/userhome/head1.png'
+              } else {
+                theHead = '/img/userhome/head2.png'
+              }
+            }
+            console.log(theHead)
+
+            // 构造对象
             const obj1 = {
               username: res.data.data.emp_name,
               gender: theGender,
@@ -169,7 +183,7 @@ export default {
               age: res.data.data.age,
               telephone: res.data.data.telephone,
               jno: res.data.data.jno,
-              head: res.data.data.head ? res.data.data.head : '/img/userhome/icon_head1.jpeg'
+              head: theHead
             }
 
             const obj2 = {
@@ -185,13 +199,15 @@ export default {
             console.log('用户信息', state.user)
             console.log('单位信息', state.unit)
 
-            ElNotification({
-              title: '成功啦',
-              message: '获取成功',
-              type: 'success',
-              position: 'top-right', // 右上
-              offset: 60
-            })
+            if (type === 1) {
+              ElNotification({
+                title: '成功啦',
+                message: '获取个人信息成功',
+                type: 'success',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            }
           }
           state.ready = true
         })
@@ -201,7 +217,7 @@ export default {
     }
 
     onMounted(() => {
-      getUserData() // 调api获取数据
+      getUserData(1) // 调api获取数据
     })
 
     // 菜单打开
@@ -222,7 +238,14 @@ export default {
       }
     }
 
-    const modifyInfo = (user, unit) => {
+    const modifyInfo = (data1, data2) => {
+      router.push({
+        path: '/userhome/edit',
+        query: {
+          user: JSON.stringify(data1),
+          unit: JSON.stringify(data2)
+        }
+      })
     }
 
     const modifyPwd = (user) => {
@@ -231,13 +254,28 @@ export default {
     const appIntroduction = () => {
     }
 
+    // 是否是二级路由
+    const secondRoutes = computed(() => {
+      let res = null
+      if (route.path === '/parttime/list' || route.path === '/parttime/signup' ||
+        route.path === '/markcomment/mark' || route.path === '/markcomment/comment' ||
+        route.path === '/userhome/index') {
+        // 是二级路由
+        res = true
+      } else {
+        res = false
+      }
+      return res
+    })
+
     return {
       ...toRefs(state),
       openItem,
       getUserData,
       modifyInfo,
       modifyPwd,
-      appIntroduction
+      appIntroduction,
+      secondRoutes
     }
   }
 }

@@ -4,7 +4,9 @@
     <div class="top-box">
       <div class="title" @click="refresh()">城职速达</div>
       <div class="log-box">
-        <img class="icon" src="" alt=""/>
+        <img class="icon" v-if="user.gender === '男'" :src="user.head !== '0' ? user.head : '/img/userhome/head1.png'" alt=""/>
+        <img class="icon" v-else-if="user.gender === '女'" :src="user.head !== '0' ? user.head : '/img/userhome/head2.png'" alt=""/>
+        <img class="icon" v-else src="/img/userhome/icon_head1.jpeg" alt=""/>
 
         <el-dropdown class="hover">
           <span class="username">{{user.username ? user.username : '未登录'}}</span>
@@ -81,6 +83,7 @@ export default {
     // 从store中获取用户信息，计算属性实现store中的user变化后，这里就能响应到，从而改变状态
     const user = computed(() => {
       const u = store.state.user
+      console.log('abc', u.head)
       return u
     })
 

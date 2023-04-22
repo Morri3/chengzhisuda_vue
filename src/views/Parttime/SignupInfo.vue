@@ -248,7 +248,6 @@ export default {
         category: '',
         gender: ''
       },
-      // isAll: false, // 是否全选
       dataList: [], // 报名数据列表
       statusList: [], // 状态下拉框
       categoryList: [], // 种类下拉框
@@ -418,15 +417,18 @@ export default {
                     }
                   }
 
+                  // 处理简历图片
                   let url = ''
                   const urls = []
                   if (res.data.data[i].url) {
-                    // const body = res.data.data[i].url.substring(7) // 获取http://后的内容
-                    // url = 'https://images.weserv.nl/?url=' + body
-                    url = res.data.data[i].url
-                    urls.push(res.data.data[i].url)
-                    // urls.push(url)
+                    console.log('url', res.data.data[i].url)
+                    if ((res.data.data[i].url).indexOf('ttp') !== -1) {
+                      console.log('preview_url', (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4))
+                      url = (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4) // 获取可访问部分的url，在minio中设置public的桶访问权限
+                      urls.push(url)
+                    }
                   } else {
+                    // 没简历图片就显示默认的
                     url = '/img/signup/前端实习生_张亦骞_浙大城市学院计算机科学与技术专业_简历.png'
                     urls.push('/img/signup/前端实习生_张亦骞_浙大城市学院计算机科学与技术专业_简历.png')
                   }
@@ -477,13 +479,6 @@ export default {
       getParttimeList()
     })
 
-    // const detail = (scope) => { // 详情按钮
-    //   console.log('scope', scope)
-    //   router.push({
-    //     path: '/parttime/list/detail'
-    //   })
-    // }
-
     // 菜单打开
     const openItem = (item) => {
       switch (item) {
@@ -506,7 +501,8 @@ export default {
     const secondRoutes = computed(() => {
       let res = null
       if (route.path === '/parttime/list' || route.path === '/parttime/signup' ||
-        route.path === '/markcomment/mark' || route.path === '/markcomment/comment') {
+        route.path === '/markcomment/mark' || route.path === '/markcomment/comment' ||
+        route.path === '/userhome/index') {
         // 是二级路由
         res = true
       } else {
@@ -521,6 +517,7 @@ export default {
       state.visible = true // 显示弹窗
     }
 
+    // 录取
     const employ = (item) => {
       state.ready = false
 
@@ -596,6 +593,7 @@ export default {
         })
     }
 
+    // 婉拒
     const reject = (item) => {
       state.ready = false
 
@@ -672,7 +670,6 @@ export default {
       openItem,
       resumeDetail,
       getParttimeList,
-      // detail,
       secondRoutes,
       employ,
       reject

@@ -9,7 +9,7 @@
     <div class="right-box">
       <!--搜索区域-->
       <div class="top-box">
-        <img class="icon" src="" alt="" />
+        <img class="icon" src="/img/utils/icon_search.png" alt="" />
         <div class="title1">兼职名称</div>
         <el-input class="input1" v-model="search.name" placeholder="请输入内容"/>
         <div class="title2">兼职状态</div>
@@ -36,7 +36,11 @@
             <el-table-column prop="id" label="序号" width="55" align="center"/>
             <el-table-column prop="pName" label="兼职名称" width="270" sortable align="center"/>
             <el-table-column prop="username" label="用户名" width="100" align="center"/>
-            <el-table-column prop="content" label="评论内容" width="420" align="center"/>
+            <el-table-column prop="content" label="评论内容" width="420" align="center">
+              <template v-slot="scope">
+                <div style="color: #f7b91e;">{{ scope.row.content }}</div>
+              </template>
+            </el-table-column>
 
             <!--评论时间-->
             <el-table-column prop="commentTime" label="评论时间" width="180" align="center"/>
@@ -375,182 +379,13 @@ export default {
         align-items: center;
 
         //评分表格
-        .mark-box{
+        .comment-box{
           width: 100%;
           height: auto;
           display: flex;
           flex-direction: column;
           //align-items: center;
           justify-content: center;
-
-          //第一行
-          .line-1{
-            width: 100%;
-            height: auto;
-            display: flex;
-            flex-direction: row;
-            align-items: center; // 垂直居中
-
-            .total-tag{
-              width: 60px;
-              height: 20px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #ff5d5d;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-            .total{
-              width: auto;
-              height: auto;
-              margin-left: 5px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-          }
-
-          //第一行
-          .line-1{
-            width: 100%;
-            height: auto;
-            display: flex;
-            flex-direction: row;
-            align-items: center; // 垂直居中
-
-            .total-tag{
-              width: auto;
-              height: 20px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #ff5d5d;
-              padding: 0 5px;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-            .total{
-              width: auto;
-              height: auto;
-              margin-left: 5px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-          }
-
-          //第2行
-          .line-2{
-            width: 100%;
-            height: auto;
-            display: flex;
-            flex-direction: row;
-            align-items: center; // 垂直居中
-
-            .mark-tag{
-              width: auto;
-              height: 20px;
-              font-weight: 400;
-              font-size: 12px;
-              color: #5d93ff;
-              padding: 0 5px;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-            .value{
-              width: auto;
-              height: auto;
-              margin-left: 5px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-            .mark-tag-2{
-              width: auto;
-              height: 20px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #5d93ff;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-              padding: 0 5px;
-              margin-left: 20px;
-            }
-          }
-
-          //第3行
-          .line-3{
-            width: 100%;
-            height: auto;
-            display: flex;
-            flex-direction: row;
-            align-items: center; // 垂直居中
-
-            .mark-tag{
-              width: auto;
-              height: 20px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #3dda0e;
-              padding: 0 5px;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-            .value{
-              width: auto;
-              height: auto;
-              margin-left: 5px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-            .mark-tag-2{
-              width: auto;
-              height: 20px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #3dda0e;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-              padding: 0 5px;
-              margin-left: 20px;
-            }
-          }
-
-          //第4行
-          .line-4{
-            width: 100%;
-            height: auto;
-            display: flex;
-            flex-direction: row;
-            align-items: center; // 垂直居中
-
-            .mark-tag{
-              width: auto;
-              height: 20px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #f98c17;
-              padding: 0 5px;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-            .value{
-              width: auto;
-              height: auto;
-              margin-left: 5px;
-              font-weight: 400;
-              font-size: 14px;
-              color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-            }
-            .mark-tag-2,.mark-tag-3{
-              width: auto;
-              height: 20px;
-              font-weight: 400;
-              font-size: 11px;
-              color: #f98c17;
-              font-family: zcool-TsangerYuYangT_W04_W04;
-              padding: 0 5px;
-              margin-left: 20px;
-            }
-          }
         }
       }
     }

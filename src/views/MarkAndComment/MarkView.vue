@@ -9,7 +9,7 @@
     <div class="right-box">
       <!--搜索区域-->
       <div class="top-box">
-        <img class="icon" src="" alt="" />
+        <img class="icon" src="/img/utils/icon_search.png" alt="" />
         <div class="title1">兼职名称</div>
         <el-input class="input1" v-model="search.name" placeholder="请输入内容"/>
         <div class="title2">兼职状态</div>

@@ -9,7 +9,7 @@
     <div class="right-box">
       <!--搜索区域-->
       <div class="top-box">
-        <img class="icon" src="" alt="" />
+        <img class="icon" src="/img/utils/icon_search.png" alt="" />
         <div class="title1">兼职名称</div>
         <el-input class="input1" v-model="search.name" placeholder="请输入内容"/>
         <div class="title2">兼职状态</div>
@@ -301,7 +301,8 @@ export default {
     const secondRoutes = computed(() => {
       let res = null
       if (route.path === '/parttime/list' || route.path === '/parttime/signup' ||
-        route.path === '/markcomment/mark' || route.path === '/markcomment/comment') {
+        route.path === '/markcomment/mark' || route.path === '/markcomment/comment' ||
+        route.path === '/userhome/index') {
         // 是二级路由
         res = true
       } else {

@@ -22,7 +22,9 @@
 
     <div class="line-5">
       <div class="title">性&nbsp;&nbsp;&nbsp;&nbsp;别</div>
-      <el-input class="input" v-model="user.gender" placeholder="请输入性别"/>
+      <el-select class="gender" v-model="user.gender" clearable placeholder="请选择性别">
+        <el-option v-for="(item, index) in genderList" :key="index" :label="item" :value="item"/>
+      </el-select>
     </div>
 
     <div class="line-6">
@@ -94,26 +96,26 @@ export default {
       },
       birthYear: [], // 出生年月下拉框
       birthMonth: [], // 出生年月下拉框
+      genderList: ['男', '女'], // 性别下拉框
       curTime: { // 时间的样式
         color: 'white'
       }
     })
 
     onMounted(() => {
-      for (let i = 1980; i <= 2023; i++) {
+      const now = new Date()
+      for (let i = now.getFullYear() - 30; i <= now.getFullYear(); i++) {
         state.birthYear.push({
           value: i,
           label: i
         })
       }
-      console.log(state.birthYear)
       for (let i = 1; i <= 12; i++) {
         state.birthMonth.push({
           value: i,
           label: i
         })
       }
-      console.log(state.birthMonth)
     })
 
     // 根据日期算年龄
@@ -294,6 +296,14 @@ export default {
       background: #ffffff;
       border-radius: 5px;
       box-shadow: 1.5px 1.5px 1px #eaeaea;//阴影
+    }
+
+    //性别那行特有
+    .gender{
+      width: 441px;
+      height: auto;
+      padding: 5px 0px;
+      margin-left: 30px;
     }
   }
 

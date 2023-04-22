@@ -688,7 +688,7 @@ export default {
 
             font-weight: 400;
             font-size: 16px;
-            color: #000000;
+            color: #ff1eff;
             font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }

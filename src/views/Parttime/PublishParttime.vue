@@ -188,7 +188,7 @@ export default {
       },
       // 单位的配置数据
       unit: {},
-      // 可选的呃兼职种类列表
+      // 可选的兼职种类列表
       categoryList: [
         '课程助教', '学生助理', '军训助理', '体测助理', '讲解员', '公寓宣传员', '班助', '服务员'
       ],
@@ -245,6 +245,7 @@ export default {
       } else if (state.parttime.settlement === 2) {
         settlement = '学期结算'
       }
+
       // 发布兼职输入的dto
       const input = {
         op_id: state.user.phone,
@@ -262,6 +263,7 @@ export default {
         create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
         num_total: state.parttime.num
       }
+
       // 调api，发布兼职
       theAxios.post('http://114.55.239.213:8087/parttime/publish', input)
         .then(res => {

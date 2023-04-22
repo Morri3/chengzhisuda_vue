@@ -269,7 +269,19 @@ const routes = [
       title: '个人中心 · 个人信息管理',
       level: 2,
       requireAuth: true
-    }
+    },
+    children: [
+      {
+        path: '/userhome/edit',
+        name: 'useredit',
+        component: () => import('../views/Userhome/UserInfoEdit.vue'),
+        meta: {
+          title: '个人信息修改',
+          level: 3,
+          requireAuth: true
+        }
+      }
+    ]
   }
 ]
 

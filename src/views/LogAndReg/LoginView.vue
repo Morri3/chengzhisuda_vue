@@ -55,68 +55,89 @@ export default {
     const login = () => {
       console.log('login', '点击了登录按钮')
 
-      // 调api
-      const user = {
-        telephone: state.user.phone,
-        pwd: state.user.pwd
-      }
-      console.log('输入的账号密码', user)
-      theAxios.post('http://114.55.239.213:8087/login/emp', user)
-        .then(res => {
-          console.log('登陆接口的返回数据', res.data.data)
+      if (!state.user.phone || !state.user.pwd) {
+        // 没输入不调api
+        ElNotification({
+          title: '出错啦',
+          message: '请检查是否有输入',
+          type: 'error',
+          position: 'top-right', // 右上
+          offset: 60
+        })
+      } else {
+        // 有输入再调api
+        // 调api
+        const user = {
+          telephone: state.user.phone,
+          pwd: state.user.pwd
+        }
+        console.log('输入的账号密码', user)
+        theAxios.post('http://114.55.239.213:8087/login/emp', user)
+          .then(res => {
+            console.log('登陆接口的返回数据', res.data.data)
 
-          if (res.data.data.memo === '不存在该兼职发布者') {
-            ElNotification({
-              title: '出错啦',
-              message: '不存在该兼职发布者',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '密码或账号错误，请检查后重新输入') {
-            ElNotification({
-              title: '出错啦',
-              message: '密码或账号错误，请检查后重新输入',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '登录成功') {
-            // 将token赋值给state.user，并存到store中
-            const theUser = {
-              token: res.data.data.token,
-              isLogin: true,
-              username: res.data.data.emp_name,
-              phone: res.data.data.telephone,
-              pwd: res.data.data.pwd
-            }
-            store.commit('setUserLoginInfo', theUser)
-            console.log('getUserLoginInfo', store.state.user)
-
-            // 跳转到首页
-            router.push({
-              path: '/home',
-              query: {
-                phone: theUser.phone, // 将用户的账号传过去
-                pwd: theUser.pwd,
-                token: theUser.token,
-                isLogin: theUser.isLogin,
-                username: theUser.username
+            if (res.data.data.memo === '不存在该兼职发布者') {
+              ElNotification({
+                title: '出错啦',
+                message: '不存在该兼职发布者',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '密码或账号错误，请检查后重新输入') {
+              ElNotification({
+                title: '出错啦',
+                message: '密码或账号错误，请检查后重新输入',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '登录成功') {
+              // 处理性别
+              let theGender = ''
+              if (res.data.data.gender === 1) {
+                theGender = '男'
+              } else {
+                theGender = '女'
               }
-            })
+              // 将token赋值给state.user，并存到store中
+              const theUser = {
+                token: res.data.data.token,
+                isLogin: true,
+                username: res.data.data.emp_name,
+                phone: res.data.data.telephone,
+                pwd: res.data.data.pwd,
+                head: res.data.data.head, // 头像
+                gender: theGender
+              }
+              store.commit('setUserLoginInfo', theUser)
+              console.log('getUserLoginInfo', store.state.user)
 
-            ElNotification({
-              title: '成功啦',
-              message: '登录成功',
-              type: 'success',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
+              // 跳转到首页
+              router.push({
+                path: '/home',
+                query: {
+                  phone: theUser.phone, // 将用户的账号传过去
+                  pwd: theUser.pwd,
+                  token: theUser.token,
+                  isLogin: theUser.isLogin,
+                  username: theUser.username
+                }
+              })
+
+              ElNotification({
+                title: '成功啦',
+                message: '登录成功',
+                type: 'success',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      }
     }
 
     return {

@@ -39,6 +39,8 @@ export default createStore({
       state.user.token = user.token
       state.user.isLogin = user.isLogin
       state.user.username = user.username
+      state.user.head = user.head
+      state.user.gender = user.gender
     }
   },
   actions: {
