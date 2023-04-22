@@ -178,15 +178,15 @@ const routes = [
           requireAuth: true
         }
       },
-      // {
-      //   path: '/parttime/list/edit',
-      //   name: 'parttimelistedit',
-      //   component: () => import('../views/Parttime/ParttimeEdit.vue'),
-      //   meta: {
-      //     title: '兼职编辑',
-      //     level: 3
-      //   }
-      // },
+      {
+        path: '/parttime/list/edit',
+        name: 'parttimelistedit',
+        component: () => import('../views/Parttime/EditParttime.vue'),
+        meta: {
+          title: '兼职编辑',
+          level: 3
+        }
+      },
       {
         path: '/parttime/publish',
         name: 'parttimepublish',

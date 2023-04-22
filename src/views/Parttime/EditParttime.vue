@@ -8,7 +8,7 @@
     <div class="right-box">
       <!--标题-->
       <div class="top-box">
-        <div class="title">发布兼职</div>
+        <div class="title">编辑兼职</div>
       </div>
 
       <!--表单信息-->
@@ -17,14 +17,15 @@
         <div class="line-1">
           <el-steps class="steps" :active="active" align-center :hollow="true">
             <el-step class="step-title" title="填写兼职信息"/>
-            <el-step class="step-title" title="点击“确认发布”按钮"/>
+            <el-step class="step-title" title="点击“确认编辑”按钮"/>
           </el-steps>
         </div>
 
         <!--line2-->
         <div class="line-2">
           <div class="name-1">兼职名称</div>
-          <el-input class="content-1" v-model="parttime.name" placeholder="请输入兼职名称" :minlength="1" clearable ref="name" :style="{'--wrapperColor': colorVal}" @input="changeBorder">
+          <el-input class="content-1" v-model="parttime.name" placeholder="请输入兼职名称" :minlength="1" clearable ref="name" :style="{'--wrapperColor': colorVal}" @input="changeBorder"
+            disabled>
             <template #prefix>
               <el-icon class="must"><Star /></el-icon><!--必填星星-->
             </template>
@@ -135,9 +136,9 @@
           </el-col>
 
           <!--发布兼职按钮-->
-          <el-button class="publish" type="primary" round color="#B886F8" :dark="true" @click="publish()">
+          <el-button class="publish" type="primary" round color="#B886F8" :dark="true" @click="save()">
             <el-icon class="icon-publish"><Plus /></el-icon>
-            <div class="title">确认发布</div>
+            <div class="title">确认编辑</div>
           </el-button>
         </div>
       </div>
@@ -147,7 +148,7 @@
 
 <script>
 import { reactive, toRefs, onMounted, onBeforeMount } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import MainMenu from '@/components/MainMenu.vue'
 import theAxios from 'axios'
 import { ElNotification } from 'element-plus'
@@ -155,7 +156,7 @@ import { useStore } from 'vuex'
 import moment from 'moment'
 
 export default {
-  name: 'PublishParttime',
+  name: 'EditParttime',
   components: {
     MainMenu
   },
@@ -163,6 +164,7 @@ export default {
   emits: [],
   setup () {
     const router = useRouter() // 使用路由
+    const route = useRoute() // 使用路由
     const store = useStore()
 
     const state = reactive({
@@ -174,6 +176,7 @@ export default {
       },
       // 兼职的表单数据
       parttime: {
+        pId: 0,
         settlement: '',
         category: '',
         name: '',
@@ -203,12 +206,39 @@ export default {
 
     onBeforeMount(() => {
       state.active = 1 // 初始化时间线进度
-      getUserInfo() // 调api获取数据
-      getUnitInfo()
+      getData() // 获取要编辑的兼职信息（从兼职首页传入）
+      getUnitInfo() // 获取单位信息
     })
 
-    const getUserInfo = () => {
-      state.user = store.state.user
+    // 获取传进来的兼职信息
+    const getData = () => {
+      const input = JSON.parse(route.query.dataList)
+      console.log('编辑兼职传来的信息', input)
+
+      // 处理结付方式
+      let theSettlement = 0
+      if (input.settlement === '月结') {
+        theSettlement = 1
+      } else if (input.settlement === '学期结算') {
+        theSettlement = 2
+      }
+      // 赋值给这个页面的变量
+      const obj = {
+        pId: input.p_id,
+        settlement: theSettlement,
+        category: input.category,
+        name: input.position_name,
+        salary: input.salary,
+        area: input.area,
+        exp: input.exp,
+        content: input.content,
+        requirement: input.requirement,
+        ddl: input.signup_ddl,
+        slogan: input.slogan,
+        worktime: input.work_time,
+        num: input.num_total // 名额数
+      }
+      state.parttime = obj // 赋值给兼职对象，显示在表单中
     }
 
     onMounted(() => {
@@ -232,25 +262,25 @@ export default {
       }
     }
 
-    // 发布兼职
-    const publish = () => {
+    // 保存修改
+    const save = () => {
       // 检查表单的必填内容
       if (state.parttime.name === '') {
         //
       }
 
       // 转换结付方式
-      let theSettlement = ''
+      let settlement = ''
       if (state.parttime.settlement === 1) {
-        theSettlement = '月结'
+        settlement = '月结'
       } else if (state.parttime.settlement === 2) {
-        theSettlement = '学期结算'
+        settlement = '学期结算'
       }
 
       // 发布兼职输入的dto
       const input = {
-        op_id: state.user.phone,
-        position_name: state.parttime.name,
+        op_id: store.state.user.phone,
+        p_id: state.parttime.pId,
         category: state.parttime.category,
         salary: state.parttime.salary,
         area: state.parttime.area,
@@ -260,15 +290,16 @@ export default {
         signup_ddl: moment(state.parttime.ddl).format('YYYY-MM-DD HH:mm:ss'),
         slogan: state.parttime.slogan,
         work_time: state.parttime.worktime,
-        settlement: theSettlement,
-        create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+        settlement: settlement,
+        update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
         num_total: state.parttime.num
       }
+      console.log('000', input.signup_ddl)
 
-      // 调api，发布兼职
-      theAxios.post('http://114.55.239.213:8087/parttime/publish', input)
+      // 调api，编辑兼职
+      theAxios.post('http://114.55.239.213:8087/parttime/edit', input)
         .then(res => {
-          console.log('发布兼职接口的返回数据', res.data.data)
+          console.log('编辑兼职接口的返回数据', res.data.data)
 
           if (res.data.data.memo === '不存在该兼职发布者') {
             ElNotification({
@@ -286,6 +317,14 @@ export default {
               position: 'top-right', // 右上
               offset: 60
             })
+          } else if (res.data.data.memo === '只能编辑已发布且无人录取的兼职') {
+            ElNotification({
+              title: '出错啦',
+              message: '只能编辑已发布且无人录取的兼职',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
           } else if (res.data.data.memo === '该兼职发布者不存在单位') {
             ElNotification({
               title: '出错啦',
@@ -294,8 +333,8 @@ export default {
               position: 'top-right', // 右上
               offset: 60
             })
-          } else if (res.data.data.memo === '发布成功') {
-            console.log('发布的兼职信息', res.data.data)
+          } else if (res.data.data.memo === '编辑成功') {
+            console.log('编辑的兼职信息', res.data.data)
 
             // 跳转到兼职首页
             router.push({
@@ -304,7 +343,7 @@ export default {
 
             ElNotification({
               title: '成功啦',
-              message: '发布成功',
+              message: '编辑成功',
               type: 'success',
               position: 'top-right', // 右上
               offset: 60
@@ -324,7 +363,7 @@ export default {
 
     const getUnitInfo = () => {
       // 调api，根据op_id找到unit信息
-      theAxios.get('http://114.55.239.213:8087/parttime/unit/get?op_id=' + state.user.phone)
+      theAxios.get('http://114.55.239.213:8087/parttime/unit/get?op_id=' + store.state.user.phone)
         .then(res => {
           console.log('获取单位信息接口的返回数据', res.data.data)
 
@@ -348,6 +387,14 @@ export default {
             ElNotification({
               title: '出错啦',
               message: '不存在该兼职发布者',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不能操作非负责的兼职') {
+            ElNotification({
+              title: '出错啦',
+              message: '不能操作非负责的兼职',
               type: 'error',
               position: 'top-right', // 右上
               offset: 60
@@ -377,10 +424,10 @@ export default {
     return {
       ...toRefs(state),
       openItem,
-      getUserInfo,
-      publish,
+      save,
       changeBorder,
-      getUnitInfo
+      getUnitInfo,
+      getData
     }
   }
 }

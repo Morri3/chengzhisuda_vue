@@ -94,7 +94,6 @@ export default {
     })
 
     onMounted(() => {
-      // console.log('getMenu',store.state.menu)
     })
 
     const openItem = (item) => {
@@ -166,23 +165,6 @@ export default {
         console.log('newValue', newValue, 'oldvalue', oldValue)
       }
     )
-
-    // // 监听选中的菜单项
-    // watch(
-    //   () => store.state.menu,
-    //   (newValue, oldValue) => {
-    //     // var cur = [0, 0, 0]
-    //     // for (let i = 0; i < 3; i++) {
-    //     //   var icon = document.getElementById(`icon${i + 1}`) // 对应的图标,使用了模板字符串
-    //     //   if (newValue[i] === true) {
-    //     //     cur[i] = (cur[i] - 180) % 360
-    //     //   }
-    //     //   icon.style.transform = 'rotate(' + cur[i] + 'deg)' // 旋转
-    //     //   icon.style.transition = 'all .5s' // 过渡动画
-    //     // }
-    //     console.log('菜单项新值', newValue, '菜单项旧值', oldValue)
-    //   }
-    // )
 
     return {
       ...toRefs(state),

@@ -26,6 +26,7 @@
               <div class="bottom">
                 <el-tag class="gender" type="primary">{{user.gender}}</el-tag>
                 <el-tag class="age" type="success">{{user.age}}岁</el-tag>
+                <el-tag class="admin" type="warning" v-if="user.isAdmin === 1">管理员</el-tag>
               </div>
             </div>
           </div>
@@ -183,9 +184,9 @@ export default {
               age: res.data.data.age,
               telephone: res.data.data.telephone,
               jno: res.data.data.jno,
-              head: theHead
+              head: theHead,
+              isAdmin: res.data.data.emp_grade // 是否是管理员，值=1表示是，0不是
             }
-
             const obj2 = {
               name: res.data.data.unit_name,
               descriptions: res.data.data.unit_descriptions,
@@ -421,6 +422,13 @@ export default {
                 padding: 5px 10px;
               }
               .age{
+                width: 50px;
+                height: auto;
+                padding: 5px 10px;
+                margin-left: 15px;
+              }
+
+              .admin{
                 width: 50px;
                 height: auto;
                 padding: 5px 10px;

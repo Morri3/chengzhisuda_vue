@@ -205,7 +205,8 @@ export default {
     // 表格
     const tableRef = ref()
 
-    const detail = (scope) => { // 详情按钮
+    // 详情按钮
+    const detail = (scope) => {
       console.log('路由传递的数据', JSON.stringify(state.parttimeAllInfoList[scope.$index]))
 
       // 跳转
@@ -214,6 +215,19 @@ export default {
         query: {
           dataList: JSON.stringify(state.parttimeAllInfoList[scope.$index]), // 当前行所在下标对应的兼职数据
           type: 0 // 表示从兼职列表页进入详情页
+        }
+      })
+    }
+
+    // 编辑按钮
+    const edit = (scope) => {
+      console.log('路由传递的数据', JSON.stringify(state.parttimeAllInfoList[scope.$index]))
+
+      // 跳转
+      router.push({
+        path: '/parttime/list/edit',
+        query: {
+          dataList: JSON.stringify(state.parttimeAllInfoList[scope.$index])
         }
       })
     }
@@ -327,7 +341,8 @@ export default {
       detail,
       secondRoutes,
       publish,
-      undercarriage
+      undercarriage,
+      edit
     }
   }
 }

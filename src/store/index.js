@@ -20,20 +20,6 @@ export default createStore({
       state.sub0 = sub0
     },
     setUserLoginInfo (state, user) {
-      // let flag = 0
-      // for (let i = 0; i < state.user.length; i++) {
-      //   if (state.user[i].phone === user.phone) {
-      //     // 该用户登陆过，更新token
-      //     flag = 1
-      //     state.user[i].token = user.token
-      //     break
-      //   }
-      // }
-      // if (flag === 0) {
-      //   // 没登陆过，push进去
-      //   state.user.push(user)
-      // }
-      // 单用户
       state.user.phone = user.phone
       state.user.pwd = user.pwd
       state.user.token = user.token
