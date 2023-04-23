@@ -139,9 +139,9 @@ export default {
             } else if (theRes.memo === '暂无负责的兼职') {
               state.nocontent = true
               ElNotification({
-                title: '出错啦',
+                title: '注意啦',
                 message: '暂无负责的兼职',
-                type: 'error',
+                type: 'warning',
                 position: 'top-right', // 右上
                 offset: 60
               })
@@ -313,7 +313,7 @@ export default {
         font-weight: 600;
         font-size: 14px;
         color: #000000;
-        font-family: zcool-TsangerYuYangT_W04_W04;
+        font-family: TsangerYuYangT_W04_W04;
       }
       .input1{
         width: 140px;
@@ -349,7 +349,7 @@ export default {
           font-weight: 600;
           font-size: 14px;
           color: #ffffff;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
         }
       }
       .search-btn:hover,.search-btn:focus {

@@ -136,7 +136,7 @@
           </el-col>
 
           <!--发布兼职按钮-->
-          <el-button class="publish" type="primary" round color="#B886F8" :dark="true" @click="save()">
+          <el-button class="publish" type="primary" round color="#FC9119" :dark="true" @click="save()">
             <el-icon class="icon-publish"><Plus /></el-icon>
             <div class="title">确认编辑</div>
           </el-button>
@@ -536,7 +536,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
           }
         }
       }
@@ -561,7 +561,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -578,7 +578,6 @@ export default {
           font-weight: 400;
           font-size: 16px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
           text-align: left;
         }
         .name-2{
@@ -594,7 +593,7 @@ export default {
           font-weight: 550;
           font-size: 16px;
           color: #ffffff;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
 
           // 文字居中
           text-align: center;
@@ -611,7 +610,6 @@ export default {
           font-weight: 400;
           font-size: 16px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
           text-align: left;
         }
       }
@@ -635,7 +633,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -652,7 +650,6 @@ export default {
           font-weight: 400;
           font-size: 16px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
           text-align: left;
         }
         .name-2{
@@ -668,7 +665,7 @@ export default {
           font-weight: 550;
           font-size: 16px;
           color: #ffffff;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
 
           // 文字居中
           text-align: center;
@@ -685,7 +682,6 @@ export default {
           font-weight: 400;
           font-size: 16px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
           text-align: left;
         }
       }
@@ -710,7 +706,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -727,7 +723,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
           .name-2{
@@ -743,7 +738,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -760,7 +755,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
       }
@@ -785,7 +779,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -802,7 +796,6 @@ export default {
           font-weight: 400;
           font-size: 16px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
           text-align: left;
 
           .choose-date{
@@ -823,7 +816,7 @@ export default {
           font-weight: 550;
           font-size: 16px;
           color: #ffffff;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
 
           // 文字居中
           text-align: center;
@@ -840,7 +833,6 @@ export default {
           font-weight: 400;
           font-size: 16px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
           text-align: left;
 
           //水平布局
@@ -868,7 +860,7 @@ export default {
           font-weight: 550;
           font-size: 16px;
           color: #ffffff;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
 
           // 文字居中
           text-align: center;
@@ -885,7 +877,6 @@ export default {
           font-weight: 400;
           font-size: 16px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
           text-align: left;
         }
       }
@@ -911,7 +902,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -928,7 +919,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
           .name-2{
@@ -944,7 +934,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -961,7 +951,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
           .publish{
@@ -986,13 +975,13 @@ export default {
               font-weight: 600;
               font-size: 14px;
               color: #ffffff;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
               margin-right: 10px;
               margin-left: -5px;
             }
           }
           .publish:hover,.publish:focus {
-            background: #a72af0;
+            background: #f0d22a;
             border: none;
           }
       }
@@ -1026,7 +1015,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -1043,7 +1032,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
           .name-2{
@@ -1059,7 +1047,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -1076,7 +1064,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
       }

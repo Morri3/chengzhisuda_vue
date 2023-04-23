@@ -12,15 +12,13 @@
           <span class="username">{{user.username ? user.username : '未登录'}}</span>
           <template #dropdown>
             <el-dropdown-menu class="menu">
-              <el-dropdown-item @click="login()" v-if="user === null ||
-                (user !== null && user.isLogin === false)" class="btn">
+              <el-dropdown-item @click="login()" v-if="user.isLogin === false || user.isLogin === undefined" class="btn">
                 登录
               </el-dropdown-item>
-              <el-dropdown-item @click="reg()" v-if="user === null ||
-              (user !== null && user.isLogin === false)" class="btn">
+              <el-dropdown-item @click="reg()" v-if="user.isLogin === false || user.isLogin === undefined" class="btn">
                 注册
               </el-dropdown-item>
-              <el-dropdown-item @click="cancel()" v-if="user.isLogin === true" class="btn">
+              <el-dropdown-item @click="cancel()" v-if="user.isLogin === true && user !== null && user !== undefined" class="btn">
                 登出
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -69,6 +67,7 @@ export default {
         // 不显示
         res = false
       } else {
+        // 其余页面显示
         res = true
       }
       return res
@@ -78,12 +77,13 @@ export default {
     )
 
     onBeforeMount(() => {
+      console.log(user.value)
+      console.log(user.value.isLogin)
     })
 
     // 从store中获取用户信息，计算属性实现store中的user变化后，这里就能响应到，从而改变状态
     const user = computed(() => {
       const u = store.state.user
-      console.log('abc', u.head)
       return u
     })
 
@@ -91,21 +91,19 @@ export default {
     })
 
     const login = () => {
-      console.log('登录', '跳转进行登录')
-      router.push({ // 跳转到登录界面
-        path: '/login'
+      router.push({
+        path: '/login' // 跳转到登录界面
       })
     }
 
     const reg = () => {
-      console.log('注册', '跳转进行注册')
-      router.push({ // 跳转到注册界面
-        path: '/reg'
+      router.push({
+        path: '/reg' // 跳转到注册界面
       })
     }
 
+    // 登出
     const cancel = () => {
-      console.log('登出', '跳转进行登出')
       // 调api
       theAxios.post('http://114.55.239.213:8087/logout/emp', {
         input_telephone: store.state.user.phone

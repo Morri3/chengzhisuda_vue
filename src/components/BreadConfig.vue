@@ -45,7 +45,7 @@ export default {
         state.list = route.matched.filter(
           (item) => item.meta && item.meta.title
         )
-        console.log('state.list', state.list)
+        console.log('当前路由数组', state.list)
       }, { immediate: true }
     )
 

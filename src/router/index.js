@@ -183,7 +183,7 @@ const routes = [
         name: 'parttimelistedit',
         component: () => import('../views/Parttime/EditParttime.vue'),
         meta: {
-          title: '兼职编辑',
+          title: '编辑兼职',
           level: 3
         }
       },
@@ -277,6 +277,16 @@ const routes = [
         component: () => import('../views/Userhome/UserInfoEdit.vue'),
         meta: {
           title: '个人信息修改',
+          level: 3,
+          requireAuth: true
+        }
+      },
+      {
+        path: '/userhome/pwd/edit',
+        name: 'pwdedit',
+        component: () => import('../views/Userhome/PwdEdit.vue'),
+        meta: {
+          title: '密码管理',
           level: 3,
           requireAuth: true
         }

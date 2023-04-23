@@ -75,7 +75,7 @@
           <div class="content-1">{{unit.area}}</div>
           <div class="name-2">招聘数量</div>
           <div class="content-2">{{unit.jobNums}}</div>
-          <el-button class="next" type="primary" round color="#B886F8" :dark="true" @click="nextPage()">
+          <el-button class="next" type="primary" round color="#5B92FF" :dark="true" @click="nextPage()">
             <div class="title">下一页</div>
           </el-button>
         </div>
@@ -371,7 +371,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -388,7 +388,6 @@ export default {
             font-weight: 700;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W05_W05;
             text-align: left;
           }
           .name-2{
@@ -404,7 +403,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -422,7 +421,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
           .tag{
@@ -470,7 +468,7 @@ export default {
           font-weight: 400;
           font-size: 16px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
           text-align: left;
           margin-left: 15px;
         }
@@ -495,7 +493,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -512,7 +510,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
 
             //溢出上下滚动条显示
@@ -536,7 +533,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -553,7 +550,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
 
             //溢出上下滚动条显示
@@ -585,7 +581,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -602,7 +598,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
       }
@@ -639,7 +634,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -656,7 +651,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
           .name-2{
@@ -672,7 +666,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -689,7 +683,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #ff1eff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
         .next{
@@ -704,11 +697,11 @@ export default {
             font-weight: 600;
             font-size: 14px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
           }
         }
         .next:hover,.next:focus {
-          background: #a72af0;
+          background: #c061ff;
           border: none;
         }
       }
@@ -739,7 +732,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -756,7 +749,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #fa2121;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
           .name-2{
@@ -772,7 +764,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -789,7 +781,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
       }
@@ -814,7 +805,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -831,7 +822,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
           .name-2{
@@ -847,7 +837,7 @@ export default {
             font-weight: 550;
             font-size: 16px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
 
             // 文字居中
             text-align: center;
@@ -864,7 +854,6 @@ export default {
             font-weight: 400;
             font-size: 16px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
             text-align: left;
           }
       }

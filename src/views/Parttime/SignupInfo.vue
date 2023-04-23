@@ -173,7 +173,7 @@
 
           <!--简历弹窗-->
           <el-dialog v-model="visible" :show-close="false" class="resumes-box"
-            title="简历" width="45%" center align-center>
+            title="简历" width="50%" center align-center v-loading="ready">
 
             <!--简历图片-->
             <el-image
@@ -197,9 +197,11 @@
 
             <!--底部按钮-->
             <template #footer>
-              <span class="dialog-footer">
-                <el-button type="primary" @click="visible = false">关闭</el-button>
-              </span>
+              <div class="dialog-footer">
+                <el-button class="close" type="primary" round color="#B886F8" :dark="true" @click="visible = false">
+                  <div class="title">关闭</div>
+                </el-button>
+              </div>
             </template>
           </el-dialog>
         </div>
@@ -340,12 +342,12 @@ export default {
                     }
                   } else if (res.data.data[i].signup_status === '已录取') {
                     theStatus = {
-                      type: 'danger',
+                      type: 'warning',
                       value: '已录取'
                     }
                   } else if (res.data.data[i].signup_status === '已结束') {
                     theStatus = {
-                      type: 'warning',
+                      type: 'danger',
                       value: '已结束'
                     }
                   } else if (res.data.data[i].signup_status === '已取消') {
@@ -513,8 +515,10 @@ export default {
 
     // 简历详情
     const resumeDetail = (item) => {
+      state.ready = true // 加载
       console.log('欢迎查看简历详情', item)
       state.visible = true // 显示弹窗
+      state.ready = false
     }
 
     // 录取
@@ -752,7 +756,7 @@ export default {
           font-weight: 600;
           font-size: 14px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
         }
         .input1{
           width: 140px;
@@ -788,7 +792,7 @@ export default {
             font-weight: 600;
             font-size: 14px;
             color: #ffffff;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
           }
         }
         .search-btn:hover,.search-btn:focus {
@@ -814,7 +818,7 @@ export default {
           font-weight: 600;
           font-size: 14px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
         }
         .input1{
           width: 140px;
@@ -890,8 +894,34 @@ export default {
           margin-top:60px;
 
           .resumes-pic{
-            width: 350px;
-            height: 480px;
+            width: 330px;
+            height: 470px;
+          }
+          .dialog-footer{
+            .close{
+              width: 70px;
+              height: 30px;
+              color: #ffffff;
+              border: none;
+              border-radius: 10px;
+              box-shadow: 2px 2px 2px #898989;//阴影
+
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+
+              .title{
+                font-weight: 600;
+                font-size: 14px;
+                color: #ffffff;
+                font-family: TsangerYuYangT_W04_W04;
+              }
+            }
+            .close:hover,.close:focus {
+              background: #a72af0;
+              border: none;
+            }
           }
         }
 
@@ -985,6 +1015,12 @@ export default {
                 color: #ffffff;
                 font-family: TsangerYuYangT_W03_W03;
               }
+            }
+            .btn:hover,.btn:focus,
+            .btn-2:hover,.btn-2:focus
+            .btn-3:hover,.btn-3:focus {
+              background: #c061ff;
+              border: none;
             }
             .btn{
               width: 90px;

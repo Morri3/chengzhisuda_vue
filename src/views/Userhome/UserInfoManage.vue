@@ -249,7 +249,13 @@ export default {
       })
     }
 
-    const modifyPwd = (user) => {
+    const modifyPwd = (data) => {
+      router.push({
+        path: '/userhome/pwd/edit',
+        query: {
+          user: JSON.stringify(data)
+        }
+      })
     }
 
     const appIntroduction = () => {
@@ -405,7 +411,7 @@ export default {
                 font-weight: 600;
                 font-size: 24px;
                 color: #000000;
-                font-family: zcool-TsangerYuYangT_W04_W04;
+                font-family: TsangerYuYangT_W04_W04;
               }
             }
 
@@ -456,7 +462,7 @@ export default {
             font-weight: 600;
             font-size: 24px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
             text-align: left;
             margin-left: 15px;
             margin-top: 25px;
@@ -479,7 +485,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -501,7 +507,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
               margin-left: 10px;
               margin-right: 3px;
@@ -530,7 +535,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -552,7 +557,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
               margin-left: 10px;
               margin-right: 3px;
@@ -580,7 +584,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -612,7 +616,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
             }
           }
@@ -634,7 +637,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -656,7 +659,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
               margin-left: 10px;
               margin-right: 3px;
@@ -685,7 +687,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -707,7 +709,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #ff1eff;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
               margin-left: 10px;
               margin-right: 3px;
@@ -748,7 +749,7 @@ export default {
             font-weight: 600;
             font-size: 24px;
             color: #000000;
-            font-family: zcool-TsangerYuYangT_W04_W04;
+            font-family: TsangerYuYangT_W04_W04;
             text-align: left;
             margin-left: 15px;
             margin-top: 15px;
@@ -770,7 +771,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #FF86BF;
               color: #ffffff;
@@ -792,7 +793,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
               margin-left: 10px;
               margin-right: 3px;
@@ -833,7 +833,7 @@ export default {
               font-weight: 600;
               font-size: 14px;
               color: #ffffff;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
           }
 

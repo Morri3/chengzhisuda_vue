@@ -25,6 +25,7 @@
               <div class="bottom">
                 <el-tag class="gender" type="primary">{{user.gender}}</el-tag>
                 <el-tag class="age" type="success">{{user.age}}岁</el-tag>
+                <el-tag class="admin" type="warning" v-if="user.isAdmin === 1">管理员</el-tag>
               </div>
             </div>
           </div>
@@ -447,7 +448,7 @@ export default {
                 font-weight: 600;
                 font-size: 24px;
                 color: #000000;
-                font-family: zcool-TsangerYuYangT_W04_W04;
+                font-family: TsangerYuYangT_W04_W04;
               }
             }
 
@@ -464,6 +465,12 @@ export default {
                 padding: 5px 10px;
               }
               .age{
+                width: 50px;
+                height: auto;
+                padding: 5px 10px;
+                margin-left: 15px;
+              }
+              .admin{
                 width: 50px;
                 height: auto;
                 padding: 5px 10px;
@@ -492,7 +499,7 @@ export default {
           font-weight: 600;
           font-size: 24px;
           color: #000000;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
           text-align: left;
           margin-left: 5%;
           margin-top: 25px;
@@ -523,7 +530,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #FFB1B1;
               color: #ffffff;
@@ -548,7 +555,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
             }
           }
@@ -569,7 +575,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #5FC715;
               color: #ffffff;
@@ -627,7 +633,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #FF86BF;
               color: #ffffff;
@@ -652,7 +658,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
             }
           }
@@ -673,7 +678,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #FF86BF;
               color: #ffffff;
@@ -699,7 +704,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #b8b8b8;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
             }
           }
@@ -720,7 +724,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -746,7 +750,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #b8b8b8;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
             }
           }
@@ -767,7 +770,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -793,7 +796,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #b8b8b8;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
             }
           }
@@ -814,7 +816,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -838,7 +840,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
             }
           }
@@ -859,7 +860,7 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W05_W05;
+              font-family: TsangerYuYangT_W05_W05;
               text-align: center;
               background: #54C5F9;
               color: #ffffff;
@@ -884,7 +885,6 @@ export default {
               font-weight: 400;
               font-size: 16px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
               text-align: left;
             }
 
@@ -902,7 +902,7 @@ export default {
                 font-weight: 600;
                 font-size: 14px;
                 color: #ffffff;
-                font-family: zcool-TsangerYuYangT_W04_W04;
+                font-family: TsangerYuYangT_W04_W04;
 
                 display: flex;
                 flex-direction: column;

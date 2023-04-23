@@ -15,6 +15,7 @@
     "moment": "^2.29.4",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
+    "vue3-seamless-scroll": "^2.0.1",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

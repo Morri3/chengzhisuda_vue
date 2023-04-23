@@ -172,9 +172,9 @@ export default {
             } else if (theRes.memo === '暂无负责的兼职') {
               state.nocontent = true
               ElNotification({
-                title: '出错啦',
+                title: '注意啦',
                 message: '暂无负责的兼职',
-                type: 'error',
+                type: 'warning',
                 position: 'top-right', // 右上
                 offset: 60
               })
@@ -355,7 +355,7 @@ export default {
         font-weight: 600;
         font-size: 14px;
         color: #000000;
-        font-family: zcool-TsangerYuYangT_W04_W04;
+        font-family: TsangerYuYangT_W04_W04;
       }
       .input1{
         width: 140px;
@@ -391,7 +391,7 @@ export default {
           font-weight: 600;
           font-size: 14px;
           color: #ffffff;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
         }
       }
       .search-btn:hover,.search-btn:focus {
@@ -443,7 +443,7 @@ export default {
               font-weight: 400;
               font-size: 14px;
               color: #ff5d5d;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
             .total{
               width: auto;
@@ -452,7 +452,7 @@ export default {
               font-weight: 400;
               font-size: 14px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
           }
 
@@ -471,7 +471,7 @@ export default {
               font-size: 12px;
               color: #ff5d5d;
               padding: 0 5px;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
             .total{
               width: auto;
@@ -480,7 +480,7 @@ export default {
               font-weight: 400;
               font-size: 14px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
           }
 
@@ -499,7 +499,7 @@ export default {
               font-size: 12px;
               color: #5d93ff;
               padding: 0 5px;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
             .value{
               width: auto;
@@ -508,7 +508,7 @@ export default {
               font-weight: 400;
               font-size: 14px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
             .mark-tag-2{
               width: auto;
@@ -516,7 +516,7 @@ export default {
               font-weight: 400;
               font-size: 12px;
               color: #5d93ff;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
               padding: 0 5px;
               margin-left: 20px;
             }
@@ -537,7 +537,7 @@ export default {
               font-size: 12px;
               color: #3dda0e;
               padding: 0 5px;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
             .value{
               width: auto;
@@ -546,7 +546,7 @@ export default {
               font-weight: 400;
               font-size: 14px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
             .mark-tag-2{
               width: auto;
@@ -554,7 +554,7 @@ export default {
               font-weight: 400;
               font-size: 12px;
               color: #3dda0e;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
               padding: 0 5px;
               margin-left: 20px;
             }
@@ -575,7 +575,7 @@ export default {
               font-size: 12px;
               color: #f98c17;
               padding: 0 5px;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
             .value{
               width: auto;
@@ -584,7 +584,7 @@ export default {
               font-weight: 400;
               font-size: 14px;
               color: #000000;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
             .mark-tag-2,.mark-tag-3{
               width: auto;
@@ -592,7 +592,7 @@ export default {
               font-weight: 400;
               font-size: 11px;
               color: #f98c17;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
               padding: 0 5px;
               margin-left: 20px;
             }

@@ -7,7 +7,7 @@
 
     <div class="line-2">
       <div class="title">密&nbsp;&nbsp;&nbsp;&nbsp;码</div>
-      <el-input class="input" v-model="user.pwd" type="password" placeholder="请输入密码" show-password/>
+      <el-input class="input" v-model="user.pwd" type="password" placeholder="请输入密码" clearable show-password/>
     </div>
 
     <div class="line-3">

@@ -25,7 +25,7 @@
         </el-button>
       </div>
 
-      <el-button class="publish" type="primary" round color="#B886F8" :dark="true" @click="publish()">
+      <el-button class="publish" type="primary" round color="#FC9119" :dark="true" @click="publish()">
         <el-icon class="icon-add"><Plus /></el-icon>
         <div class="title">发布兼职</div>
       </el-button>
@@ -411,7 +411,7 @@ export default {
         font-weight: 600;
         font-size: 14px;
         color: #000000;
-        font-family: zcool-TsangerYuYangT_W04_W04;
+        font-family: TsangerYuYangT_W04_W04;
       }
       .input1{
         width: 140px;
@@ -447,7 +447,7 @@ export default {
           font-weight: 600;
           font-size: 14px;
           color: #ffffff;
-          font-family: zcool-TsangerYuYangT_W04_W04;
+          font-family: TsangerYuYangT_W04_W04;
         }
       }
       .search-btn:hover,.search-btn:focus {
@@ -480,13 +480,13 @@ export default {
         font-weight: 600;
         font-size: 14px;
         color: #ffffff;
-        font-family: zcool-TsangerYuYangT_W04_W04;
+        font-family: TsangerYuYangT_W04_W04;
         margin-left: -5px;
         margin-right: 5px;
       }
     }
     .publish:hover,.publish:focus {
-      background: #a72af0;
+      background: #f0d22a;
       border: none;
     }
 
@@ -528,7 +528,7 @@ export default {
               font-weight: 600;
               font-size: 14px;
               color: #ffffff;
-              font-family: zcool-TsangerYuYangT_W04_W04;
+              font-family: TsangerYuYangT_W04_W04;
             }
           }
           .btn:hover,.btn:focus {

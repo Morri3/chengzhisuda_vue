@@ -39,7 +39,7 @@ export default {
       picBox: [
         { src: require('../../../public/img/home/卡片-兼职管理.png'), name: '兼职管理', url: '/parttime' },
         { src: require('../../../public/img/home/卡片-兼职点评.png'), name: '兼职点评', url: '/markcomment' },
-        { src: require('../../../public/img/home/卡片-用户信息管理.png'), name: '用户信息管理', url: '/users' },
+        { src: require('../../../public/img/home/卡片-报名信息管理.png'), name: '报名信息管理', url: '/parttime/signup' },
         { src: require('../../../public/img/home/卡片-用户行为分析.png'), name: '用户行为分析', url: '/behavior' },
         { src: require('../../../public/img/home/卡片-个人中心.png'), name: '个人中心', url: '/userhome' },
         { src: require('../../../public/img/home/卡片-更多功能.png'), name: '更多功能', url: '/home' }
