@@ -214,24 +214,6 @@ export default {
     onMounted(() => {
     })
 
-    // 菜单打开
-    const openItem = (item) => {
-      switch (item) {
-        case '兼职管理': {
-          state.sub.sub1 = !state.sub.sub1
-          break
-        }
-        case '兼职点评': {
-          state.sub.sub2 = !state.sub.sub2
-          break
-        }
-        case '个人中心': {
-          state.sub.sub3 = !state.sub.sub3
-          break
-        }
-      }
-    }
-
     // 发布兼职
     const publish = () => {
       // 检查表单的必填内容
@@ -376,7 +358,6 @@ export default {
 
     return {
       ...toRefs(state),
-      openItem,
       getUserInfo,
       publish,
       changeBorder,

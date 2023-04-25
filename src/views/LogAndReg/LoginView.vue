@@ -108,7 +108,8 @@ export default {
                 phone: res.data.data.telephone,
                 pwd: res.data.data.pwd,
                 head: res.data.data.head, // 头像
-                gender: theGender
+                gender: theGender,
+                isAdmin: res.data.data.emp_grade // 是否是管理员，1是，0不是
               }
               store.commit('setUserLoginInfo', theUser)
               console.log('getUserLoginInfo', store.state.user)
@@ -121,7 +122,8 @@ export default {
                   pwd: theUser.pwd,
                   token: theUser.token,
                   isLogin: theUser.isLogin,
-                  username: theUser.username
+                  username: theUser.username,
+                  isAdmin: theUser.isAdmin // 是否是管理员
                 }
               })
 

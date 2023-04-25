@@ -46,18 +46,32 @@
       <div class="divider"></div>
 
       <!--item4-->
+      <div class="menu-item" v-show="admin">
+        <img class="icon" :src="'/img/menu/icon_analyze.png'" alt=""/>
+        <div class="name-long">用户行为分析</div>
+        <img class="down" id="icon3" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('用户行为分析')"/>
+      </div>
+      <div class="divider" v-show="sub.sub3"></div>
+      <div class="menu-subitem-first" @click="changeRoute('/analyze/behavior')" v-show="sub.sub3"
+        :class="item.item5 === true ? 'bg-2' : ''">
+        <div class="name-long">学生用户行为分析</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!--item5-->
       <div class="menu-item">
         <img class="icon" :src="'/img/menu/icon_userhome.png'" alt=""/>
         <div class="name">个人中心</div>
-        <img class="down" id="icon3" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('个人中心')"/>
+        <img class="down" id="icon4" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('个人中心')"/>
       </div>
-      <div class="divider" v-show="sub.sub3"></div>
-      <div class="menu-subitem-first" @click="changeRoute('/userhome')" v-show="sub.sub3"
-        :class="item.item5 === true ? 'bg-2' : ''">
+      <div class="divider" v-show="sub.sub4"></div>
+      <div class="menu-subitem-first" @click="changeRoute('/userhome')" v-show="sub.sub4"
+        :class="item.item6 === true ? 'bg-2' : ''">
         <div class="name">个人信息管理</div>
       </div>
 
-      <div class="divider" v-show="!sub.sub3"></div>
+      <div class="divider" v-show="!sub.sub4"></div>
     </div>
   </div>
 </template>
@@ -71,7 +85,7 @@ export default {
   name: 'MainMenu',
   components: {
   },
-  props: {},
+  props: [],
   emits: [],
   setup () {
     const store = useStore() // 使用缓存
@@ -82,18 +96,30 @@ export default {
       sub: { // 控制二级菜单的开关
         sub1: false,
         sub2: false,
-        sub3: false
+        sub3: false,
+        sub4: false
       },
       item: { // 对应各个二级菜单，item1为第一个二级菜单，以此类推
         item1: false,
         item2: false,
         item3: false,
         item4: false,
-        item5: false
-      }
+        item5: false,
+        item6: false
+      },
+      admin: false // 是否是管理员
     })
 
     onMounted(() => {
+      state.user = store.state.user
+      // 实现用户分析模块的访问控制
+      if (state.user.isAdmin !== 1) {
+        // 不是管理员，隐藏用户分析模块
+        state.admin = false
+      } else {
+        // 是管理员
+        state.admin = true
+      }
     })
 
     const openItem = (item) => {
@@ -106,8 +132,12 @@ export default {
           state.sub.sub2 = !state.sub.sub2
           break
         }
-        case '个人中心': {
+        case '用户行为分析': {
           state.sub.sub3 = !state.sub.sub3
+          break
+        }
+        case '个人中心': {
+          state.sub.sub4 = !state.sub.sub4
           break
         }
       }
@@ -133,8 +163,11 @@ export default {
       if (item === '/comment/comment') {
         state.item.item4 = !state.item.item4
       }
-      if (item === '/userhome') {
+      if (item === '/analyze/behavior') {
         state.item.item5 = !state.item.item5
+      }
+      if (item === '/userhome') {
+        state.item.item6 = !state.item.item6
       }
 
       // 当前点击的item是哪个 存到store中
@@ -151,10 +184,10 @@ export default {
 
     // 监听菜单的打开、关闭
     watch(
-      () => [state.sub.sub1, state.sub.sub2, state.sub.sub3],
+      () => [state.sub.sub1, state.sub.sub2, state.sub.sub3, state.sub.sub4],
       (newValue, oldValue) => {
-        const cur = [0, 0, 0]
-        for (let i = 0; i < 3; i++) {
+        const cur = [0, 0, 0, 0]
+        for (let i = 0; i < 4; i++) {
           const icon = document.getElementById(`icon${i + 1}`) // 对应的图标,使用了模板字符串
           if (newValue[i] === true) {
             cur[i] = (cur[i] - 180) % 360
@@ -162,7 +195,7 @@ export default {
           icon.style.transform = 'rotate(' + cur[i] + 'deg)' // 旋转
           icon.style.transition = 'all .5s' // 过渡动画
         }
-        console.log('newValue', newValue, 'oldvalue', oldValue)
+        // console.log('newValue', newValue, 'oldvalue', oldValue)
       }
     )
 
@@ -218,6 +251,7 @@ export default {
         margin-left: 20px;
       }
 
+      // 字数少
       .name{
         width: 80px;
         height: 45px;
@@ -228,6 +262,20 @@ export default {
 
         margin-left: 10px;
         font-size: 16px;
+        color: #000000;
+        font-family: TsangerYuYangT_W03_W03;
+      }
+      // 字数多
+      .name-long{
+        width: 80px;
+        height: 45px;
+        text-align: left;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        margin-left: 10px;
+        font-size: 12px;
         color: #000000;
         font-family: TsangerYuYangT_W03_W03;
       }
@@ -256,6 +304,7 @@ export default {
       padding-left: 40px; // padding-left width共同控制紫色边框的位置
       cursor: pointer; // 小手的样式
 
+      //字数少的
       .name{
         width: 100px;
         height:32px;
@@ -266,6 +315,20 @@ export default {
 
         margin-left: 10px;
         font-size: 14px;
+        color: #000000;
+        font-family: TsangerYuYangT_W03_W03;
+      }
+      //字数多的
+      .name-long{
+        width: 110px;
+        height:32px;
+        text-align: left;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        margin-left: 10px;
+        font-size: 10px;
         color: #000000;
         font-family: TsangerYuYangT_W03_W03;
       }

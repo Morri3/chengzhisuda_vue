@@ -268,27 +268,8 @@ export default {
     onMounted(() => {
     })
 
-    // 菜单打开
-    const openItem = (item) => {
-      switch (item) {
-        case '兼职管理': {
-          state.sub.sub1 = !state.sub.sub1
-          break
-        }
-        case '兼职点评': {
-          state.sub.sub2 = !state.sub.sub2
-          break
-        }
-        case '个人中心': {
-          state.sub.sub3 = !state.sub.sub3
-          break
-        }
-      }
-    }
-
     return {
       ...toRefs(state),
-      openItem,
       getData1,
       getData2,
       getData3

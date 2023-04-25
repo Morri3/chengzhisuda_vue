@@ -18,6 +18,7 @@
 import { reactive, toRefs, onMounted, onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import CurTime from '@/components/CurTime.vue'
+import { ElNotification } from 'element-plus'
 
 export default {
   name: 'HomeView',
@@ -50,30 +51,49 @@ export default {
     })
 
     onMounted(() => {
-      console.log(route.query)
+      console.log('路由传递数据', route.query)
       state.user.phone = route.query.phone
       state.user.pwd = route.query.pwd
       state.user.token = route.query.token
       state.user.isLogin = route.query.isLogin
       state.user.username = route.query.username
+      state.user.isAdmin = route.query.isAdmin
     })
 
     onBeforeMount(() => {
-      console.log(route.query)
+      console.log('路由传递数据', route.query)
       state.user.phone = route.query.phone
       state.user.pwd = route.query.pwd
       state.user.token = route.query.token
       state.user.isLogin = route.query.isLogin
       state.user.username = route.query.username
+      state.user.isAdmin = route.query.isAdmin
     })
 
     const jumpTo = (item) => {
-      console.log('点击了跳转')
-
-      // 跳转
-      router.push({
-        path: item.url
-      })
+      // 对分析模块进行访问限制
+      if (item.url === '/analyze') {
+        if (state.user.isAdmin === '1') {
+          // 管理员可以访问
+          router.push({
+            path: item.url
+          })
+        } else {
+          // 不是管理员不能进入用户行为分析页
+          ElNotification({
+            title: '注意啦',
+            message: '该模块仅管理员可访问',
+            type: 'warning',
+            position: 'top-right', // 右上
+            offset: 60
+          })
+        }
+      } else {
+        // 其他页面不限制
+        router.push({
+          path: item.url
+        })
+      }
     }
 
     return {

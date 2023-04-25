@@ -27,6 +27,7 @@ export default createStore({
       state.user.username = user.username
       state.user.head = user.head
       state.user.gender = user.gender
+      state.user.isAdmin = user.isAdmin
     }
   },
   actions: {
