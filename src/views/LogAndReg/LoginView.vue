@@ -2,7 +2,7 @@
   <div class="box">
     <div class="line-1">
       <div class="title">手机号码</div>
-      <el-input class="input" v-model="user.phone" placeholder="请输入手机号码" clearable />
+      <el-input class="input" v-model="user.phone" :maxlength="11" placeholder="请输入手机号码" clearable />
     </div>
 
     <div class="line-2">
@@ -66,12 +66,12 @@ export default {
         })
       } else {
         // 有输入再调api
-        // 调api
         const user = {
           telephone: state.user.phone,
           pwd: state.user.pwd
         }
         console.log('输入的账号密码', user)
+
         theAxios.post('http://114.55.239.213:8087/login/emp', user)
           .then(res => {
             console.log('登陆接口的返回数据', res.data.data)
@@ -100,6 +100,7 @@ export default {
               } else {
                 theGender = '女'
               }
+
               // 将token赋值给state.user，并存到store中
               const theUser = {
                 token: res.data.data.token,
@@ -112,7 +113,7 @@ export default {
                 isAdmin: res.data.data.emp_grade // 是否是管理员，1是，0不是
               }
               store.commit('setUserLoginInfo', theUser)
-              console.log('getUserLoginInfo', store.state.user)
+              console.log('用户登录信息', store.state.user)
 
               // 跳转到首页
               router.push({
