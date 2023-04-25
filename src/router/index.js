@@ -257,7 +257,7 @@ const routes = [
     redirect: '/userhome/index', // 重定向
     meta: {
       title: '个人中心',
-      level: 2,
+      level: 1,
       requireAuth: true
     }
   },
@@ -292,6 +292,26 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/analyze',
+    name: 'analyze',
+    redirect: '/analyze/behavior', // 重定向
+    meta: {
+      title: '用户行为分析',
+      level: 1,
+      requireAuth: true
+    }
+  },
+  {
+    path: '/analyze/behavior',
+    name: 'userbehavior',
+    component: () => import('../views/Behavior/UserBehavior.vue'),
+    meta: {
+      title: '用户行为分析 · 学生用户行为分析',
+      level: 2,
+      requireAuth: true
+    }
   }
 ]
 

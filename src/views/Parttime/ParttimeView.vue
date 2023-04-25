@@ -36,12 +36,6 @@
         <div class="table">
           <el-table :data="parttimeList" ref="tableRef" height="350" style="width: 100%" v-if="ready"
             :header-cell-style="{ background: '#B886F8', color: '#ffffff' }" align="center">
-            <!--复选框，用插槽-->
-            <!-- <el-table-column type="selection" width="30" align="center">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.checked" @change="select"/>
-               </template>
-            </el-table-column> -->
 
             <!--以下5个普通列-->
             <el-table-column prop="pId" label="序号" width="55" align="center" :fixed="true"/>
@@ -316,7 +310,7 @@ export default {
       let res = null
       if (route.path === '/parttime/list' || route.path === '/parttime/signup' ||
         route.path === '/markcomment/mark' || route.path === '/markcomment/comment' ||
-        route.path === '/userhome/index') {
+        route.path === '/userhome/index' || route.path === '/analyze/behavior') {
         // 是二级路由
         res = true
       } else {

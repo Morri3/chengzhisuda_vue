@@ -266,7 +266,7 @@ export default {
       let res = null
       if (route.path === '/parttime/list' || route.path === '/parttime/signup' ||
         route.path === '/markcomment/mark' || route.path === '/markcomment/comment' ||
-        route.path === '/userhome/index') {
+        route.path === '/userhome/index' || route.path === '/analyze/behavior') {
         // 是二级路由
         res = true
       } else {
