@@ -38,14 +38,15 @@ export default {
         token: ''
       },
       picBox: [
-        { src: require('../../../public/img/home/卡片-兼职管理.png'), name: '兼职管理', url: '/parttime' },
-        { src: require('../../../public/img/home/卡片-兼职点评.png'), name: '兼职点评', url: '/markcomment' },
-        { src: require('../../../public/img/home/卡片-报名信息管理.png'), name: '报名信息管理', url: '/parttime/signup' },
-        { src: require('../../../public/img/home/卡片-用户行为分析.png'), name: '用户行为分析', url: '/analyze' },
-        { src: require('../../../public/img/home/卡片-个人中心.png'), name: '个人中心', url: '/userhome' },
-        { src: require('../../../public/img/home/卡片-更多功能.png'), name: '更多功能', url: '/home' }
+        { src: '/img/home/卡片-兼职管理.png', name: '兼职管理', url: '/parttime' },
+        { src: '/img/home/卡片-兼职点评.png', name: '兼职点评', url: '/markcomment' },
+        { src: '/img/home/卡片-报名信息管理.png', name: '报名信息管理', url: '/parttime/signup' },
+        { src: '/img/home/卡片-用户行为分析.png', name: '用户行为分析', url: '/analyze' },
+        { src: '/img/home/卡片-个人中心.png', name: '个人中心', url: '/userhome' },
+        { src: '/img/home/卡片-更多功能.png', name: '更多功能', url: '/home' }
       ],
-      curTime: { // 时间的样式
+      // 时间的样式
+      curTime: {
         color: 'white'
       }
     })
@@ -61,7 +62,6 @@ export default {
     })
 
     onBeforeMount(() => {
-      console.log('路由传递数据', route.query)
       state.user.phone = route.query.phone
       state.user.pwd = route.query.pwd
       state.user.token = route.query.token
@@ -73,8 +73,8 @@ export default {
     const jumpTo = (item) => {
       // 对分析模块进行访问限制
       if (item.url === '/analyze') {
+        // 管理员可以访问
         if (state.user.isAdmin === '1') {
-          // 管理员可以访问
           router.push({
             path: item.url
           })

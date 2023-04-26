@@ -15,6 +15,7 @@
         <div class="name">兼职管理</div>
         <img class="down" id="icon1" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('兼职管理')"/>
       </div>
+
       <div class="divider" v-show="sub.sub1"></div>
       <div class="menu-subitem-first" @click="changeRoute('/parttime/list')" v-show="sub.sub1"
         :class="item.item1 === true ? 'bg-2' : ''">
@@ -33,6 +34,7 @@
         <div class="name">兼职点评</div>
         <img class="down" id="icon2" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('兼职点评')"/>
       </div>
+
       <div class="divider" v-show="sub.sub2"></div>
       <div class="menu-subitem-first" @click="changeRoute('/markcomment/mark')" v-show="sub.sub2"
         :class="item.item3 === true ? 'bg-2' : ''">
@@ -51,6 +53,7 @@
         <div class="name-long">用户行为分析</div>
         <img class="down" id="icon3" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('用户行为分析')"/>
       </div>
+
       <div class="divider" v-show="sub.sub3"></div>
       <div class="menu-subitem-first" @click="changeRoute('/analyze/behavior')" v-show="sub.sub3"
         :class="item.item5 === true ? 'bg-2' : ''">
@@ -65,6 +68,7 @@
         <div class="name">个人中心</div>
         <img class="down" id="icon4" :src="'/img/menu/icon_down.png'" alt="" @click="openItem('个人中心')"/>
       </div>
+
       <div class="divider" v-show="sub.sub4"></div>
       <div class="menu-subitem-first" @click="changeRoute('/userhome')" v-show="sub.sub4"
         :class="item.item6 === true ? 'bg-2' : ''">
@@ -220,11 +224,14 @@ export default {
   .menu-bg{
     width: 75%;
     height: 100%;
-    background: #ffffff;
+    //background: #ffffff;
     border-radius: 15px;
     box-shadow: 3px 3px 6px #b8b7b7;//阴影
     display: flex;
     flex-direction: column;
+    background-image: url('/public/img/menu/菜单背景-纯紫.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 
     .bg-1{
       border:  #B886F8 .5px solid;
@@ -234,7 +241,12 @@ export default {
       border:  #B886F8 2px solid;
     }
 
+    //第一个菜单项
     .menu-item:first-child{
+      background-image: url('/public/img/menu/菜单背景-粉.png');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      border-radius: 15px 15px 0 0;
       cursor: pointer; // 小手的样式
     }
 
@@ -244,6 +256,9 @@ export default {
       display: flex;
       flex-direction: row;
       align-items: center;
+      background-image: url('/public/img/menu/菜单背景-橙.png');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
 
       .icon{
         width: 25px;
@@ -262,7 +277,7 @@ export default {
 
         margin-left: 10px;
         font-size: 16px;
-        color: #000000;
+        color: #ffffff;
         font-family: TsangerYuYangT_W03_W03;
       }
       // 字数多
@@ -276,7 +291,7 @@ export default {
 
         margin-left: 10px;
         font-size: 12px;
-        color: #000000;
+        color: #ffffff;
         font-family: TsangerYuYangT_W03_W03;
       }
 
@@ -315,7 +330,7 @@ export default {
 
         margin-left: 10px;
         font-size: 14px;
-        color: #000000;
+        color: #ffffff;
         font-family: TsangerYuYangT_W03_W03;
       }
       //字数多的
@@ -329,13 +344,10 @@ export default {
 
         margin-left: 10px;
         font-size: 10px;
-        color: #000000;
+        color: #ffffff;
         font-family: TsangerYuYangT_W03_W03;
       }
     }
-    //.menu-subitem-first{
-    //  margin-top: 8px;
-    //}
   }
 }
 </style>
