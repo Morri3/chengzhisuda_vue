@@ -39,13 +39,13 @@ export default {
     // 产生不重复的随机数
     const random = (arr, max, min, need) => {
       const num = Math.floor((Math.random() * (max - min)) + min) // 随机数
-      if (arr.indexOf(num) >= 0) { // 存在，重新调用
-        random()
-      } else { // 不存在，加入数组
+      if (arr.indexOf(num) === -1) { // 不存在，加入数组
         arr.push(num)
+      } else { // 存在，重新调用
+        random(arr, max, min, need)
       }
       if (arr.length < need) { // 数组长度<需要的个数，就重新调用
-        random()
+        random(arr, max, min, need)
       }
     }
 
@@ -63,8 +63,13 @@ export default {
         // 颜色数组
         const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#60E4FD', '#6A60FD', '#FD60AC']
 
+        // 构造随机数
+        const numArr = []
+        random(numArr, 0, 7, 3)
+
         const data = []
         for (let i = 0; i < (JSON.parse(props.data)).length; i++) {
+          // 构造数据
           data.push(
             // 真实数据
             {
@@ -110,6 +115,7 @@ export default {
             name: '',
             type: 'pie', // 饼图
             clockWise: false,
+            center: ['50%', '35%'], // 位置
             radius: ['50%', '50%'], // 饼图的内外径
             hoverAnimation: true, // 悬停动画
             itemStyle: { // 元素样式
@@ -117,7 +123,6 @@ export default {
                 label: {
                   show: true,
                   position: 'outside', // 标签显示在外侧
-                  color: '#E9A64B',
                   formatter: function (params) {
                     let percent = 0 // 百分比占比
                     let total = 0 // 总和
@@ -127,20 +132,26 @@ export default {
                     }
                     // 求每个item的占比
                     percent = ((params.value / total) * 100).toFixed(0)
-                    // 是真实的item
-                    if (params.name !== '') {
-                      return ('' + params.name + '\n' + percent + '%')
-                    } else {
+                    if (params.name !== '') { // 是真实的item
+                      return ('{name|' + params.name + '}\n{percent|' + percent + '%}')
+                    } else { // 用于填充的item
                       return ''
                     }
-                  }
-                },
-                // 标签线的样式
-                labelLine: {
-                  length: 18,
-                  length2: 5,
-                  show: true,
-                  color: '#FFC678'
+                  },
+                  // 富文本标签
+                  rich: {
+                    name: {
+                      color: color[numArr[0]],
+                      lineHeight: 10,
+                      fontFamily: 'DingTalk_JinBuTi_Regular'
+                    },
+                    percent: {
+                      color: color[numArr[1]],
+                      fontSize: 16,
+                      fontFamily: 'DingTalk_JinBuTi_Regular'
+                    }
+                  },
+                  alignTo: 'labelLine'
                 }
               }
             },
@@ -166,24 +177,31 @@ export default {
               }
             },
             confine: true, // 限制在图表区域内
-            triggerOn: 'mousemove', // 触发条件
+            triggerOn: 'click', // 触发条件
             textStyle: { // 悬浮框中文字的样式
               fontSize: 13,
-              color: '#000'
+              fontFamily: 'DingTalk_JinBuTi_Regular'
+            },
+            formatter: function (params) {
+              return `
+                      <div><a style="color: ${color[numArr[1]]}">${params.name}</a></div>
+                      <div><a style="color: ${color[numArr[2]]}">${params.value}%</a></div>
+                     `
             }
           },
           // 图例
           legend: {
+            bottom: 0,
+            left: 'center',
+            // 文字样式
+            textStyle: {
+              color: '#000000',
+              fontSize: 12
+            },
             icon: 'circle',
             itemWidth: 8,
             itemHeight: 8,
-            itemGap: 7,
-            x: 'center',
-            y: 'top',
-            // 文字样式
-            textStyle: {
-              color: '#000'
-            }
+            itemGap: 5 // 图例间隙
           },
           // 数据
           series: series

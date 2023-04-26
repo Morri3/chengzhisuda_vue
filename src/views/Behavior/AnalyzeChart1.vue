@@ -42,6 +42,8 @@ export default {
 
         const time = [] // 时间数组
         const num = [] // 数量数组
+
+        // 构造time、num数组
         for (let i = 0; i < (JSON.parse(props.data)).length; i++) {
           time.push((JSON.parse(props.data))[i].date)
           num.push((JSON.parse(props.data))[i].num)
@@ -65,6 +67,11 @@ export default {
               label: {
                 backgroundColor: '#283b56'
               }
+            },
+            // 悬浮框中文字的样式
+            textStyle: {
+              fontSize: 13,
+              fontFamily: 'DingTalk_JinBuTi_Regular'
             }
           },
           legend: {

@@ -30,7 +30,7 @@
 
         <!--下右-->
         <div class="chart-box">
-          <!-- <AnalyzeChart4 :data="JSON.stringify(data4)" class="chart"></AnalyzeChart4> -->
+          <AnalyzeChart4 :data="JSON.stringify(data4)" class="chart"></AnalyzeChart4>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@ import { ElNotification } from 'element-plus'
 import AnalyzeChart1 from './AnalyzeChart1.vue'
 import AnalyzeChart2 from './AnalyzeChart2.vue'
 import AnalyzeChart3 from './AnalyzeChart3.vue'
-// import AnalyzeChart4 from './AnalyzeChart4.vue'
+import AnalyzeChart4 from './AnalyzeChart4.vue'
 
 export default {
   name: 'UserBehavior',
@@ -55,8 +55,8 @@ export default {
     MainMenu,
     AnalyzeChart1,
     AnalyzeChart2,
-    AnalyzeChart3
-    // AnalyzeChart4
+    AnalyzeChart3,
+    AnalyzeChart4
   },
   props: {},
   setup () {
@@ -79,14 +79,15 @@ export default {
       nocontent: false, // 404
       data1: [], // 图1数据
       data2: [], // 图2数据
-      data3: [] // 图3数据
-      // data4: [] // 图4数据
+      data3: [], // 图3数据
+      data4: [] // 图4数据
     })
 
     onBeforeMount(() => {
       getData1()
       getData2()
       getData3()
+      getData4()
     })
 
     const getData1 = () => {
@@ -265,6 +266,58 @@ export default {
         })
     }
 
+    const getData4 = () => {
+      // 调api，获取图3数据
+      theAxios.get('http://114.55.239.213:8087/analyze/student/get')
+        .then(res => {
+          console.log('获取分析图4接口的返回数据', res.data.data)
+
+          let flag = false // 判断是否没数据
+          for (let i = 0; i < res.data.data.length; i++) {
+            if (res.data.data[i].memo === '获取成功') {
+              flag = true
+            }
+          }
+          if (flag === false) {
+            // 说明没数据
+            const theRes = res.data.data[0]
+            if (theRes.memo === '暂无学生') {
+              state.nocontent = true
+              ElNotification({
+                title: '注意啦',
+                message: '暂无学生',
+                type: 'warning',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            }
+          } else {
+            state.nocontent = false
+            console.log('活跃', res.data.data)
+
+            // 有数据
+            if (res.data.data.length > 0) {
+              const list = [] // 存放数据
+              for (let i = 0; i < res.data.data.length; i++) {
+                if (res.data.data[i].memo === '获取成功') {
+                  list.push({
+                    stuName: res.data.data[i].stu_name,
+                    num: res.data.data[i].num,
+                    numName: res.data.data[i].num_name,
+                    stuId: res.data.data[i].stu_id
+                  })
+                }
+              }
+              state.data4 = list
+              console.log('分析图4数据', state.data4)
+            }
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
+
     onMounted(() => {
     })
 
@@ -272,7 +325,8 @@ export default {
       ...toRefs(state),
       getData1,
       getData2,
-      getData3
+      getData3,
+      getData4
     }
   }
 }

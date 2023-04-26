@@ -39,13 +39,13 @@ export default {
     // 产生不重复的随机数
     const random = (arr, max, min, need) => {
       const num = Math.floor((Math.random() * (max - min)) + min) // 随机数
-      if (arr.indexOf(num) >= 0) { // 存在，重新调用
-        random()
-      } else { // 不存在，加入数组
+      if (arr.indexOf(num) === -1) { // 不存在，加入数组
         arr.push(num)
+      } else { // 存在，重新调用
+        random(arr, max, min, need)
       }
       if (arr.length < need) { // 数组长度<需要的个数，就重新调用
-        random()
+        random(arr, max, min, need)
       }
     }
 
@@ -69,22 +69,26 @@ export default {
 
         // 构造series
         const series = []
-        numNames.forEach((v) => {
+        // 生成不重复随机数
+        const numArr = []
+        random(numArr, 0, 7, 3)
+
+        for (let i = 0; i < numNames.length; i++) {
           const obj = {
-            name: v,
+            name: numNames[i],
             type: 'bar', // 柱状图
             stack: 'As', // 堆叠
             emphasis: {
               focus: 'series'
             },
+            barWidth: '30%',
             itemStyle: { // 折线+图例的颜色
-              // color: random(color, 0, 3, 3) // 随机颜色
-              color: color[Math.floor(Math.random() * 3)]
+              color: color[numArr[i]] // 随机颜色
             },
             data: []
           }
           series.push(obj)
-        })
+        }
 
         // 处理series的data，按照相同pName进行堆叠
         JSON.parse(props.data).forEach((v1) => {
@@ -113,19 +117,31 @@ export default {
             trigger: 'axis',
             axisPointer: {
               type: 'shadow'
+            },
+            textStyle: { // 悬浮框中文字的样式
+              fontSize: 13,
+              fontFamily: 'DingTalk_JinBuTi_Regular'
             }
           },
           // 图例
           legend: {
+            top: 0,
+            left: 'center',
             icon: 'circle',
+            // 文字样式
+            textStyle: {
+              color: '#000000',
+              fontSize: 12
+            },
             itemWidth: 8,
-            itemHeight: 8
+            itemHeight: 8,
+            itemGap: 30 // 图例间隙
           },
           // 网格
           grid: {
             left: '4%',
             right: '4%',
-            bottom: '19.5%', // 和底部的距离
+            bottom: '22%', // 和底部的距离
             containLabel: true // 包含刻度标签
           },
           // x轴
