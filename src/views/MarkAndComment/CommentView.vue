@@ -14,11 +14,11 @@
         <el-input class="input1" v-model="search.name" placeholder="请输入内容"/>
         <div class="title2">兼职状态</div>
         <el-select class="input2" v-model="search.status" placeholder="请选择">
-          <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value"/>
+          <el-option v-for="(item, index) in statusList" :key="index" :label="item" :value="item"/>
         </el-select>
         <div class="title3">兼职种类</div>
         <el-select class="input3" v-model="search.category" placeholder="请选择">
-          <el-option v-for="item in categoryList" :key="item.value" :label="item.label" :value="item.value"/>
+          <el-option v-for="(item, index) in categoryList" :key="index" :label="item" :value="item"/>
         </el-select>
         <el-button class="search-btn" type="primary" round color="#B886F8" :dark="true" @click="search()">
           <div class="title">筛选</div>
@@ -93,8 +93,12 @@ export default {
         status: '',
         category: ''
       },
-      statusList: [], // 状态下拉框
-      categoryList: [], // 种类下拉框
+      statusList: [ // 状态下拉框
+        '', '已发布', '已招满', '已结束'
+      ],
+      categoryList: [ // 种类下拉框
+        '', '课程助教', '学生助理', '军训助理', '体测助理', '讲解员', '公寓宣传员', '班助', '服务员'
+      ],
       genderList: [], // 性别下拉框
       commentList: [], // 评论列表
       nocontent: false // 是否显示404内容

@@ -185,7 +185,11 @@ export default {
             formatter: function (params) {
               return `
                       <div><a style="color: ${color[numArr[1]]}">${params.name}</a></div>
-                      <div><a style="color: ${color[numArr[2]]}">${params.value}%</a></div>
+                      <div>
+                        <a style="color: ${color[numArr[2]]}"> ● </a>
+                        <a style="color: #000000">综合评分均值：</a>
+                        <a style="color: ${color[numArr[2]]}">${(params.value).toFixed(2)}</a>
+                      </div>
                      `
             }
           },

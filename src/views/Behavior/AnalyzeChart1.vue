@@ -65,7 +65,7 @@ export default {
             axisPointer: {
               type: 'cross',
               label: {
-                backgroundColor: '#283b56'
+                backgroundColor: '#F7A82B'
               }
             },
             // 悬浮框中文字的样式
