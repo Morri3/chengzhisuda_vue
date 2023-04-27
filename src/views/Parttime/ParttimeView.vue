@@ -39,7 +39,7 @@
 
             <!--以下5个普通列-->
             <el-table-column prop="pId" label="序号" width="55" align="center" :fixed="true"/>
-            <el-table-column prop="positionName" label="兼职名称" width="280" sortable align="center"/>
+            <el-table-column prop="positionName" label="兼职名称" width="280" align="center"/>
             <el-table-column prop="nums" label="报名/录用/名额数" width="140" align="center"/>
 
             <!--用插槽-->

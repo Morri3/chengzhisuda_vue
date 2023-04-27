@@ -246,6 +246,10 @@ export default {
                 color: '#F7A82B',
                 opacity: 0 // 不显示
               }
+            },
+            axisLabel: { // x轴标签
+              snow: true,
+              fontFamily: 'DingTalk_JinBuTi_Regular'
             }
           }],
           // y轴

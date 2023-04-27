@@ -140,7 +140,7 @@ export default {
           // 网格
           grid: {
             left: '4%',
-            right: '4%',
+            right: '6%',
             bottom: '22%', // 和底部的距离
             containLabel: true // 包含刻度标签
           },
@@ -161,6 +161,10 @@ export default {
                 color: '#F7A82B',
                 opacity: 0 // 不显示
               }
+            },
+            axisLabel: { // x轴标签
+              snow: true,
+              fontFamily: 'DingTalk_JinBuTi_Regular'
             }
           }],
           // y轴

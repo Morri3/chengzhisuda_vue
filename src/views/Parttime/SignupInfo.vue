@@ -33,8 +33,6 @@
           <el-select class="input1" v-model="search.gender" placeholder="请选择">
             <el-option v-for="(item, index) in genderList" :key="index" :label="item" :value="item"/>
           </el-select>
-          <!-- <div class="title2">全选</div>
-          <el-switch class="selectAll" v-model="isAll" inline-prompt active-text="是" inactive-text="否"/> -->
         </div>
       </div>
 
@@ -102,9 +100,10 @@
               <div class="right-box">
 
                 <div class="line-1">
-                  <div class="name">{{item.username}}</div>
+                  <el-tag class="id" type="warning">SID:{{item.sId}}</el-tag>
                   <img class="gender-icon" :src="'/img/position/男.png'" alt="" v-if="item.gender === '男'"/>
                   <img class="gender-icon" :src="'/img/position/女.png'" alt="" v-else-if="item.gender === '女'"/>
+                  <div class="name">{{item.username}}</div>
                   <el-tag class="status" :type="item.status.type"
                     :style="item.status.type==='primary'?'border: 1px solid #22bdff;':'border: 1px solid #f8e6ce'">
                     {{item.status.value}}
@@ -269,8 +268,6 @@ export default {
     })
 
     const getParttimeList = (type) => {
-      console.log('调api取数据')
-
       // 调api，获取报名信息
       theAxios.get('http://114.55.239.213:8087/parttime/signup/get_info?emp_id=' + store.state.user.phone)
         .then(res => {
@@ -321,15 +318,27 @@ export default {
                 position: 'top-right', // 右上
                 offset: 60
               })
-            } else if (theRes.memo === '不存在简历') {
-              state.nocontent = true
-              ElNotification({
-                title: '出错啦',
-                message: '不存在简历',
-                type: 'error',
-                position: 'top-right', // 右上
-                offset: 60
-              })
+            } else if (theRes.memo === '简历为空') {
+              state.nocontent = false
+              // 简历空也要显示用户报名信息
+              // state.dataList.push({
+              //   name: res.data.data[i].p_name,
+              //   opName: '',
+              //   status1: res.data.data[i].num_signup ? res.data.data[i].num_signup : 0,
+              //   status2: res.data.data[i].num_employment ? res.data.data[i].num_employment : 0,
+              //   total: res.data.data[i].num_total ? res.data.data[i].num_total : 0,
+              //   username: res.data.data[i].username ? res.data.data[i].username : '暂未填写',
+              //   gender: res.data.data[i].gender ? res.data.data[i].gender : '暂未填写',
+              //   status: theStatus,
+              //   age: res.data.data[i].age ? res.data.data[i].age : 0,
+              //   grade: res.data.data[i].grade ? res.data.data[i].grade : '暂未填写',
+              //   exp: res.data.data[i].exp ? res.data.data[i].exp : '暂未填写',
+              //   create_time: res.data.data[i].signup_time ? res.data.data[i].signup_time : '暂未填写',
+              //   resumes: '', // 简历图片
+              //   resumesList: [], // 图片放大预览的列表
+              //   sId: res.data.data[i].s_id,
+              //   pId: res.data.data[i].p_id
+              // })
             }
           } else {
             state.nocontent = false
@@ -1076,6 +1085,23 @@ export default {
                 align-items: center;
                 margin-top: 5px;
 
+                .id{
+                  width: auto;
+                  height: auto;
+                  font-weight: 400;
+                  font-size: 12px;
+                  color: #000000;
+                  font-family: TsangerYuYangT_W05_W05;
+                  margin-left: 10px;
+                  padding: 3px 5px;
+                }
+
+                .gender-icon{
+                  width: 20px;
+                  height: 20px;
+                  margin-left: 8px;
+                }
+
                 .name{
                   width: 80px;
                   height: auto;
@@ -1083,19 +1109,13 @@ export default {
                   font-size: 18px;
                   color: #000000;
                   font-family: TsangerYuYangT_W05_W05;
-                  margin-left: 10px;
-                }
-
-                .gender-icon{
-                  width: 20px;
-                  height: 20px;
-                  margin-left: 5px;
+                  margin-left: 7px;
                 }
 
                 .status{
                   width: 68px;
                   height: 25px;
-                  margin-left: 690px;
+                  margin-left: 640px;
                   border: 1px solid #f8e6ce;
                 }
               }
