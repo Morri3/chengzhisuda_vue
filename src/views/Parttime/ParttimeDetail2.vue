@@ -153,8 +153,6 @@ export default {
     })
 
     onBeforeMount(() => {
-      // getData() // 获取数据
-      // getData2()
     })
 
     const getData = () => {
@@ -170,7 +168,7 @@ export default {
 
           if (res.data.data.memo === '获取成功') {
             const theMark = {
-              total: res.data.data.total_score,
+              total: (res.data.data.total_score).toFixed(2),
               pf: res.data.data.pf,
               pl: res.data.data.pl,
               we: res.data.data.we,
@@ -225,10 +223,6 @@ export default {
                   createTime: res.data.data[i].create_time
                 }
                 arr.push(theComment) // 加到数组arr中
-                arr.push(theComment) // 加到数组arr中
-                arr.push(theComment) // 加到数组arr中
-                arr.push(theComment) // 加到数组arr中
-                arr.push(theComment) // 加到数组arr中
               }
             }
             state.comment = arr // 赋值给arr
@@ -241,7 +235,8 @@ export default {
     }
 
     onMounted(() => {
-      getData() // 获取数据
+      // 获取数据
+      getData()
       getData2()
     })
 

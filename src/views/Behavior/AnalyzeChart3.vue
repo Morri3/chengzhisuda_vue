@@ -131,7 +131,7 @@ export default {
                       total += values[i]
                     }
                     // 求每个item的占比
-                    percent = ((params.value / total) * 100).toFixed(0)
+                    percent = ((params.value / total) * 100).toFixed(2)
                     if (params.name !== '') { // 是真实的item
                       return ('{name|' + params.name + '}\n{percent|' + percent + '%}')
                     } else { // 用于填充的item

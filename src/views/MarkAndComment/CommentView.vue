@@ -11,16 +11,14 @@
       <div class="top-box">
         <img class="icon" src="/img/utils/icon_search.png" alt="" />
         <div class="title1">兼职名称</div>
-        <el-input class="input1" v-model="search.name" placeholder="请输入内容"/>
-        <div class="title2">兼职状态</div>
-        <el-select class="input2" v-model="search.status" placeholder="请选择">
-          <el-option v-for="(item, index) in statusList" :key="index" :label="item" :value="item"/>
-        </el-select>
+        <el-input class="input1" v-model="search.name" placeholder="请输入内容" clearable/>
+        <div class="title2">用户名</div>
+        <el-input class="input2" v-model="search.username" placeholder="请输入内容" clearable/>
         <div class="title3">兼职种类</div>
         <el-select class="input3" v-model="search.category" placeholder="请选择">
           <el-option v-for="(item, index) in categoryList" :key="index" :label="item" :value="item"/>
         </el-select>
-        <el-button class="search-btn" type="primary" round color="#B886F8" :dark="true" @click="search()">
+        <el-button class="search-btn" type="primary" round color="#B886F8" :dark="true" @click="searchData()">
           <div class="title">筛选</div>
         </el-button>
       </div>
@@ -30,11 +28,11 @@
         <!--表格-->
         <div class="table">
           <el-table :data="commentList" ref="tableRef" height="350" style="width: 100%;"
-            :header-cell-style="{ background: '#B886F8', color: '#ffffff' }" align="center">
+            :header-cell-style="{ background: '#B886F8', color: '#ffffff' }" align="center" empty-text="暂无数据">
 
             <!--以下5个普通列-->
             <el-table-column prop="id" label="序号" width="55" align="center"/>
-            <el-table-column prop="pName" label="兼职名称" width="270" sortable align="center"/>
+            <el-table-column prop="pName" label="兼职名称" width="270" align="center"/>
             <el-table-column prop="username" label="用户名" width="100" align="center"/>
             <el-table-column prop="content" label="评论内容" width="420" align="center">
               <template v-slot="scope">
@@ -62,13 +60,11 @@ import MainMenu from '@/components/MainMenu.vue'
 import theAxios from 'axios'
 import { ElNotification } from 'element-plus'
 import { useStore } from 'vuex'
-// import RouterView from '../RouterView.vue'
 
 export default {
   name: 'CommentView',
   components: {
     MainMenu
-    // ,RouterView
   },
   props: {},
   emits: [],
@@ -90,7 +86,7 @@ export default {
       },
       search: { // 搜索部分
         name: '',
-        status: '',
+        username: '',
         category: ''
       },
       statusList: [ // 状态下拉框
@@ -101,7 +97,8 @@ export default {
       ],
       genderList: [], // 性别下拉框
       commentList: [], // 评论列表
-      nocontent: false // 是否显示404内容
+      nocontent: false, // 是否显示404内容
+      tmpDataList: [] // 兼职数据列表
     })
 
     onBeforeMount(() => {
@@ -174,12 +171,15 @@ export default {
                     username: v.username,
                     pName: v.p_name,
                     stuId: v.user_id,
-                    sId: v.s_id
+                    sId: v.s_id,
+                    category: v.category // 兼职种类
                   })
                 }
               })
               // list赋值给markList
               state.commentList = list
+              // 赋值给暂存数组
+              state.tmpDataList = state.commentList
               console.log('评论列表数据', state.commentList)
 
               ElNotification({
@@ -189,10 +189,6 @@ export default {
                 position: 'top-right', // 右上
                 offset: 60
               })
-
-              // router.push({
-              //   path: '/parttime/signup'
-              // })
             }
           }
           state.ready = true
@@ -223,11 +219,50 @@ export default {
       return res
     })
 
+    // 搜索功能
+    const searchData = () => {
+      state.ready = false
+
+      const name = state.search.name
+      const category = state.search.category
+      const username = state.search.username
+
+      let newDataList = state.tmpDataList // 筛选后的列表
+
+      // 1.兼职名称模糊查询
+      if (name !== '' && name) {
+        newDataList = newDataList.filter(v => {
+          return (v.pName).indexOf(name) !== -1
+        })
+      }
+
+      // 2.用户名模糊查询
+      if (username !== '' && username) {
+        newDataList = newDataList.filter(v => {
+          return (v.username).indexOf(username) !== -1
+        })
+      }
+
+      // 3.兼职种类精确查询
+      if (category !== '' && category) {
+        // 过滤掉种类不是目标种类的兼职
+        newDataList = newDataList.filter((v) => {
+          return v.category === category
+        })
+      }
+
+      // 4.把新的数组赋值给state.markList
+      state.commentList = newDataList
+
+      state.ready = true
+    }
+
     return {
       ...toRefs(state),
       tableRef,
       getCommentList,
-      secondRoutes
+      secondRoutes,
+      searchData
     }
   }
 }
@@ -301,7 +336,7 @@ export default {
         color: #000000;
         font-family: TsangerYuYangT_W04_W04;
       }
-      .input1{
+      .input1,.input2{
         width: 140px;
         height: 30px;
         margin-left: 10px;
@@ -310,7 +345,7 @@ export default {
         align-items: center;
         justify-content: center;
       }
-      .input2,.input3{
+      .input3{
         width: 140px;
         height: 40px;
         margin-left: 10px;

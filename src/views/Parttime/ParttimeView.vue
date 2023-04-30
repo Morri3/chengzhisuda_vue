@@ -11,7 +11,7 @@
       <div class="top-box">
         <img class="icon" src="/img/utils/icon_search.png" alt="" />
         <div class="title1">兼职名称</div>
-        <el-input class="input1" v-model="search.name" placeholder="请输入内容"/>
+        <el-input class="input1" v-model="search.name" placeholder="请输入内容" clearable/>
         <div class="title2">兼职状态</div>
         <el-select class="input2" v-model="search.status" placeholder="请选择">
           <el-option v-for="(item, index) in statusList" :key="index" :label="item" :value="item"/>
@@ -20,7 +20,7 @@
         <el-select class="input3" v-model="search.category" placeholder="请选择">
           <el-option v-for="(item, index) in categoryList" :key="index" :label="item" :value="item"/>
         </el-select>
-        <el-button class="search-btn" type="primary" round color="#B886F8" :dark="true" @click="search()">
+        <el-button class="search-btn" type="primary" round color="#B886F8" :dark="true" @click="searchData()">
           <div class="title">筛选</div>
         </el-button>
       </div>
@@ -35,20 +35,30 @@
         <!--表格-->
         <div class="table">
           <el-table :data="parttimeList" ref="tableRef" height="350" style="width: 100%" v-if="ready"
-            :header-cell-style="{ background: '#B886F8', color: '#ffffff' }" align="center">
-
-            <!--以下5个普通列-->
+            :header-cell-style="{ background: '#B886F8', color: '#ffffff' }" align="center" empty-text="暂无数据">
             <el-table-column prop="pId" label="序号" width="55" align="center" :fixed="true"/>
-            <el-table-column prop="positionName" label="兼职名称" width="280" align="center"/>
+
+            <el-table-column prop="positionName" label="兼职名称" width="280" align="center" v-if="isAdmin === 0"/>
+            <el-table-column prop="positionName" label="兼职名称" width="240" align="center" v-if="isAdmin === 1"/>
+
+            <!--插槽-->
+            <el-table-column prop="op" label="负责人" width="80" align="center" v-if="isAdmin === 1">
+              <template v-slot="scope">
+                <el-tag class="opName" :type="scope.row.op.opNameCategory">{{ scope.row.op.opName }}</el-tag>
+              </template>
+            </el-table-column>
+
             <el-table-column prop="nums" label="报名/录用/名额数" width="140" align="center"/>
 
-            <!--用插槽-->
+            <!--插槽-->
             <el-table-column prop="status" label="兼职状态" width="120" align="center">
               <template v-slot="scope">
                 <el-tag class="status" :type="scope.row.status.type">{{ scope.row.status.value }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="updateTime" label="更新时间" width="210" align="center"/>
+
+            <el-table-column prop="updateTime" label="更新时间" width="210" align="center" v-if="isAdmin === 0"/>
+            <el-table-column prop="updateTime" label="更新时间" width="190" align="center" v-if="isAdmin === 1"/>
 
             <!--自定义单元格内容（按钮），用插槽-->
             <el-table-column prop="op" label="操作" width="230" align="center">
@@ -60,8 +70,7 @@
                   <el-button class="btn" type="primary" round color="#B886F8" :dark="true" v-if="scope.row.status.value === '已发布'" @click="edit(scope)">
                     <div class="title">编辑</div>
                   </el-button>
-                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" v-if="scope.row.status.value === '已发布' || scope.row.status.value === '已招满'"
-                    @click="undercarriage(scope)">
+                  <el-button class="btn" type="primary" round color="#B886F8" :dark="true" v-if="scope.row.status.value === '已发布'" @click="undercarriage(scope)">
                     <div class="title">下架</div>
                   </el-button>
                 </div>
@@ -73,6 +82,7 @@
     </div>
   </div>
 
+  <!--三级菜单就跳转-->
   <div class="box" v-else>
     <router-view/>
   </div>
@@ -85,13 +95,11 @@ import MainMenu from '@/components/MainMenu.vue'
 import theAxios from 'axios'
 import { ElNotification } from 'element-plus'
 import store from '@/store'
-// import RouterView from '../RouterView.vue'
 
 export default {
   name: 'ParttimeView',
   components: {
     MainMenu
-    // ,RouterView
   },
   props: {},
   emits: [],
@@ -126,17 +134,25 @@ export default {
       ],
       parttimeList: [], // 兼职列表数据(表格显示用)
       parttimeAllInfoList: [], // 兼职列表详细信息
-      ready: true // 用于刷新页面
+      ready: true, // 用于刷新页面
+      isAdmin: false, // 当前登录用户是否是管理员
+      tmpDataList: [] // 兼职数据列表
     })
 
     onBeforeMount(() => {
-      getParttimeList() // 调api获取数据
     })
 
-    const getParttimeList = () => {
-      console.log('开始调api获取兼职数据...')
-
-      theAxios.get('http://114.55.239.213:8087/parttime/emp/get_own?emp_id=' + store.state.user.phone)
+    const getParttimeList = (type) => {
+      // 调api
+      let theRoute = ''
+      if (type === 1) {
+        // 是管理员
+        theRoute = 'get'
+      } else {
+        // 是兼职发布者
+        theRoute = 'get_own'
+      }
+      theAxios.get('http://114.55.239.213:8087/parttime/emp/' + theRoute + '?emp_id=' + store.state.user.phone)
         .then(res => {
           console.log('获取兼职接口的返回数据', res.data.data)
 
@@ -163,11 +179,19 @@ export default {
               // 根据状态判断tag的类型
               let statusType = ''
               if (res.data.data[i].position_status === '已发布') {
-                statusType = 'primary'
+                statusType = ''
               } else if (res.data.data[i].position_status === '已招满') {
                 statusType = 'danger'
               } else if (res.data.data[i].position_status === '已结束') {
                 statusType = 'warning'
+              }
+
+              // 判断负责人的el-tag的种类
+              let theCategory = ''
+              if (res.data.data[i].op_name === '管理员') {
+                theCategory = 'error'
+              } else {
+                theCategory = ''
               }
 
               // 构造json对象
@@ -179,10 +203,16 @@ export default {
                   type: statusType,
                   value: res.data.data[i].position_status
                 },
-                updateTime: res.data.data[i].update_time ? res.data.data[i].update_time : '尚未更新'
+                updateTime: res.data.data[i].update_time ? res.data.data[i].update_time : '尚未更新',
+                op: {
+                  opName: res.data.data[i].op_name ? res.data.data[i].op_name : '',
+                  opNameCategory: theCategory
+                },
+                category: res.data.data[i].category // 兼职种类
               }
               state.parttimeList.push(parttime) // 数组中添加当前遍历的兼职
               state.parttimeAllInfoList.push(res.data.data[i]) // 整个兼职数据存入该数组
+              state.tmpDataList = state.parttimeList // 赋值给暂存的数组
             }
             console.log('所有兼职数据', state.parttimeList)
             console.log('所有兼职详细数据', state.parttimeAllInfoList)
@@ -194,6 +224,14 @@ export default {
     }
 
     onMounted(() => {
+      state.isAdmin = store.state.user.isAdmin
+      if (state.isAdmin) {
+        // 是管理员，获取所有兼职信息
+        getParttimeList(1)
+      } else {
+        // 是兼职发布者
+        getParttimeList(0)
+      }
     })
 
     // 表格
@@ -228,8 +266,8 @@ export default {
 
     // 下架
     const undercarriage = (scope) => {
-      console.log('开始下架兼职...')
       state.ready = false
+
       // 发布兼职输入的dto
       const input = {
         op_id: store.state.user.phone,
@@ -280,6 +318,7 @@ export default {
               offset: 60
             })
           }
+
           state.ready = true
         })
         .catch(err => {
@@ -309,6 +348,45 @@ export default {
       })
     }
 
+    // 搜索功能
+    const searchData = () => {
+      state.ready = false
+
+      const name = state.search.name
+      const category = state.search.category
+      const status = state.search.status
+
+      let newDataList = state.tmpDataList // 筛选后的列表
+
+      // 1.兼职名称模糊查询
+      if (name !== '' && name) {
+        newDataList = newDataList.filter(v => {
+          return (v.positionName).indexOf(name) !== -1
+        })
+      }
+
+      // 2.兼职状态精确查询
+      if (status !== '' && status) {
+        // 过滤掉状态不是目标状态的兼职
+        newDataList = newDataList.filter((v) => {
+          return v.status.value === status
+        })
+      }
+
+      // 3.兼职种类精确查询
+      if (category !== '' && category) {
+        // 过滤掉种类不是目标种类的兼职
+        newDataList = newDataList.filter((v) => {
+          return v.category === category
+        })
+      }
+
+      // 4.把新的数组赋值给state.parttimeList
+      state.parttimeList = newDataList
+
+      state.ready = true
+    }
+
     return {
       ...toRefs(state),
       tableRef,
@@ -317,7 +395,8 @@ export default {
       secondRoutes,
       publish,
       undercarriage,
-      edit
+      edit,
+      searchData
     }
   }
 }
@@ -484,6 +563,7 @@ export default {
         flex-direction: column;
         align-items: center;
 
+        // 按钮
         .btn-box{
           width: 100%;
           height: auto;

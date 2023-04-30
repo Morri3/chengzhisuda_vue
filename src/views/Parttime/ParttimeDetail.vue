@@ -130,6 +130,7 @@ export default {
     const getData = () => {
       console.log('获取路由传递来的兼职数据', JSON.parse(route.query.dataList))
       const input = JSON.parse(route.query.dataList) // 这里是获取proxy包裹的对象
+
       // 构造种类1
       let settlementType = ''
       if (input.settlement === '学期结') {
@@ -137,6 +138,7 @@ export default {
       } else if (input.settlement === '月结') {
         settlementType = 'warning'
       }
+
       // 构造种类3
       let statusType = ''
       if (input.status === '已发布') {
@@ -146,6 +148,7 @@ export default {
       } else if (input.position_status === '已结束') {
         statusType = 'error'
       }
+
       // 构造数据对象
       const theParttime = {
         id: input.p_id,
@@ -225,8 +228,8 @@ export default {
     }
 
     const getLastPageData = () => {
-      console.log('获取路由传递来的兼职数据', JSON.parse(route.query.parttime))
-      console.log('获取路由传递来的单位数据', JSON.parse(route.query.unit))
+      console.log('路由传来的兼职数据', JSON.parse(route.query.parttime))
+      console.log('路由传来的单位数据', JSON.parse(route.query.unit))
       state.parttime = JSON.parse(route.query.parttime) // 这里是获取proxy包裹的对象
       state.unit = JSON.parse(route.query.unit) // 这里是获取proxy包裹的对象
     }
@@ -765,7 +768,7 @@ export default {
             text-align: left;
           }
       }
-      .line-3,.line-8{
+      .line-3{
           width: 90%;
           height: auto;
           display: flex;
@@ -837,6 +840,91 @@ export default {
             color: #000000;
             text-align: left;
           }
+      }
+      .line-8{
+        width: 90%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .name-1{
+          margin-left: 10px;
+          width: 80px;
+          height: 28px;
+          background: #B886F8;
+          color: #ffffff;
+          border-radius: 5px;
+          border: none;
+          box-shadow: 2px 2px 2px #898989;//阴影
+
+          font-weight: 550;
+          font-size: 16px;
+          color: #ffffff;
+          font-family: TsangerYuYangT_W04_W04;
+
+          // 文字居中
+          text-align: center;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }
+        .content-1{
+          width:380px;
+          height: 25px;
+          margin-left: 10px;
+
+          font-weight: 400;
+          font-size: 16px;
+          color: #000000;
+          text-align: left;
+          //溢出滚动
+          overflow-x: hidden;
+          overflow-y: scroll;
+          &::-webkit-scrollbar {
+            width: 0;//隐藏滚动条
+          }
+        }
+        .name-2{
+          margin-left: 20px;
+          width: 80px;
+          height: 28px;
+          background: #B886F8;
+          color: #ffffff;
+          border-radius: 5px;
+          border: none;
+          box-shadow: 2px 2px 2px #898989;//阴影
+
+          font-weight: 550;
+          font-size: 16px;
+          color: #ffffff;
+          font-family: TsangerYuYangT_W04_W04;
+
+          // 文字居中
+          text-align: center;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }
+        .content-2{
+          width:380px;
+          height: 25px;
+          margin-left: 10px;
+
+          font-weight: 400;
+          font-size: 16px;
+          color: #000000;
+          text-align: left;
+          //溢出滚动
+          overflow-x: hidden;
+          overflow-y: scroll;
+          &::-webkit-scrollbar {
+            width: 0;//隐藏滚动条
+          }
+        }
       }
     }
   }

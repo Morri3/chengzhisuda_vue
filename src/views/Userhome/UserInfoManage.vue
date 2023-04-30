@@ -140,6 +140,7 @@ export default {
     })
 
     const getUserData = (type) => {
+      state.ready = false
       // 调api
       theAxios.get('http://114.55.239.213:8087/users/info/get_emp?telephone=' + store.state.user.phone)
         .then(res => {
