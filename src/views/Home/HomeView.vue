@@ -16,9 +16,10 @@
 
 <script>
 import { reactive, toRefs, onMounted, onBeforeMount } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import CurTime from '@/components/CurTime.vue'
 import { ElNotification } from 'element-plus'
+import { useStore } from 'vuex'
 
 export default {
   name: 'HomeView',
@@ -28,15 +29,12 @@ export default {
   props: {},
   emits: [],
   setup () {
+    const store = useStore()
     const router = useRouter() // 使用路由
-    const route = useRoute() // 使用路由
+    // const route = useRoute() // 使用路由
 
     const state = reactive({
-      user: {
-        phone: '',
-        pwd: '',
-        token: ''
-      },
+      user: {},
       picBox: [
         { src: '/img/home/卡片-兼职管理.png', name: '兼职管理', url: '/parttime' },
         { src: '/img/home/卡片-兼职点评.png', name: '兼职点评', url: '/markcomment' },
@@ -52,29 +50,18 @@ export default {
     })
 
     onMounted(() => {
-      console.log('路由传递数据', route.query)
-      state.user.phone = route.query.phone
-      state.user.pwd = route.query.pwd
-      state.user.token = route.query.token
-      state.user.isLogin = route.query.isLogin
-      state.user.username = route.query.username
-      state.user.isAdmin = route.query.isAdmin
+      state.user = store.state.user
     })
 
     onBeforeMount(() => {
-      state.user.phone = route.query.phone
-      state.user.pwd = route.query.pwd
-      state.user.token = route.query.token
-      state.user.isLogin = route.query.isLogin
-      state.user.username = route.query.username
-      state.user.isAdmin = route.query.isAdmin
+      state.user = store.state.user
     })
 
     const jumpTo = (item) => {
       // 对分析模块进行访问限制
       if (item.url === '/analyze') {
         // 管理员可以访问
-        if (state.user.isAdmin === '1') {
+        if (state.user.isAdmin === 1) {
           router.push({
             path: item.url
           })

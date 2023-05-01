@@ -117,15 +117,15 @@ export default {
 
               // 跳转到首页
               router.push({
-                path: '/home',
-                query: {
-                  phone: theUser.phone, // 将用户的账号传过去
-                  pwd: theUser.pwd,
-                  token: theUser.token,
-                  isLogin: theUser.isLogin,
-                  username: theUser.username,
-                  isAdmin: theUser.isAdmin // 是否是管理员
-                }
+                path: '/home'
+                // query: {
+                //   phone: theUser.phone, // 将用户的账号传过去
+                //   pwd: theUser.pwd,
+                //   token: theUser.token,
+                //   isLogin: theUser.isLogin,
+                //   username: theUser.username,
+                //   isAdmin: theUser.isAdmin // 是否是管理员
+                // }
               })
 
               ElNotification({
