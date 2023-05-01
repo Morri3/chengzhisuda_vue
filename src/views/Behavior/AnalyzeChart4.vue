@@ -132,11 +132,20 @@ export default {
           list[i].numArr.forEach(v => {
             // 找到录用数所在元素，计算百分比
             if (v.numName === '录用数') {
-              const obj = {
-                stuName: list[i].stuName,
-                percent: ((v.num * 1.0 / sum) * 100).toFixed(2)
+              if (sum > 0) {
+                const obj = {
+                  stuName: list[i].stuName,
+                  percent: ((v.num * 1.0 / sum) * 100).toFixed(2)
+                }
+                percent.push(obj)
+              } else {
+                // 总和为0
+                const obj = {
+                  stuName: list[i].stuName,
+                  percent: 0
+                }
+                percent.push(obj)
               }
-              percent.push(obj)
             }
           })
         }
