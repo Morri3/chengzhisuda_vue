@@ -99,7 +99,11 @@ export default {
             },
             axisLabel: { // x轴标签
               snow: true,
-              fontFamily: 'DingTalk_JinBuTi_Regular'
+              fontFamily: 'DingTalk_JinBuTi_Regular',
+              rotate: 45,
+              formatter: function (value) {
+                return value.substring(2, 4) + value.substring(5, 7) + value.substring(8, 10)
+              }
             }
           },
           // y轴

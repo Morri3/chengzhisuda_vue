@@ -141,7 +141,7 @@ export default {
           grid: {
             left: '4%',
             right: '6%',
-            bottom: '22%', // 和底部的距离
+            bottom: '14%', // 和底部的距离
             containLabel: true // 包含刻度标签
           },
           // x轴
@@ -164,7 +164,17 @@ export default {
             },
             axisLabel: { // x轴标签
               snow: true,
-              fontFamily: 'DingTalk_JinBuTi_Regular'
+              fontSize: 12,
+              fontFamily: 'DingTalk_JinBuTi_Regular',
+              rotate: 45,
+              // 标签长度>2，只显示前两个中文+省略号
+              formatter: function (value) {
+                if (value.length > 2) {
+                  return value.substring(0, 2) + '..'
+                } else {
+                  return value
+                }
+              }
             }
           }],
           // y轴
