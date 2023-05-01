@@ -211,7 +211,7 @@ export default {
           grid: {
             show: false,
             top: '40',
-            bottom: '45',
+            bottom: '62',
             right: '45',
             left: '55'
           },
@@ -249,7 +249,15 @@ export default {
             },
             axisLabel: { // x轴标签
               snow: true,
-              fontFamily: 'DingTalk_JinBuTi_Regular'
+              fontFamily: 'DingTalk_JinBuTi_Regular',
+              rotate: 45,
+              formatter: function (value) {
+                if (value.length > 3) {
+                  return value.substring(0, 3) + '..'
+                } else {
+                  return value
+                }
+              }
             }
           }],
           // y轴
