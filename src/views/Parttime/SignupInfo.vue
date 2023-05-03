@@ -122,7 +122,7 @@
                   <div class="exp">{{item.exp}}</div>
                 </div>
 
-                <div class="line-3" v-if="item.education && item.education.length > 0">
+                <div class="line-3" v-if="item.education && item.education.content">
                   <div class="education">
                     <img class="icon" :src="'/img/position/icon_education.png'" alt=""/>
                     <div class="time">{{(item.education).time}}</div>
@@ -266,17 +266,13 @@ export default {
     })
 
     watch(
-      // 监听是否有数据
-      () => state.dataList,
+      // 监听是否有数据，根据数组长度控制是否显示nocontent
+      () => state.dataList.length,
       (newVal, oldVal) => {
-        if (newVal.length > 0 && oldVal.length > 0) {
+        if (newVal > 0) {
           state.nocontent = false
-        } else if (newVal.length > 0 && oldVal.length === 0) {
-          state.nocontent = false
-        } else if (newVal.length === 0 && oldVal.length > 0) {
-          state.nocontent = true
         } else {
-          state.nocontent = false
+          state.nocontent = true
         }
       }
     )
@@ -297,237 +293,166 @@ export default {
         .then(res => {
           console.log('获取报名信息接口的返回数据', res.data.data)
 
-          // 判断是否一个报名记录都没有
-          let flag = true
+          let flag = false
+          let errMsg = ''
           for (let i = 0; i < res.data.data.length; i++) {
-            if (res.data.data[i].memo !== '暂时无人报名该兼职') {
-              flag = false
+            // 这三种情况就不显示数据/无法显示数据
+            if (res.data.data[i].memo === '请检查输入的信息是否完整') {
+              flag = true
+              errMsg = '请检查输入的信息是否完整'
+              break
+            } else if (res.data.data[i].memo === '暂时无负责的兼职') {
+              flag = true
+              errMsg = '暂时无负责的兼职'
+              break
+            } else if (res.data.data[i].memo === '存在非法报名') {
+              flag = true
+              errMsg = '存在非法报名'
+              break
             }
           }
+
           if (flag) {
             state.nocontent = true
             ElNotification({
-              title: '注意啦',
-              message: '暂时无人报名该兼职',
-              type: 'warning',
+              title: '出错啦',
+              message: errMsg,
+              type: 'error',
               position: 'top-right', // 右上
               offset: 60
             })
           } else {
-            const theRes = res.data.data[0] // 第一个item
-            if (theRes.memo === '请检查输入的信息是否完整') {
-              state.nocontent = true
-              ElNotification({
-                title: '注意啦',
-                message: '请检查输入的信息是否完整',
-                type: 'warning',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            } else if (theRes.memo === '暂时无负责的兼职') {
-              state.nocontent = true
-              ElNotification({
-                title: '注意啦',
-                message: '暂时无负责的兼职',
-                type: 'warning',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            } else {
-              // 接着，遍历列表，判断有没有遍历的那个兼职有无报名数据
-              for (let i = 0; i < res.data.data.length; i++) {
-                if (res.data.data[i].memo === '暂时无人报名该兼职') {
-                  // 表示该兼职没人报名，就跳过
-                } else {
-                  // 表示存在报名，继续后面的判断，判断该报名的学生是否存在
-                  if (res.data.data[i].memo === '存在非法报名') {
-                    // 该报名是非法的
-                    ElNotification({
-                      title: '出错啦',
-                      message: '报名' + res.data.data[i].s_id + '是非法的',
-                      type: 'error',
-                      position: 'top-right', // 右上
-                      offset: 60
-                    })
-                  } else {
-                    // 该报名合法
-                    if (res.data.data[i].memo === '获取报名信息成功') {
-                      // 有简历，处理报名状态
-                      let theStatus = {}
-                      if (res.data.data[i].signup_status === '已报名') {
-                        theStatus = {
-                          type: 'primary',
-                          value: '已报名'
-                        }
-                      } else if (res.data.data[i].signup_status === '已录取') {
-                        theStatus = {
-                          type: 'warning',
-                          value: '已录取'
-                        }
-                      } else if (res.data.data[i].signup_status === '已结束') {
-                        theStatus = {
-                          type: 'danger',
-                          value: '已结束'
-                        }
-                      } else if (res.data.data[i].signup_status === '已取消') {
-                        theStatus = {
-                          type: 'error',
-                          value: '已取消'
-                        }
-                      }
+            // 有数据
 
-                      // 处理校园经历
-                      const list1 = []
-                      if (res.data.data[i].campusExpList.length > 0) {
-                        for (let j = 0; j < res.data.data[i].campusExpList.length; j++) {
-                          if ((res.data.data[i].campusExpList)[j].hasContent === 1) {
-                            list1.push({
-                              time: (res.data.data[i].campusExpList)[j].time,
-                              title: (res.data.data[i].campusExpList)[j].title,
-                              content: (res.data.data[i].campusExpList)[j].content
-                            })
-                          }
-                        }
-                      }
+            for (let i = 0; i < res.data.data.length; i++) {
+              if (res.data.data[i].memo === '简历为空' || res.data.data[i].memo === '获取报名信息成功') {
+                // 此时有报名数据
 
-                      // 处理教育背景
-                      let list2 = {}
-                      if (res.data.data[i].educationBgList.length > 0) {
-                        // 有数据
-                        for (let j = 0; j < res.data.data[i].educationBgList.length; j++) {
-                          if ((res.data.data[i].educationBgList)[j].hasContent === 1) {
-                            list2 = {
-                              time: (res.data.data[i].educationBgList)[j].time,
-                              title: (res.data.data[i].educationBgList)[j].title,
-                              content: (res.data.data[i].educationBgList)[j].content
-                            }
-                          }
-                        }
-                      }
-
-                      // 处理项目经历
-                      const list3 = []
-                      if (res.data.data[i].projectExpList.length > 0) {
-                        // 有数据
-                        for (let j = 0; j < res.data.data[i].projectExpList.length; j++) {
-                          if ((res.data.data[i].projectExpList)[j].hasContent === 1) {
-                            list3.push({
-                              time: (res.data.data[i].projectExpList)[j].time,
-                              title: (res.data.data[i].projectExpList)[j].title,
-                              content: (res.data.data[i].projectExpList)[j].content
-                            })
-                          }
-                        }
-                      }
-
-                      // 处理专业技能
-                      const list4 = []
-                      if (res.data.data[i].professionalSkillList.length > 0) {
-                        // 有数据
-                        for (let j = 0; j < res.data.data[i].professionalSkillList.length; j++) {
-                          if ((res.data.data[i].professionalSkillList)[j].hasContent === 1) {
-                            list4.push({
-                              content: (res.data.data[i].professionalSkillList)[j].content
-                            })
-                          }
-                        }
-                      }
-
-                      // 处理简历图片【若简历未上传=没有简历图片，后端没有setUrl这个字段】
-                      let url = ''
-                      const urls = []
-                      let hasUrl = 0 // 是否有简历图片
-                      if (res.data.data[i].memo !== '简历为空') {
-                        console.log('url', res.data.data[i].url)
-                        if (res.data.data[i].url !== null) {
-                          // 有简历图片
-                          hasUrl = 1
-                          console.log('可预览URL', (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4))
-                          url = (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4) // 获取可访问部分的url，在minio中设置public的桶访问权限
-                          urls.push(url)
-                        }
-                      }
-
-                      state.dataList.push({
-                        name: res.data.data[i].p_name,
-                        opId: res.data.data[i].op_id,
-                        opName: res.data.data[i].op_name,
-                        status1: res.data.data[i].num_signup ? res.data.data[i].num_signup : 0,
-                        status2: res.data.data[i].num_employment ? res.data.data[i].num_employment : 0,
-                        total: res.data.data[i].num_total ? res.data.data[i].num_total : 0,
-                        username: res.data.data[i].username ? res.data.data[i].username : '暂未填写',
-                        gender: res.data.data[i].gender ? res.data.data[i].gender : '暂未填写',
-                        status: theStatus, // 兼职状态
-                        category: res.data.data[i].category, // 兼职种类
-                        age: res.data.data[i].age ? res.data.data[i].age : 0,
-                        grade: res.data.data[i].grade ? res.data.data[i].grade : '暂未填写',
-                        exp: res.data.data[i].exp ? res.data.data[i].exp : '暂未填写',
-                        create_time: res.data.data[i].signup_time ? res.data.data[i].signup_time : '暂未填写',
-                        education: list2,
-                        campus: list1,
-                        project: list3,
-                        skills: list4,
-                        resumes: url, // 简历图片
-                        resumesList: urls, // 图片放大预览的列表
-                        sId: res.data.data[i].s_id,
-                        pId: res.data.data[i].p_id,
-                        hasUrl: hasUrl // 是否有简历图片
-                      })
-                    } else if (res.data.data[i].memo === '简历为空') {
-                      // 处理报名状态
-                      let theStatus = {}
-                      if (res.data.data[i].signup_status === '已报名') {
-                        theStatus = {
-                          type: 'primary',
-                          value: '已报名'
-                        }
-                      } else if (res.data.data[i].signup_status === '已录取') {
-                        theStatus = {
-                          type: 'warning',
-                          value: '已录取'
-                        }
-                      } else if (res.data.data[i].signup_status === '已结束') {
-                        theStatus = {
-                          type: 'danger',
-                          value: '已结束'
-                        }
-                      } else if (res.data.data[i].signup_status === '已取消') {
-                        theStatus = {
-                          type: 'error',
-                          value: '已取消'
-                        }
-                      }
-
-                      state.dataList.push({
-                        name: res.data.data[i].p_name,
-                        opId: res.data.data[i].op_id,
-                        opName: res.data.data[i].op_name,
-                        status1: res.data.data[i].num_signup ? res.data.data[i].num_signup : 0,
-                        status2: res.data.data[i].num_employment ? res.data.data[i].num_employment : 0,
-                        total: res.data.data[i].num_total ? res.data.data[i].num_total : 0,
-                        username: res.data.data[i].username ? res.data.data[i].username : '暂未填写',
-                        gender: res.data.data[i].gender ? res.data.data[i].gender : '暂未填写',
-                        status: theStatus, // 兼职状态
-                        category: res.data.data[i].category, // 兼职种类
-                        age: res.data.data[i].age ? res.data.data[i].age : 0,
-                        grade: res.data.data[i].grade ? res.data.data[i].grade : '暂未填写',
-                        exp: res.data.data[i].exp ? res.data.data[i].exp : '暂未填写',
-                        create_time: res.data.data[i].signup_time ? res.data.data[i].signup_time : '暂未填写',
-                        education: res.data.data[i].educationBgList,
-                        campus: res.data.data[i].campusExpList,
-                        project: res.data.data[i].projectExpList,
-                        skills: res.data.data[i].professionalSkillList,
-                        sId: res.data.data[i].s_id,
-                        pId: res.data.data[i].p_id,
-                        hasUrl: 0 // 是否有简历图片
-                      })
-                    }
-                    state.tmpDataList = state.dataList
+                // 处理报名状态
+                let theStatus = {}
+                if (res.data.data[i].signup_status === '已报名') {
+                  theStatus = {
+                    type: 'primary',
+                    value: '已报名'
+                  }
+                } else if (res.data.data[i].signup_status === '已录取') {
+                  theStatus = {
+                    type: 'warning',
+                    value: '已录取'
+                  }
+                } else if (res.data.data[i].signup_status === '已结束') {
+                  theStatus = {
+                    type: 'danger',
+                    value: '已结束'
+                  }
+                } else if (res.data.data[i].signup_status === '已取消') {
+                  theStatus = {
+                    type: 'error',
+                    value: '已取消'
                   }
                 }
+
+                // 处理校园经历
+                const list1 = []
+                if (res.data.data[i].campusExpList.length > 0) {
+                  for (let j = 0; j < res.data.data[i].campusExpList.length; j++) {
+                    if ((res.data.data[i].campusExpList)[j].hasContent === 1) {
+                      list1.push({
+                        time: (res.data.data[i].campusExpList)[j].time,
+                        title: (res.data.data[i].campusExpList)[j].title,
+                        content: (res.data.data[i].campusExpList)[j].content
+                      })
+                    }
+                  }
+                }
+
+                // 处理教育背景
+                let list2 = {}
+                if (res.data.data[i].educationBgList.length > 0) {
+                  // 有数据
+                  for (let j = 0; j < res.data.data[i].educationBgList.length; j++) {
+                    if ((res.data.data[i].educationBgList)[j].hasContent === 1) {
+                      list2 = {
+                        time: (res.data.data[i].educationBgList)[j].time,
+                        title: (res.data.data[i].educationBgList)[j].title,
+                        content: (res.data.data[i].educationBgList)[j].content
+                      }
+                    }
+                  }
+                }
+
+                // 处理项目经历
+                const list3 = []
+                if (res.data.data[i].projectExpList.length > 0) {
+                  // 有数据
+                  for (let j = 0; j < res.data.data[i].projectExpList.length; j++) {
+                    if ((res.data.data[i].projectExpList)[j].hasContent === 1) {
+                      list3.push({
+                        time: (res.data.data[i].projectExpList)[j].time,
+                        title: (res.data.data[i].projectExpList)[j].title,
+                        content: (res.data.data[i].projectExpList)[j].content
+                      })
+                    }
+                  }
+                }
+
+                // 处理专业技能
+                const list4 = []
+                if (res.data.data[i].professionalSkillList.length > 0) {
+                  // 有数据
+                  for (let j = 0; j < res.data.data[i].professionalSkillList.length; j++) {
+                    if ((res.data.data[i].professionalSkillList)[j].hasContent === 1) {
+                      list4.push({
+                        content: (res.data.data[i].professionalSkillList)[j].content
+                      })
+                    }
+                  }
+                }
+
+                // 处理简历图片【若简历未上传=没有简历图片，后端没有setUrl这个字段】
+                let url = ''
+                const urls = []
+                let hasUrl = 0 // 是否有简历图片
+                if (res.data.data[i].memo !== '简历为空') {
+                  console.log('url', res.data.data[i].url)
+                  if (res.data.data[i].url !== null) {
+                    // 有简历图片
+                    hasUrl = 1
+                    console.log('可预览URL', (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4))
+                    url = (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4) // 获取可访问部分的url，在minio中设置public的桶访问权限
+                    urls.push(url)
+                  }
+                }
+
+                state.dataList.push({
+                  name: res.data.data[i].p_name,
+                  opId: res.data.data[i].op_id,
+                  opName: res.data.data[i].op_name,
+                  status1: res.data.data[i].num_signup ? res.data.data[i].num_signup : 0,
+                  status2: res.data.data[i].num_employment ? res.data.data[i].num_employment : 0,
+                  total: res.data.data[i].num_total ? res.data.data[i].num_total : 0,
+                  username: res.data.data[i].username ? res.data.data[i].username : '暂未填写',
+                  gender: res.data.data[i].gender ? res.data.data[i].gender : '暂未填写',
+                  status: theStatus, // 兼职状态
+                  category: res.data.data[i].category, // 兼职种类
+                  age: res.data.data[i].age ? res.data.data[i].age : 0,
+                  grade: res.data.data[i].grade ? res.data.data[i].grade : '暂未填写',
+                  exp: res.data.data[i].exp ? res.data.data[i].exp : '暂未填写',
+                  create_time: res.data.data[i].signup_time ? res.data.data[i].signup_time : '暂未填写',
+                  education: list2,
+                  campus: list1,
+                  project: list3,
+                  skills: list4,
+                  resumes: url, // 简历图片
+                  resumesList: urls, // 图片放大预览的列表
+                  sId: res.data.data[i].s_id,
+                  pId: res.data.data[i].p_id,
+                  hasUrl: hasUrl // 是否有简历图片
+                })
               }
-              console.log('报名数据', state.dataList)
             }
+            // 用于筛选
+            state.tmpDataList = state.dataList
           }
         })
         .catch(err => {
@@ -590,65 +515,70 @@ export default {
         .then(res => {
           console.log('录用接口的返回数据', res.data.data)
 
-          let flag = false
-          for (let i = 0; i < res.data.data.length; i++) {
-            if (res.data.data[i].memo === '获取报名信息成功') {
-              flag = true
+          if (res.data.data.memo === '不存在该兼职') {
+            state.nocontent = true
+            ElNotification({
+              title: '注意啦',
+              message: '不存在该兼职',
+              type: 'warning',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不存在该报名') {
+            state.nocontent = true
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该报名',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不能操作非负责的兼职') {
+            state.nocontent = true
+            ElNotification({
+              title: '出错啦',
+              message: '不能操作非负责的兼职',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不存在该用户') {
+            state.nocontent = true
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该用户',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '请检查输入的信息是否完整') {
+            state.nocontent = true
+            ElNotification({
+              title: '出错啦',
+              message: '请检查输入的信息是否完整',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '录用成功') {
+            state.nocontent = false
+            if (state.isAdmin === 1) {
+              getParttimeListByEmpId(1)
+            } else {
+              getParttimeListByEmpId(0)
             }
-          }
-          if (flag === false) {
-            // 说明没数据
-            const theRes = res.data.data[0]
-            if (theRes.memo === '不能操作非负责的兼职') {
-              state.nocontent = true
-              ElNotification({
-                title: '注意啦',
-                message: '不能操作非负责的兼职',
-                type: 'warning',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            } else if (theRes.memo === '不存在该报名') {
-              state.nocontent = true
-              ElNotification({
-                title: '出错啦',
-                message: '不存在该报名',
-                type: 'error',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            } else if (theRes.memo === '请检查输入的信息是否完整') {
-              state.nocontent = true
-              ElNotification({
-                title: '出错啦',
-                message: '请检查输入的信息是否完整',
-                type: 'error',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            }
-          } else {
-            // 有数据
-            if (res.data.data.length > 0) {
-              state.nocontent = false
-              if (state.isAdmin === 1) {
-                getParttimeListByEmpId(1)
-              } else {
-                getParttimeListByEmpId(0)
-              }
 
-              ElNotification({
-                title: '成功啦',
-                message: '录用成功',
-                type: 'success',
-                position: 'top-right', // 右上
-                offset: 60
-              })
+            router.push({
+              path: '/parttime/signup'
+            })
 
-              router.push({
-                path: '/parttime/signup'
-              })
-            }
+            ElNotification({
+              title: '成功啦',
+              message: '录用成功',
+              type: 'success',
+              position: 'top-right', // 右上
+              offset: 60
+            })
           }
           state.ready = true
         })
@@ -670,61 +600,70 @@ export default {
         .then(res => {
           console.log('婉拒接口的返回数据', res.data.data)
 
-          let flag = false
-          for (let i = 0; i < res.data.data.length; i++) {
-            if (res.data.data[i].memo === '获取报名信息成功') {
-              flag = true
+          if (res.data.data.memo === '不存在该兼职') {
+            state.nocontent = true
+            ElNotification({
+              title: '注意啦',
+              message: '不存在该兼职',
+              type: 'warning',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不存在该报名') {
+            state.nocontent = true
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该报名',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不能操作非负责的兼职') {
+            state.nocontent = true
+            ElNotification({
+              title: '出错啦',
+              message: '不能操作非负责的兼职',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不存在该用户') {
+            state.nocontent = true
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该用户',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '请检查输入的信息是否完整') {
+            state.nocontent = true
+            ElNotification({
+              title: '出错啦',
+              message: '请检查输入的信息是否完整',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '婉拒成功') {
+            state.nocontent = false
+            if (state.isAdmin === 1) {
+              getParttimeListByEmpId(1)
+            } else {
+              getParttimeListByEmpId(0)
             }
-          }
-          if (flag === false) {
-            // 说明没数据
-            const theRes = res.data.data[0]
-            if (theRes.memo === '不能操作非负责的兼职') {
-              state.nocontent = true
-              ElNotification({
-                title: '注意啦',
-                message: '不能操作非负责的兼职',
-                type: 'warning',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            } else if (theRes.memo === '不存在该报名') {
-              state.nocontent = true
-              ElNotification({
-                title: '出错啦',
-                message: '不存在该报名',
-                type: 'error',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            } else if (theRes.memo === '请检查输入的信息是否完整') {
-              state.nocontent = true
-              ElNotification({
-                title: '出错啦',
-                message: '请检查输入的信息是否完整',
-                type: 'error',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            }
-          } else {
-            // 有数据
-            if (res.data.data.length > 0) {
-              state.nocontent = false
-              if (state.isAdmin === 1) {
-                getParttimeListByEmpId(1)
-              } else {
-                getParttimeListByEmpId(0)
-              }
 
-              ElNotification({
-                title: '成功啦',
-                message: '婉拒成功',
-                type: 'success',
-                position: 'top-right', // 右上
-                offset: 60
-              })
-            }
+            router.push({
+              path: '/parttime/signup'
+            })
+
+            ElNotification({
+              title: '成功啦',
+              message: '婉拒成功',
+              type: 'success',
+              position: 'top-right', // 右上
+              offset: 60
+            })
           }
           state.ready = true
         })

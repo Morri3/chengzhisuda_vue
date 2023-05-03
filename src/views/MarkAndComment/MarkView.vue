@@ -124,7 +124,8 @@ export default {
       ],
       markList: [], // 评分列表
       nocontent: false, // 是否显示404内容
-      tmpDataList: [] // 兼职数据列表
+      tmpDataList: [], // 兼职数据列表
+      isAdmin: false // 是否是管理员
     })
 
     onBeforeMount(() => {
@@ -132,7 +133,15 @@ export default {
 
     const getMarkList = () => {
       // 调api
-      theAxios.get('http://114.55.239.213:8087/mark/emp/getSome?emp_id=' + store.state.user.phone)
+      let theRoute = ''
+      if (state.isAdmin) {
+        // 是管理员
+        theRoute = 'get_all_admin'
+      } else {
+        // 是兼职发布者
+        theRoute = 'get_all_emp'
+      }
+      theAxios.get('http://114.55.239.213:8087/mark/emp/' + theRoute + '?emp_id=' + store.state.user.phone)
         .then(res => {
           console.log('评分数据接口的返回数据', res.data.data)
 
@@ -234,6 +243,7 @@ export default {
     }
 
     onMounted(() => {
+      state.isAdmin = store.state.user.isAdmin
       getMarkList() // 调api获取数据
     })
 

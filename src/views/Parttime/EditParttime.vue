@@ -276,7 +276,6 @@ export default {
         update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
         num_total: state.parttime.num
       }
-      console.log('000', input.signup_ddl)
 
       // 调api，编辑兼职
       theAxios.post('http://114.55.239.213:8087/parttime/edit', input)
@@ -291,10 +290,26 @@ export default {
               position: 'top-right', // 右上
               offset: 60
             })
+          } else if (res.data.data.memo === '请检查输入的发布中发生异常表单信息是否完整') {
+            ElNotification({
+              title: '出错啦',
+              message: '发布中发生异常',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
           } else if (res.data.data.memo === '请检查输入的表单信息是否完整') {
             ElNotification({
               title: '出错啦',
               message: '请检查输入的表单信息是否完整',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不存在该兼职') {
+            ElNotification({
+              title: '出错啦',
+              message: '不存在该兼职',
               type: 'error',
               position: 'top-right', // 右上
               offset: 60
@@ -311,6 +326,14 @@ export default {
             ElNotification({
               title: '出错啦',
               message: '该兼职发布者不存在单位',
+              type: 'error',
+              position: 'top-right', // 右上
+              offset: 60
+            })
+          } else if (res.data.data.memo === '不能操作非负责的兼职') {
+            ElNotification({
+              title: '出错啦',
+              message: '不能操作非负责的兼职',
               type: 'error',
               position: 'top-right', // 右上
               offset: 60

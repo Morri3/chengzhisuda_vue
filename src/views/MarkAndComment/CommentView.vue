@@ -98,7 +98,8 @@ export default {
       genderList: [], // 性别下拉框
       commentList: [], // 评论列表
       nocontent: false, // 是否显示404内容
-      tmpDataList: [] // 兼职数据列表
+      tmpDataList: [], // 兼职数据列表
+      isAdmin: false // 是否是管理员
     })
 
     onBeforeMount(() => {
@@ -106,7 +107,15 @@ export default {
 
     const getCommentList = () => {
       // 调api
-      theAxios.get('http://114.55.239.213:8087/comments/emp/getSome?emp_id=' + store.state.user.phone)
+      let theRoute = ''
+      if (state.isAdmin) {
+        // 是管理员
+        theRoute = 'get_all_admin'
+      } else {
+        // 是兼职发布者
+        theRoute = 'get_all_emp'
+      }
+      theAxios.get('http://114.55.239.213:8087/comments/emp/' + theRoute + '?emp_id=' + store.state.user.phone)
         .then(res => {
           console.log('评论数据接口的返回数据', res.data.data)
 
@@ -199,6 +208,7 @@ export default {
     }
 
     onMounted(() => {
+      state.isAdmin = store.state.user.isAdmin
       getCommentList() // 调api获取数据
     })
 
