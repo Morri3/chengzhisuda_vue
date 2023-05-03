@@ -104,7 +104,7 @@ export default {
 
     onMounted(() => {
       const now = new Date()
-      for (let i = now.getFullYear() - 30; i <= now.getFullYear(); i++) {
+      for (let i = now.getFullYear() - 50; i <= now.getFullYear(); i++) {
         state.birthYear.push({
           value: i,
           label: i
@@ -166,90 +166,142 @@ export default {
     }
 
     const reg = () => {
-      console.log('reg', '点击了注册按钮')
-
-      // 调api
-      // 处理年龄
-      let s = ''
-      if (parseInt(state.user.selectedBirthMonth) >= 1 && parseInt(state.user.selectedBirthMonth) <= 9) {
-        s = state.user.selectedBirthYear + '-0' + state.user.selectedBirthMonth
+      // 验证表单，有一个没填就提示，不让注册
+      if (!state.user.phone || !state.user.pwd || !state.user.pwd2 || !state.user.name || !state.user.emails ||
+        !state.user.selectedBirthMonth || !state.user.selectedBirthYear || !state.user.unit || !state.user.jno) {
+        ElNotification({
+          title: '注意啦',
+          message: '请填写相关字段',
+          type: 'warning',
+          position: 'top-right', // 右上
+          offset: 60
+        })
       } else {
-        s = state.user.selectedBirthYear + '-' + state.user.selectedBirthMonth
-      }
-      console.log(s)
-      const theAge = getAge(s) // 计算年龄
-      console.log('年龄', theAge)
+        // 都填了
 
-      // 处理性别
-      let g = 0
-      if (state.user.gender === '男') {
-        g = 0
-      } else if (state.user.gender === '女') {
-        g = 1
-      } else {
-        g = 0 // 其他情况默认为0
-      }
-      console.log('性别', g)
+        if (state.user.phone.length !== 11) {
+          // 手机号长度不对
+          ElNotification({
+            title: '注意啦',
+            message: '请输入正确的手机号',
+            type: 'warning',
+            position: 'top-right', // 右上
+            offset: 60
+          })
+        } else {
+          // 手机号长度正确
 
-      const input = {
-        telephone: state.user.phone,
-        unit_name: state.user.unit,
-        emp_name: state.user.name,
-        pwd: state.user.pwd,
-        pwd2: state.user.pwd2,
-        jno: state.user.jno,
-        gender: g,
-        emails: state.user.emails,
-        age: theAge,
-        reg_date: getFormatDate(new Date()),
-        emp_grade: 0 // 0表示兼职发布者
-      }
-      console.log('输入的表单信息', input)
-      theAxios.post('http://114.55.239.213:8087/register/emp', input)
-        .then(res => {
-          console.log('登陆接口的返回数据', res.data.data)
-
-          if (res.data.data.memo === '请输入表单信息') {
-            ElNotification({
-              title: '出错啦',
-              message: '请输入表单信息',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '注册成功') {
-            const thePhone = res.data.data.telephone
-            const theUser = {
-              phone: thePhone
-            }
-            store.commit('setUserLoginInfo', theUser)
-            console.log('getUserLoginInfo', store.state.user)
-
-            // 跳转到登录页
-            router.push({
-              path: '/login'
-            })
-
-            ElNotification({
-              title: '成功啦',
-              message: '注册成功',
-              type: 'success',
-              position: 'top-right', // 右上
-              offset: 60
-            })
+          // 处理年龄
+          let s = ''
+          let birthYear = ''
+          let birthMonth = ''
+          birthYear = state.user.selectedBirthYear // 出生年份
+          if (parseInt(state.user.selectedBirthMonth) >= 1 && parseInt(state.user.selectedBirthMonth) <= 9) {
+            s = state.user.selectedBirthYear + '-0' + state.user.selectedBirthMonth
+            birthMonth = '0' + state.user.selectedBirthMonth
+          } else {
+            s = state.user.selectedBirthYear + '-' + state.user.selectedBirthMonth
+            birthMonth = state.user.selectedBirthMonth
           }
-        })
-        .catch(err => {
-          console.error(err)
-        })
+          console.log(s)
+          const theAge = getAge(s) // 计算年龄
+          console.log('年龄', theAge)
 
-      // 跳转
-      router.push({ // 跳转到登录界面
-        path: '/login',
-        query: {
-          userInfo: state.user
+          // 处理性别
+          let g = 1
+          if (state.user.gender === '男') {
+            g = 1
+          } else if (state.user.gender === '女') {
+            g = 0
+          } else {
+            g = 1 // 其他情况默认为1
+          }
+          console.log('性别', g)
+
+          const input = {
+            telephone: state.user.phone,
+            unit_name: state.user.unit,
+            emp_name: state.user.name,
+            pwd: state.user.pwd,
+            pwd2: state.user.pwd2,
+            jno: state.user.jno,
+            gender: g,
+            emails: state.user.emails,
+            age: theAge,
+            birth_year: birthYear, // 出生年份
+            birth_month: birthMonth, // 出生月份
+            reg_date: getFormatDate(new Date()),
+            emp_grade: 0 // 0表示兼职发布者
+          }
+          console.log('输入的注册表单信息', input)
+
+          // 调api
+          theAxios.post('http://114.55.239.213:8087/register/emp', input)
+            .then(res => {
+              console.log('登陆接口的返回数据', res.data.data)
+
+              if (res.data.data.memo === '请输入表单信息') {
+                ElNotification({
+                  title: '注意啦',
+                  message: '请输入表单信息',
+                  type: 'warning',
+                  position: 'top-right', // 右上
+                  offset: 60
+                })
+              } else if (res.data.data.memo === '两次密码请输入正确') {
+                ElNotification({
+                  title: '注意啦',
+                  message: '两次密码请输入正确',
+                  type: 'warning',
+                  position: 'top-right', // 右上
+                  offset: 60
+                })
+              } else if (res.data.data.memo === '该手机号已注册，请直接登录') {
+                ElNotification({
+                  title: '注意啦',
+                  message: '该手机号已注册，请直接登录',
+                  type: 'warning',
+                  position: 'top-right', // 右上
+                  offset: 60
+                })
+              } else if (res.data.data.memo === '请输入正确的邮箱格式') {
+                ElNotification({
+                  title: '注意啦',
+                  message: '请输入正确的邮箱格式',
+                  type: 'warning',
+                  position: 'top-right', // 右上
+                  offset: 60
+                })
+              } else if (res.data.data.memo === '注册成功') {
+                const thePhone = res.data.data.telephone
+                const theUser = {
+                  phone: thePhone
+                }
+                store.commit('setUserLoginInfo', theUser)
+                console.log('getUserLoginInfo', store.state.user)
+
+                // 跳转到登录界面
+                router.push({
+                  path: '/login',
+                  query: {
+                    userInfo: state.user
+                  }
+                })
+
+                ElNotification({
+                  title: '成功啦',
+                  message: '注册成功',
+                  type: 'success',
+                  position: 'top-right', // 右上
+                  offset: 60
+                })
+              }
+            })
+            .catch(err => {
+              console.error(err)
+            })
         }
-      })
+      }
     }
 
     return {

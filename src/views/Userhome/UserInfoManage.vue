@@ -9,6 +9,7 @@
       <!--标题-->
       <div class="top-box">
         <div class="title">个人信息管理</div>
+        <img src="/img/userhome/icon_refresh.png" class="refresh" @click="refresh()"/>
       </div>
 
       <!--主体部分-->
@@ -114,17 +115,7 @@ export default {
 
     const state = reactive({
       // 用户信息
-      user: {
-        // phone: '18968966599',
-        // pwd: '',
-        // token: '',
-        // emails: '111@163.com',
-        // username: 'aaa',
-        // gender: '男',
-        // age: 23,
-        // jno: 'J00000',
-        // head: '/img/userhome/icon_head1.jpeg'
-      },
+      user: {},
       sub: { // 控制二级菜单的开关
         sub1: false,
         sub2: false,
@@ -183,6 +174,8 @@ export default {
               gender: theGender,
               emails: res.data.data.emails,
               age: res.data.data.age,
+              selectedBirthYear: res.data.data.birth_year, // 出生年份
+              selectedBirthMonth: res.data.data.birth_month, // 出生月份
               telephone: res.data.data.telephone,
               jno: res.data.data.jno,
               head: theHead,
@@ -221,6 +214,10 @@ export default {
     onMounted(() => {
       getUserData(1) // 调api获取数据
     })
+
+    const refresh = () => {
+      getUserData(1) // 调api获取数据
+    }
 
     const modifyInfo = (data1, data2) => {
       router.push({
@@ -264,7 +261,8 @@ export default {
       modifyInfo,
       modifyPwd,
       appIntroduction,
-      secondRoutes
+      secondRoutes,
+      refresh
     }
   }
 }
@@ -333,6 +331,15 @@ export default {
         font-size: 24px;
         color: #000000;
         font-family: DingTalk_JinBuTi_Regular;
+      }
+
+      //刷新按钮
+      .refresh{
+        width: 20px;
+        height: 20px;
+        margin-left: 40px;
+        margin-top: 1px;
+        cursor: pointer;
       }
     }
 

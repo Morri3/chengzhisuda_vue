@@ -150,47 +150,11 @@ export default {
     onBeforeMount(() => {
       state.user = JSON.parse(route.query.user)
       state.unit = JSON.parse(route.query.unit)
-
-      // 处理年龄转日期
-      const subYear = parseInt(state.user.age)
-      const subMonth = parseInt(1)
-      const subDay = parseInt(1)
-      const now = new Date()
-      const nowYear = now.getFullYear()
-      const nowMonth = now.getMonth() + 1
-      const nowDay = now.getDate() // day相减，不够向month借 → month相减，不够向year借 → 最后year相减
-      let day = nowDay - subDay
-      let month = nowMonth - subMonth
-      let year = nowYear - subYear // 检查是否溢出
-      if (day <= 0) { // 获得上月的天数
-        let lastMonth = nowMonth - 1
-        let lastMonthOfYear = nowYear
-        if (lastMonth <= 0) {
-          lastMonth = (lastMonth + 12) % 12
-          lastMonthOfYear = lastMonthOfYear - 1
-        }
-        day = day + new Date(lastMonthOfYear, lastMonth, 0).getDate()
-        month = month - 1
-      }
-      if (month <= 0) {
-        month = (month + 12) % 12
-        year--
-      }
-      if (month < 10) {
-        month = '0' + month
-      }
-      if (day < 10) {
-        day = '0' + day
-      }
-
-      // 得到年份、月份后，赋值
-      state.user.selectedBirthYear = year
-      state.user.selectedBirthMonth = month
     })
 
     onMounted(() => {
       const now = new Date()
-      for (let i = now.getFullYear() - 30; i <= now.getFullYear(); i++) {
+      for (let i = now.getFullYear() - 50; i <= now.getFullYear(); i++) {
         state.birthYear.push({
           value: i,
           label: i
@@ -235,6 +199,15 @@ export default {
       // 处理年龄
       const ageStr = state.user.selectedBirthYear + '-' + state.user.selectedBirthMonth + '-01'
       const theAge = getAge(ageStr)
+      let birthYear = ''
+      let birthMonth = ''
+      birthYear = state.user.selectedBirthYear
+      if (parseInt(state.user.selectedBirthMonth) >= 1 && parseInt(state.user.selectedBirthMonth) <= 9) {
+        birthMonth = '0' + state.user.selectedBirthMonth
+      } else {
+        birthMonth = state.user.selectedBirthMonth
+      }
+
       // 处理性别
       let theGender = 0
       if (state.user.gender === '男') {
@@ -247,6 +220,8 @@ export default {
         telephone: state.user.telephone,
         gender: theGender,
         age: theAge,
+        birth_year: birthYear,
+        birth_month: birthMonth,
         emails: state.user.emails,
         unit_descriptions: state.unit.descriptions,
         unit_loc: state.unit.area
