@@ -251,16 +251,19 @@ export default {
           } else if (res.data.data.memo === '修改个人信息成功') {
             state.nocontent = false
 
+            router.push({
+              path: '/userhome/index',
+              query: {
+                refresh: true // 刷新页面获取最新数据
+              }
+            })
+
             ElNotification({
               title: '成功啦',
               message: '修改个人信息成功',
               type: 'success',
               position: 'top-right', // 右上
               offset: 60
-            })
-
-            router.push({
-              path: '/userhome/index'
             })
           }
           state.ready = true

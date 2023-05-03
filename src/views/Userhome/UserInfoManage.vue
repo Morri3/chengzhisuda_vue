@@ -9,7 +9,7 @@
       <!--标题-->
       <div class="top-box">
         <div class="title">个人信息管理</div>
-        <img src="/img/userhome/icon_refresh.png" class="refresh" @click="refresh()"/>
+        <!-- <img src="/img/userhome/icon_refresh.png" class="refresh" @click="refresh()"/> -->
       </div>
 
       <!--主体部分-->
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted, onBeforeMount, computed } from 'vue'
+import { reactive, toRefs, onMounted, onBeforeMount, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import MainMenu from '@/components/MainMenu.vue'
 import theAxios from 'axios'
@@ -129,6 +129,16 @@ export default {
     onBeforeMount(() => {
       getUserData(2)
     })
+
+    watch(
+      () => route.query.refresh,
+      (newVal, oldVal) => {
+        if (newVal) {
+          // 有数据
+          getUserData(2)
+        }
+      }
+    )
 
     const getUserData = (type) => {
       state.ready = false
@@ -215,9 +225,9 @@ export default {
       getUserData(1) // 调api获取数据
     })
 
-    const refresh = () => {
-      getUserData(1) // 调api获取数据
-    }
+    // const refresh = () => {
+    //   getUserData(2) // 调api获取数据
+    // }
 
     const modifyInfo = (data1, data2) => {
       router.push({
@@ -261,8 +271,9 @@ export default {
       modifyInfo,
       modifyPwd,
       appIntroduction,
-      secondRoutes,
-      refresh
+      secondRoutes
+      // ,
+      // refresh
     }
   }
 }
