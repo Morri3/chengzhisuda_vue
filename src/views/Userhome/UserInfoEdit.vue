@@ -743,7 +743,7 @@ export default {
               align-items: center;
             }
             .unit-name{
-              width: 180px;
+              width: 500px;
               height: 100%;
               max-height: 60px;//最大高度
               margin: auto 3px auto 20px;//垂直方向居中

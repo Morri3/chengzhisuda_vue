@@ -542,7 +542,7 @@ export default {
             }
             .name{
               width: 180px;
-              height: auto;
+              height: 25px;
               font-weight: 400;
               font-size: 16px;
               color: #000000;
@@ -550,10 +550,13 @@ export default {
               margin-left: 10px;
               margin-right: 3px;
 
-              //溢出隐藏，省略号表示
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
+              //溢出上下滚动条显示
+              display: inline-block;
+              overflow-y:scroll;
+              overflow-x:hidden;
+              &::-webkit-scrollbar {
+                width: 0;//隐藏滚动条
+              }
             }
           }
 
