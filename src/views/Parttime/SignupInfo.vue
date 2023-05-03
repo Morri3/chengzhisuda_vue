@@ -269,6 +269,8 @@ export default {
       // 监听是否有数据，根据数组长度控制是否显示nocontent
       () => state.dataList.length,
       (newVal, oldVal) => {
+        console.log('n', newVal)
+        console.log('o', oldVal)
         if (newVal > 0) {
           state.nocontent = false
         } else {

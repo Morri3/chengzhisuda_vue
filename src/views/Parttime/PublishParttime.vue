@@ -80,7 +80,7 @@
         <div class="line-5">
           <div class="name-1">截止时间</div>
           <div class="content-1">
-            <el-date-picker class="choose-date" v-model="parttime.ddl" type="datetime" placeholder="请选择截止时间" clearable ref="signupDdl"/>
+            <el-date-picker class="choose-date" v-model="parttime.ddl" type="datetime" placeholder="请选择截止时间" clearable ref="signupDdl" prefix-icon="Star"/>
           </div>
 
           <div class="name-2">结付方式</div>
@@ -217,91 +217,95 @@ export default {
     // 发布兼职
     const publish = () => {
       // 检查表单的必填内容
-      if (state.parttime.name === '') {
-        //
-      }
+      if (state.parttime.name === '' || state.parttime.salary === '' || state.parttime.area === '' ||
+        state.parttime.content === '' || state.parttime.category === '' || state.parttime.ddl === '' ||
+        state.parttime.num === '' || state.parttime.worktime === '' || state.parttime.slogan === '') {
+        ElNotification({
+          title: '注意啦',
+          message: '请检查表单数据是否为空',
+          type: 'warning',
+          position: 'top-right', // 右上
+          offset: 60
+        })
+      } else {
+        // 转换结付方式
+        let theSettlement = ''
+        if (state.parttime.settlement === 1) {
+          theSettlement = '月结'
+        } else if (state.parttime.settlement === 2) {
+          theSettlement = '学期结算'
+        }
 
-      // 转换结付方式
-      let theSettlement = ''
-      if (state.parttime.settlement === 1) {
-        theSettlement = '月结'
-      } else if (state.parttime.settlement === 2) {
-        theSettlement = '学期结算'
-      }
+        // 发布兼职输入的dto
+        const input = {
+          op_id: state.user.phone,
+          position_name: state.parttime.name,
+          category: state.parttime.category,
+          salary: state.parttime.salary,
+          area: state.parttime.area,
+          exp: state.parttime.exp,
+          content: state.parttime.content,
+          requirement: state.parttime.requirement,
+          signup_ddl: moment(state.parttime.ddl).format('YYYY-MM-DD HH:mm:ss'),
+          slogan: state.parttime.slogan,
+          work_time: state.parttime.worktime,
+          settlement: theSettlement,
+          create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+          num_total: state.parttime.num
+        }
 
-      // 发布兼职输入的dto
-      const input = {
-        op_id: state.user.phone,
-        position_name: state.parttime.name,
-        category: state.parttime.category,
-        salary: state.parttime.salary,
-        area: state.parttime.area,
-        exp: state.parttime.exp,
-        content: state.parttime.content,
-        requirement: state.parttime.requirement,
-        signup_ddl: moment(state.parttime.ddl).format('YYYY-MM-DD HH:mm:ss'),
-        slogan: state.parttime.slogan,
-        work_time: state.parttime.worktime,
-        settlement: theSettlement,
-        create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-        num_total: state.parttime.num
-      }
+        // 调api，发布兼职
+        theAxios.post('http://114.55.239.213:8087/parttime/publish', input)
+          .then(res => {
+            console.log('发布兼职接口的返回数据', res.data.data)
 
-      // 调api，发布兼职
-      theAxios.post('http://114.55.239.213:8087/parttime/publish', input)
-        .then(res => {
-          console.log('发布兼职接口的返回数据', res.data.data)
+            if (res.data.data.memo === '不存在该兼职发布者') {
+              ElNotification({
+                title: '出错啦',
+                message: '不存在该兼职发布者',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '请检查输入的表单信息是否完整') {
+              ElNotification({
+                title: '出错啦',
+                message: '请检查输入的表单信息是否完整',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '该兼职发布者不存在单位') {
+              ElNotification({
+                title: '出错啦',
+                message: '该兼职发布者不存在单位',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '发布成功') {
+              console.log('发布的兼职信息', res.data.data)
 
-          if (res.data.data.memo === '不存在该兼职发布者') {
-            ElNotification({
-              title: '出错啦',
-              message: '不存在该兼职发布者',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '请检查输入的表单信息是否完整') {
-            ElNotification({
-              title: '出错啦',
-              message: '请检查输入的表单信息是否完整',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '该兼职发布者不存在单位') {
-            ElNotification({
-              title: '出错啦',
-              message: '该兼职发布者不存在单位',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '发布成功') {
-            console.log('发布的兼职信息', res.data.data)
+              state.active = 2 // 更新时间线进度
 
-            // 跳转到兼职首页
-            router.push({
-              path: '/parttime'
-            })
+              ElNotification({
+                title: '成功啦',
+                message: '发布成功',
+                type: 'success',
+                position: 'top-right', // 右上
+                offset: 60
+              })
 
-            ElNotification({
-              title: '成功啦',
-              message: '发布成功',
-              type: 'success',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          }
-          state.active = 2 // 更新时间线进度
-
-          // 跳转
-          router.push({
-            path: '/parttime/list'
+              // 跳转到兼职首页
+              router.push({
+                path: '/parttime'
+              })
+            }
           })
-        })
-        .catch(err => {
-          console.error(err)
-        })
+          .catch(err => {
+            console.error(err)
+          })
+      }
     }
 
     const getUnitInfo = () => {

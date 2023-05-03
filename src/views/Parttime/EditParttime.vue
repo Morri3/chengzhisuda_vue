@@ -247,123 +247,130 @@ export default {
     // 保存修改
     const save = () => {
       // 检查表单的必填内容
-      if (state.parttime.name === '') {
-        //
-      }
+      if (state.parttime.salary === '' || state.parttime.area === '' || state.parttime.settlement === '' ||
+        state.parttime.content === '' || state.parttime.category === '' || state.parttime.ddl === '' ||
+        state.parttime.num === '' || state.parttime.worktime === '' || state.parttime.slogan === '') {
+        ElNotification({
+          title: '注意啦',
+          message: '请检查表单数据是否为空',
+          type: 'warning',
+          position: 'top-right', // 右上
+          offset: 60
+        })
+      } else {
+        // 转换结付方式
+        let settlement = ''
+        if (state.parttime.settlement === 1) {
+          settlement = '月结'
+        } else if (state.parttime.settlement === 2) {
+          settlement = '学期结算'
+        }
 
-      // 转换结付方式
-      let settlement = ''
-      if (state.parttime.settlement === 1) {
-        settlement = '月结'
-      } else if (state.parttime.settlement === 2) {
-        settlement = '学期结算'
-      }
+        // 发布兼职输入的dto
+        const input = {
+          op_id: store.state.user.phone,
+          p_id: state.parttime.pId,
+          category: state.parttime.category,
+          salary: state.parttime.salary,
+          area: state.parttime.area,
+          exp: state.parttime.exp,
+          content: state.parttime.content,
+          requirement: state.parttime.requirement,
+          signup_ddl: moment(state.parttime.ddl).format('YYYY-MM-DD HH:mm:ss'),
+          slogan: state.parttime.slogan,
+          work_time: state.parttime.worktime,
+          settlement: settlement,
+          update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+          num_total: state.parttime.num
+        }
 
-      // 发布兼职输入的dto
-      const input = {
-        op_id: store.state.user.phone,
-        p_id: state.parttime.pId,
-        category: state.parttime.category,
-        salary: state.parttime.salary,
-        area: state.parttime.area,
-        exp: state.parttime.exp,
-        content: state.parttime.content,
-        requirement: state.parttime.requirement,
-        signup_ddl: moment(state.parttime.ddl).format('YYYY-MM-DD HH:mm:ss'),
-        slogan: state.parttime.slogan,
-        work_time: state.parttime.worktime,
-        settlement: settlement,
-        update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-        num_total: state.parttime.num
-      }
+        // 调api，编辑兼职
+        theAxios.post('http://114.55.239.213:8087/parttime/edit', input)
+          .then(res => {
+            console.log('编辑兼职接口的返回数据', res.data.data)
 
-      // 调api，编辑兼职
-      theAxios.post('http://114.55.239.213:8087/parttime/edit', input)
-        .then(res => {
-          console.log('编辑兼职接口的返回数据', res.data.data)
+            if (res.data.data.memo === '不存在该兼职发布者') {
+              ElNotification({
+                title: '出错啦',
+                message: '不存在该兼职发布者',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '请检查输入的发布中发生异常表单信息是否完整') {
+              ElNotification({
+                title: '出错啦',
+                message: '发布中发生异常',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '请检查输入的表单信息是否完整') {
+              ElNotification({
+                title: '出错啦',
+                message: '请检查输入的表单信息是否完整',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '不存在该兼职') {
+              ElNotification({
+                title: '出错啦',
+                message: '不存在该兼职',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '只能编辑已发布且无人录取的兼职') {
+              ElNotification({
+                title: '出错啦',
+                message: '只能编辑已发布且无人录取的兼职',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '该兼职发布者不存在单位') {
+              ElNotification({
+                title: '出错啦',
+                message: '该兼职发布者不存在单位',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '不能操作非负责的兼职') {
+              ElNotification({
+                title: '出错啦',
+                message: '不能操作非负责的兼职',
+                type: 'error',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            } else if (res.data.data.memo === '编辑成功') {
+              console.log('编辑的兼职信息', res.data.data)
 
-          if (res.data.data.memo === '不存在该兼职发布者') {
-            ElNotification({
-              title: '出错啦',
-              message: '不存在该兼职发布者',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '请检查输入的发布中发生异常表单信息是否完整') {
-            ElNotification({
-              title: '出错啦',
-              message: '发布中发生异常',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '请检查输入的表单信息是否完整') {
-            ElNotification({
-              title: '出错啦',
-              message: '请检查输入的表单信息是否完整',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '不存在该兼职') {
-            ElNotification({
-              title: '出错啦',
-              message: '不存在该兼职',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '只能编辑已发布且无人录取的兼职') {
-            ElNotification({
-              title: '出错啦',
-              message: '只能编辑已发布且无人录取的兼职',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '该兼职发布者不存在单位') {
-            ElNotification({
-              title: '出错啦',
-              message: '该兼职发布者不存在单位',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '不能操作非负责的兼职') {
-            ElNotification({
-              title: '出错啦',
-              message: '不能操作非负责的兼职',
-              type: 'error',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          } else if (res.data.data.memo === '编辑成功') {
-            console.log('编辑的兼职信息', res.data.data)
+              state.active = 2 // 更新时间线进度
 
-            // 跳转到兼职首页
-            router.push({
-              path: '/parttime'
-            })
+              // 跳转到兼职首页
+              router.push({
+                path: '/parttime',
+                query: {
+                  refresh: true
+                }
+              })
 
-            ElNotification({
-              title: '成功啦',
-              message: '编辑成功',
-              type: 'success',
-              position: 'top-right', // 右上
-              offset: 60
-            })
-          }
-          state.active = 2 // 更新时间线进度
-
-          // 跳转
-          router.push({
-            path: '/parttime/list'
+              ElNotification({
+                title: '成功啦',
+                message: '编辑成功',
+                type: 'success',
+                position: 'top-right', // 右上
+                offset: 60
+              })
+            }
           })
-        })
-        .catch(err => {
-          console.error(err)
-        })
+          .catch(err => {
+            console.error(err)
+          })
+      }
     }
 
     const getUnitInfo = () => {

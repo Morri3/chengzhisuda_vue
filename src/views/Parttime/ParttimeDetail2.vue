@@ -19,13 +19,14 @@
           <!--line1-->
           <div class="line-1">
             <div class="title">点评信息</div>
-            <!-- <div class="update-time">最近更新于{{parttime.createTime}}</div> -->
           </div>
+
           <!--line2-->
           <div class="line-2">
             <div class="name">总体评分</div>
             <div class="content">{{mark.total}} 分</div>
           </div>
+
           <!--line3-->
           <div class="line-3">
             <div class="name">薪资水平</div>
@@ -34,6 +35,7 @@
             />
             <div class="num">{{mark.pf}} 分</div>
           </div>
+
           <!--line4-->
           <div class="line-4">
             <div class="name">闲时待遇</div>
@@ -42,6 +44,7 @@
             />
             <div class="num">{{mark.pl}} 分</div>
           </div>
+
           <!--line5-->
           <div class="line-5">
             <div class="name">专业技能满意度</div>
@@ -50,6 +53,7 @@
             />
             <div class="num">{{mark.we}} 分</div>
           </div>
+
           <!--line6-->
           <div class="line-6">
             <div class="name">专业契合度</div>
@@ -58,6 +62,7 @@
             />
             <div class="num">{{mark.lt}} 分</div>
           </div>
+
           <!--line7-->
           <div class="line-7">
             <div class="name">工作环境</div>
@@ -66,6 +71,7 @@
             />
             <div class="num">{{mark.pt}} 分</div>
           </div>
+
           <!--line8-->
           <div class="line-8">
             <div class="name">岗前培训</div>
@@ -74,6 +80,7 @@
             />
             <div class="num">{{mark.ods}} 分</div>
           </div>
+
           <!--line9-->
           <div class="line-9">
             <div class="name">总体收获满意度</div>
@@ -197,7 +204,7 @@ export default {
 
     const getData2 = () => {
       // 调api根据p_id获取评论信息
-      theAxios.get('http://114.55.239.213:8087/comments/emp/getAll?p_id=' + state.parttime.id +
+      theAxios.get('http://114.55.239.213:8087/comments/emp/get_one_all?p_id=' + state.parttime.id +
         '&emp_id=' + store.state.user.phone)
         .then(res => {
           console.log('评论接口的返回数据', res.data.data)
@@ -226,7 +233,7 @@ export default {
               }
             }
             state.comment = arr // 赋值给arr
-            console.log('当前兼职评论数据', state.comment)
+            console.log('当前兼职的评论数据', state.comment)
           }
         })
         .catch(err => {

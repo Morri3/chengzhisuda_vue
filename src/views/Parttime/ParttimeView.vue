@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { ref, reactive, toRefs, onMounted, onBeforeMount, computed } from 'vue'
+import { ref, reactive, toRefs, onMounted, onBeforeMount, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import MainMenu from '@/components/MainMenu.vue'
 import theAxios from 'axios'
@@ -175,6 +175,9 @@ export default {
               offset: 60
             })
           } else if (first.memo === '兼职获取成功') {
+            const list = []
+            const infoList = []
+
             for (let i = 0; i < res.data.data.length; i++) {
               // 根据状态判断tag的类型
               let statusType = ''
@@ -210,10 +213,16 @@ export default {
                 },
                 category: res.data.data[i].category // 兼职种类
               }
-              state.parttimeList.push(parttime) // 数组中添加当前遍历的兼职
-              state.parttimeAllInfoList.push(res.data.data[i]) // 整个兼职数据存入该数组
-              state.tmpDataList = state.parttimeList // 赋值给暂存的数组
+
+              list.push(parttime)
+              infoList.push(res.data.data[i])
+              // state.parttimeList.push(parttime) // 数组中添加当前遍历的兼职
+              // state.parttimeAllInfoList.push(res.data.data[i]) // 整个兼职数据存入该数组
+              // state.tmpDataList = state.parttimeList // 赋值给暂存的数组
             }
+            state.parttimeList = list // 数组中添加当前遍历的兼职
+            state.parttimeAllInfoList = infoList // 整个兼职数据存入该数组
+            state.tmpDataList = state.parttimeList // 赋值给暂存的数组
             console.log('所有兼职数据', state.parttimeList)
             console.log('所有兼职详细数据', state.parttimeAllInfoList)
           }
@@ -236,6 +245,22 @@ export default {
 
     // 表格
     const tableRef = ref()
+
+    watch(
+      () => route.query.refresh,
+      (newVal, oldVal) => {
+        if (newVal) {
+          // 有数据
+          if (state.isAdmin) {
+            // 是管理员，获取所有兼职信息
+            getParttimeList(1)
+          } else {
+            // 是兼职发布者
+            getParttimeList(0)
+          }
+        }
+      }
+    )
 
     // 详情按钮
     const detail = (scope) => {
@@ -305,10 +330,14 @@ export default {
           } else if (res.data.data.memo === '下架成功') {
             console.log('下架的兼职信息', res.data.data)
 
-            // 跳转到兼职首页
-            router.push({
-              path: '/parttime'
-            })
+            // 获取最新数据，刷新页面
+            if (state.isAdmin) {
+              // 是管理员，获取所有兼职信息
+              getParttimeList(1)
+            } else {
+              // 是兼职发布者
+              getParttimeList(0)
+            }
 
             ElNotification({
               title: '成功啦',
