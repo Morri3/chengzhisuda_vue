@@ -60,13 +60,13 @@
                 <div class="op-statistics">已报{{item.status1}}人，已录用{{item.status2}}人，共招{{item.total}}人</div>
               </div>
 
-              <!--按钮-->
+              <!--简历详情按钮-->
               <el-button class="btn" type="primary" round color="#B886F8" :dark="true" @click="resumeDetail(item)">
                 <img class="icon" :src="'/img/position/button_resume_info.png'" alt=""/>
                 <div class="title">简历详情</div>
               </el-button>
 
-              <!--按钮-->
+              <!--录用按钮-->
               <el-button class="btn-2" type="primary" round color="#B886F8" :dark="true" @click="employ(item)"
                 v-if="item.status.value === '已报名'">
                 <img class="icon" :src="'/img/position/button_hire.png'" alt=""/>
@@ -78,7 +78,7 @@
                 <div class="title">录用</div>
               </el-button>
 
-              <!--按钮-->
+              <!--婉拒按钮-->
               <el-button class="btn-3" type="primary" round color="#B886F8" :dark="true" @click="reject(item)"
                 v-if="item.status.value === '已报名'">
                 <img class="icon" :src="'/img/position/button_refuse.png'" alt=""/>
@@ -176,8 +176,8 @@
         </div>
 
         <!--简历弹窗-->
-        <el-dialog v-model="visible" :show-close="false" class="resumes-box"
-          title="简历" center align-center v-loading="ready">
+        <el-dialog v-model="visible" :show-close="false" class="resumes-box" title="简历" center
+          align-center v-loading="ready">
 
           <!--简历图片-->
           <div v-if="curItem.hasUrl === 0" class="no-url">暂无简历图片</div>
@@ -490,8 +490,6 @@ export default {
     // 简历详情
     const resumeDetail = (item) => {
       state.ready = false
-
-      console.log('欢迎查看简历详情', item)
       state.visible = true // 显示弹窗
 
       // 将简历图片、hasUrl变量赋值给state中的变量，实现弹窗的内容根据点击这个按钮实现更新
@@ -500,6 +498,7 @@ export default {
         resumes: item.resumes,
         resumesList: item.resumesList
       }
+      console.log('欢迎查看简历详情', state.curItem)
 
       state.ready = true
     }
@@ -1283,9 +1282,10 @@ export default {
                   flex-direction: row;
 
                   .icon{
-                    width: 10px;
-                    height: 10px;
-                    margin-top: 5px;
+                    width: 15px;
+                    height: 15px;
+                    margin-top: 2px;
+                    margin-right: -4px;//让每行文字左对齐
                   }
                   .time{
                     width: 140px;
@@ -1353,8 +1353,10 @@ export default {
                       margin-top: 5px;
 
                       .icon{
-                        width: 10px;
-                        height: 10px;
+                        width: 15px;
+                        height: 15px;
+                        margin-top: -2px;
+                        margin-right: -4px;//让每行文字左对齐
                       }
                     }
 
@@ -1425,8 +1427,10 @@ export default {
                       margin-top: 5px;
 
                       .icon{
-                        width: 10px;
-                        height: 10px;
+                        width: 15px;
+                        height: 15px;
+                        margin-top: -2px;
+                        margin-right: -4px;//让每行文字左对齐
                       }
                     }
 
@@ -1498,8 +1502,10 @@ export default {
                       margin-top: 5px;
 
                       .icon{
-                        width: 10px;
-                        height: 10px;
+                        width: 18px;
+                        height: 18px;
+                        margin-top: -3px;
+                        margin-right: -9px;//让每行文字左对齐
                       }
                     }
 

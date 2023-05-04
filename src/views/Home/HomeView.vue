@@ -1,15 +1,18 @@
 <template>
   <div class="box">
+    <!--左边的logo-->
     <div class="left-box">
       <img class="logo" :src="'/img/home/logo.png'" alt="" />
     </div>
 
+    <!--右边的6个卡片-->
     <div class="right-box">
       <div class="item-box" v-for="(item, index) in picBox" :index="index" :key="item">
         <img class="pic" :src="item.src" alt="" @click="jumpTo(item)" />
       </div>
     </div>
 
+    <!--底部的实时时间-->
     <CurTime :color="curTime.color" class="time"></CurTime>
   </div>
 </template>

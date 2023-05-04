@@ -246,6 +246,7 @@ export default {
     // 表格
     const tableRef = ref()
 
+    // 监听是否要更新页面数据
     watch(
       () => route.query.refresh,
       (newVal, oldVal) => {
