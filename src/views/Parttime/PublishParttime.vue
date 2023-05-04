@@ -288,17 +288,20 @@ export default {
 
               state.active = 2 // 更新时间线进度
 
+              // 跳转到兼职首页
+              router.push({
+                path: '/parttime',
+                query: {
+                  refresh: true
+                }
+              })
+
               ElNotification({
                 title: '成功啦',
                 message: '发布成功',
                 type: 'success',
                 position: 'top-right', // 右上
                 offset: 60
-              })
-
-              // 跳转到兼职首页
-              router.push({
-                path: '/parttime'
               })
             }
           })

@@ -269,8 +269,6 @@ export default {
       // 监听是否有数据，根据数组长度控制是否显示nocontent
       () => state.dataList.length,
       (newVal, oldVal) => {
-        console.log('n', newVal)
-        console.log('o', oldVal)
         if (newVal > 0) {
           state.nocontent = false
         } else {
@@ -278,6 +276,23 @@ export default {
         }
       }
     )
+
+    onMounted(() => {
+      state.isAdmin = store.state.user.isAdmin
+      // 没数据，显示无内容的提示
+      if (state.dataList.length <= 0) {
+        state.nocontent = true
+      }
+
+      // 调函数获取报名数据
+      if (state.isAdmin) {
+        // 是管理员，获取所有兼职报名信息
+        getParttimeListByEmpId(1)
+      } else {
+        // 是兼职发布者
+        getParttimeListByEmpId(0)
+      }
+    })
 
     const getParttimeListByEmpId = (type) => {
       state.dataList = [] // 清空
@@ -325,6 +340,7 @@ export default {
             })
           } else {
             // 有数据
+            const list = []
 
             for (let i = 0; i < res.data.data.length; i++) {
               if (res.data.data[i].memo === '简历为空' || res.data.data[i].memo === '获取报名信息成功') {
@@ -426,7 +442,7 @@ export default {
                   }
                 }
 
-                state.dataList.push({
+                list.push({
                   name: res.data.data[i].p_name,
                   opId: res.data.data[i].op_id,
                   opName: res.data.data[i].op_name,
@@ -453,25 +469,15 @@ export default {
                 })
               }
             }
-            // 用于筛选
-            state.tmpDataList = state.dataList
+
+            state.dataList = list
+            state.tmpDataList = state.dataList // 用于筛选
           }
         })
         .catch(err => {
           console.error(err)
         })
     }
-
-    onMounted(() => {
-      state.isAdmin = store.state.user.isAdmin
-      if (state.isAdmin) {
-        // 是管理员，获取所有兼职报名信息
-        getParttimeListByEmpId(1)
-      } else {
-        // 是兼职发布者
-        getParttimeListByEmpId(0)
-      }
-    })
 
     // 是否是二级路由
     const secondRoutes = computed(() => {
