@@ -343,7 +343,7 @@ export default {
             const list = []
 
             for (let i = 0; i < res.data.data.length; i++) {
-              if (res.data.data[i].memo === '简历为空' || res.data.data[i].memo === '获取报名信息成功') {
+              if (res.data.data[i].memo === '获取报名信息成功') {
                 // 此时有报名数据
 
                 // 处理报名状态
@@ -441,6 +441,130 @@ export default {
                     urls.push(url)
                   }
                 }
+
+                list.push({
+                  name: res.data.data[i].p_name,
+                  opId: res.data.data[i].op_id,
+                  opName: res.data.data[i].op_name,
+                  status1: res.data.data[i].num_signup ? res.data.data[i].num_signup : 0,
+                  status2: res.data.data[i].num_employment ? res.data.data[i].num_employment : 0,
+                  total: res.data.data[i].num_total ? res.data.data[i].num_total : 0,
+                  username: res.data.data[i].username ? res.data.data[i].username : '暂未填写',
+                  gender: res.data.data[i].gender ? res.data.data[i].gender : '暂未填写',
+                  status: theStatus, // 兼职状态
+                  category: res.data.data[i].category, // 兼职种类
+                  age: res.data.data[i].age ? res.data.data[i].age : 0,
+                  grade: res.data.data[i].grade ? res.data.data[i].grade : '暂未填写',
+                  exp: res.data.data[i].exp ? res.data.data[i].exp : '暂未填写',
+                  create_time: res.data.data[i].signup_time ? res.data.data[i].signup_time : '暂未填写',
+                  education: list2,
+                  campus: list1,
+                  project: list3,
+                  skills: list4,
+                  resumes: url, // 简历图片
+                  resumesList: urls, // 图片放大预览的列表
+                  sId: res.data.data[i].s_id,
+                  pId: res.data.data[i].p_id,
+                  hasUrl: hasUrl // 是否有简历图片
+                })
+              } else if (res.data.data[i].memo === '简历为空') {
+                // 此时有报名数据
+
+                // 处理报名状态
+                let theStatus = {}
+                if (res.data.data[i].signup_status === '已报名') {
+                  theStatus = {
+                    type: 'primary',
+                    value: '已报名'
+                  }
+                } else if (res.data.data[i].signup_status === '已录取') {
+                  theStatus = {
+                    type: 'warning',
+                    value: '已录取'
+                  }
+                } else if (res.data.data[i].signup_status === '已结束') {
+                  theStatus = {
+                    type: 'danger',
+                    value: '已结束'
+                  }
+                } else if (res.data.data[i].signup_status === '已取消') {
+                  theStatus = {
+                    type: 'error',
+                    value: '已取消'
+                  }
+                }
+
+                // 处理校园经历
+                const list1 = []
+                // if (res.data.data[i].campusExpList.length > 0) {
+                //   for (let j = 0; j < res.data.data[i].campusExpList.length; j++) {
+                //     if ((res.data.data[i].campusExpList)[j].hasContent === 1) {
+                //       list1.push({
+                //         time: (res.data.data[i].campusExpList)[j].time,
+                //         title: (res.data.data[i].campusExpList)[j].title,
+                //         content: (res.data.data[i].campusExpList)[j].content
+                //       })
+                //     }
+                //   }
+                // }
+
+                // 处理教育背景
+                const list2 = {}
+                // if (res.data.data[i].educationBgList.length > 0) {
+                //   // 有数据
+                //   for (let j = 0; j < res.data.data[i].educationBgList.length; j++) {
+                //     if ((res.data.data[i].educationBgList)[j].hasContent === 1) {
+                //       list2 = {
+                //         time: (res.data.data[i].educationBgList)[j].time,
+                //         title: (res.data.data[i].educationBgList)[j].title,
+                //         content: (res.data.data[i].educationBgList)[j].content
+                //       }
+                //     }
+                //   }
+                // }
+
+                // 处理项目经历
+                const list3 = []
+                // if (res.data.data[i].projectExpList.length > 0) {
+                //   // 有数据
+                //   for (let j = 0; j < res.data.data[i].projectExpList.length; j++) {
+                //     if ((res.data.data[i].projectExpList)[j].hasContent === 1) {
+                //       list3.push({
+                //         time: (res.data.data[i].projectExpList)[j].time,
+                //         title: (res.data.data[i].projectExpList)[j].title,
+                //         content: (res.data.data[i].projectExpList)[j].content
+                //       })
+                //     }
+                //   }
+                // }
+
+                // 处理专业技能
+                const list4 = []
+                // if (res.data.data[i].professionalSkillList.length > 0) {
+                //   // 有数据
+                //   for (let j = 0; j < res.data.data[i].professionalSkillList.length; j++) {
+                //     if ((res.data.data[i].professionalSkillList)[j].hasContent === 1) {
+                //       list4.push({
+                //         content: (res.data.data[i].professionalSkillList)[j].content
+                //       })
+                //     }
+                //   }
+                // }
+
+                // 处理简历图片【若简历未上传=没有简历图片，后端没有setUrl这个字段】
+                const url = ''
+                const urls = []
+                const hasUrl = 0 // 是否有简历图片
+                // if (res.data.data[i].memo !== '简历为空') {
+                //   console.log('url', res.data.data[i].url)
+                //   if (res.data.data[i].url !== null) {
+                //     // 有简历图片
+                //     hasUrl = 1
+                //     console.log('可预览URL', (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4))
+                //     url = (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4) // 获取可访问部分的url，在minio中设置public的桶访问权限
+                //     urls.push(url)
+                //   }
+                // }
 
                 list.push({
                   name: res.data.data[i].p_name,
@@ -1046,7 +1170,7 @@ export default {
             }
             .p-name{
               width: 220px;
-              height: 40px;
+              height: 24px;
               font-weight: 500;
               font-size: 20px;
               color: #000000;
@@ -1054,9 +1178,13 @@ export default {
               margin-left: 15px;
               margin-right: 60px; // 让p-name左移到左边
 
-              display: flex;
-              flex-direction: row;
-              align-items: center;
+              // 元素溢出滚动
+              display: inline-block;//flex布局不能正常实现溢出滚动
+              overflow-y:scroll;
+              overflow-x:hidden;
+              &::-webkit-scrollbar {
+                width: 0;//隐藏滚动条
+              }
             }
 
             // 操作员
@@ -1249,7 +1377,7 @@ export default {
                 }
 
                 .grade{
-                  width: 38px;
+                  width: 55px;
                   height: auto;
                   margin-left: 15px;
                   font-weight: 400;

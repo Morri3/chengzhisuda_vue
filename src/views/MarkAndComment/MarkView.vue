@@ -41,7 +41,8 @@
                 <div class="mark-box">
                   <div class="line-1">
                     <el-tag class="total-tag" type="danger" size="small">总体评分</el-tag>
-                    <div class="total">{{ scope.row.mark.total }}分</div>
+                    <!--取两位小数-->
+                    <div class="total">{{ (scope.row.mark.total).toFixed(2) }}分</div>
                   </div>
                   <div class="line-2">
                     <el-tag class="mark-tag" type="primary">专业契合度</el-tag>
