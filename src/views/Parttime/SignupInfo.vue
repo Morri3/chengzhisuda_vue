@@ -370,11 +370,11 @@ export default {
                   }
                 }
 
-                // 处理校园经历
+                // 处理校园经历，不显示已删除的detail
                 const list1 = []
                 if (res.data.data[i].campusExpList.length > 0) {
                   for (let j = 0; j < res.data.data[i].campusExpList.length; j++) {
-                    if ((res.data.data[i].campusExpList)[j].hasContent === 1) {
+                    if ((res.data.data[i].campusExpList)[j].hasContent === 1 && (res.data.data[i].campusExpList)[j].status !== '已删除') {
                       list1.push({
                         time: (res.data.data[i].campusExpList)[j].time,
                         title: (res.data.data[i].campusExpList)[j].title,
@@ -384,12 +384,12 @@ export default {
                   }
                 }
 
-                // 处理教育背景
+                // 处理教育背景，不显示已删除的detail
                 let list2 = {}
                 if (res.data.data[i].educationBgList.length > 0) {
                   // 有数据
                   for (let j = 0; j < res.data.data[i].educationBgList.length; j++) {
-                    if ((res.data.data[i].educationBgList)[j].hasContent === 1) {
+                    if ((res.data.data[i].educationBgList)[j].hasContent === 1 && (res.data.data[i].educationBgList)[j].status !== '已删除') {
                       list2 = {
                         time: (res.data.data[i].educationBgList)[j].time,
                         title: (res.data.data[i].educationBgList)[j].title,
@@ -399,12 +399,12 @@ export default {
                   }
                 }
 
-                // 处理项目经历
+                // 处理项目经历，不显示已删除的detail
                 const list3 = []
                 if (res.data.data[i].projectExpList.length > 0) {
                   // 有数据
                   for (let j = 0; j < res.data.data[i].projectExpList.length; j++) {
-                    if ((res.data.data[i].projectExpList)[j].hasContent === 1) {
+                    if ((res.data.data[i].projectExpList)[j].hasContent === 1 && (res.data.data[i].projectExpList)[j].status !== '已删除') {
                       list3.push({
                         time: (res.data.data[i].projectExpList)[j].time,
                         title: (res.data.data[i].projectExpList)[j].title,
@@ -414,12 +414,12 @@ export default {
                   }
                 }
 
-                // 处理专业技能
+                // 处理专业技能，不显示已删除的detail
                 const list4 = []
                 if (res.data.data[i].professionalSkillList.length > 0) {
                   // 有数据
                   for (let j = 0; j < res.data.data[i].professionalSkillList.length; j++) {
-                    if ((res.data.data[i].professionalSkillList)[j].hasContent === 1) {
+                    if ((res.data.data[i].professionalSkillList)[j].hasContent === 1 && (res.data.data[i].professionalSkillList)[j].status !== '已删除') {
                       list4.push({
                         content: (res.data.data[i].professionalSkillList)[j].content
                       })
