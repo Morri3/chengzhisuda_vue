@@ -62,7 +62,7 @@
 
             <!--自定义单元格内容（按钮），用插槽-->
             <el-table-column prop="op" label="操作" width="230" align="center">
-              <template #default="scope">
+              <template v-slot="scope">
                 <div class="btn-box">
                   <el-button class="btn" type="primary" round color="#B886F8" :dark="true" @click="detail(scope)">
                     <div class="title">详情</div>
@@ -216,9 +216,6 @@ export default {
 
               list.push(parttime)
               infoList.push(res.data.data[i])
-              // state.parttimeList.push(parttime) // 数组中添加当前遍历的兼职
-              // state.parttimeAllInfoList.push(res.data.data[i]) // 整个兼职数据存入该数组
-              // state.tmpDataList = state.parttimeList // 赋值给暂存的数组
             }
             state.parttimeList = list // 数组中添加当前遍历的兼职
             state.parttimeAllInfoList = infoList // 整个兼职数据存入该数组
@@ -265,13 +262,20 @@ export default {
 
     // 详情按钮
     const detail = (scope) => {
-      console.log('路由传递的数据', JSON.stringify(state.parttimeAllInfoList[scope.$index]))
+      // 由p_id找到当前操作的兼职
+      let curItem = {}
+      state.parttimeAllInfoList.forEach(v => {
+        if (v.p_id === scope.row.pId) {
+          curItem = v
+        }
+      })
+      console.log('详情路由传递的数据', JSON.stringify(curItem))
 
       // 跳转
       router.push({
         path: '/parttime/list/detail',
         query: {
-          dataList: JSON.stringify(state.parttimeAllInfoList[scope.$index]), // 当前行所在下标对应的兼职数据
+          dataList: JSON.stringify(curItem), // 当前行的p_id对应的兼职数据
           type: 0 // 表示从兼职列表页进入详情页
         }
       })
@@ -279,13 +283,20 @@ export default {
 
     // 编辑按钮
     const edit = (scope) => {
-      console.log('路由传递的数据', JSON.stringify(state.parttimeAllInfoList[scope.$index]))
+      // 由p_id找到当前操作的兼职
+      let curItem = {}
+      state.parttimeAllInfoList.forEach(v => {
+        if (v.p_id === scope.row.pId) {
+          curItem = v
+        }
+      })
+      console.log('编辑路由传递的数据', JSON.stringify(curItem))
 
       // 跳转
       router.push({
         path: '/parttime/list/edit',
         query: {
-          dataList: JSON.stringify(state.parttimeAllInfoList[scope.$index])
+          dataList: JSON.stringify(curItem) // 当前行的p_id对应的兼职数据
         }
       })
     }
