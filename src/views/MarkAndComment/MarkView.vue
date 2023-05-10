@@ -68,8 +68,9 @@
               </template>
             </el-table-column>
 
-            <!--评分时间-->
-            <el-table-column prop="markTime" label="评分时间" width="180" align="center"></el-table-column>
+            <!--评分时间，按日期升序排序，而评论数据默认按照兼职表的兼职记录找到各自报名，再由报名找到评论数据 这样的顺序排序-->
+            <el-table-column prop="markTime" label="评分时间" width="180" align="center" sortable
+              :default-sort="{prop: 'markTime', order: 'ascending'}"/>
           </el-table>
         </div>
       </div>

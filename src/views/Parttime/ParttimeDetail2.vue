@@ -94,8 +94,8 @@
         <!--评论-->
         <div class="comment-box">
           <!--有评论数据-->
-          <vue3-seamless-scroll class="scroll-box" v-if="comment.length > 0" :list="comment" :step="0.13"
-            :limitScrollNum="5" :hover="true">
+          <vue3-seamless-scroll class="scroll-box" v-if="comment.length > 0" :list="comment" :step="0.15"
+            :limitScrollNum="4" :hover="true">
             <div class="content-box" v-for="(item, index) in comment" :key="index" :value="item" :label="item">
               <div class="top">
                 <div class="time">{{item.createTime}}</div>
@@ -726,7 +726,7 @@ export default {
               }
             }
             .content{
-              width:100%;
+              width:93%;
               height:auto;
               text-align: left;
 
@@ -735,7 +735,7 @@ export default {
               color: #f69920;
               font-family: TsangerYuYangT_W04_W04;
               margin-top: 6px;
-              padding-left: 40px;
+              padding-left: 30px;
             }
           }
         }

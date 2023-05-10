@@ -7,7 +7,6 @@
 <script>
 import { reactive, toRefs, onMounted, onBeforeMount, nextTick, watch } from 'vue'
 import * as echarts from 'echarts' // 引入
-// import moment from 'moment'
 
 export default {
   name: 'AnalyzeChart3',
@@ -177,7 +176,7 @@ export default {
               }
             },
             confine: true, // 限制在图表区域内
-            triggerOn: 'click', // 触发条件
+            triggerOn: 'mousemove|click', // 触发条件
             textStyle: { // 悬浮框中文字的样式
               fontSize: 13,
               fontFamily: 'DingTalk_JinBuTi_Regular'
@@ -211,11 +210,119 @@ export default {
           series: series
         }
         myChart.setOption(options)
+
+        // 定时，每3s自动切换
+        let curIdx = -1
+        let interval = setInterval(() => { // 定时器
+          // 1.取消之前的高亮
+          myChart.dispatchAction({
+            type: 'downplay',
+            seriesIndex: 0,
+            dataIndex: curIdx
+          })
+
+          // 2.隐藏之前的tooltip
+          myChart.dispatchAction({
+            type: 'hideTip',
+            seriesIndex: 0,
+            dataIndex: curIdx
+          })
+
+          // 3.修改当前下标
+          curIdx = (curIdx + 1) % series[0].data.length // 取名额数数组长度
+
+          // 4.当前位置高亮
+          myChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: curIdx
+          })
+
+          // 5.显示tooltip
+          myChart.dispatchAction({
+            type: 'showTip',
+            seriesIndex: 0,
+            dataIndex: curIdx
+          })
+        }, 3000) // 设置自动切换高亮图形的定时器
+
+        // 鼠标悬停时
+        myChart.on('mouseover', (params) => {
+          // 1.清空定时器
+          clearInterval(interval)
+
+          // 2.之前位置的取消高亮
+          myChart.dispatchAction({
+            type: 'downplay',
+            seriesIndex: 0,
+            dataIndex: curIdx
+          })
+
+          // 3.修改当前下标
+          curIdx = (curIdx + 1) % series[0].data.length // 取名额数数组长度
+
+          // 4.当前悬停的位置高亮
+          myChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: params.dataIndex // 悬停所在位置
+          })
+        })
+
+        // 鼠标移开后，继续自动切换
+        myChart.on('mouseout', (params) => {
+          // 1.若定时器存在，清空定时器
+          if (interval) {
+            clearInterval(interval)
+          }
+
+          // 2.取消悬停位置的高亮
+          myChart.dispatchAction({
+            type: 'downplay',
+            seriesIndex: 0,
+            dataIndex: params.dataIndex
+          })
+
+          // 3.重新设置定时器，继续从原来的位置开始切换
+          interval = setInterval(() => {
+            // 3-1.之前位置的取消高亮
+            myChart.dispatchAction({
+              type: 'downplay',
+              seriesIndex: 0,
+              dataIndex: curIdx
+            })
+
+            // 3-2.隐藏之前的tooltip
+            myChart.dispatchAction({
+              type: 'hideTip',
+              seriesIndex: 0,
+              dataIndex: curIdx
+            })
+
+            // 3-3.修改当前下标
+            curIdx = (curIdx + 1) % series[0].data.length
+
+            // 3-4.当前位置高亮
+            myChart.dispatchAction({
+              type: 'highlight',
+              seriesIndex: 0,
+              dataIndex: curIdx
+            })
+
+            // 3-5.显示tooltip
+            myChart.dispatchAction({
+              type: 'showTip',
+              seriesIndex: 0,
+              dataIndex: curIdx
+            })
+          }, 3000)
+        })
       })
     }
 
     onMounted(() => {
-      SetChart()
+      // 这里不能加setchart
+      // SetChart()
     })
 
     return {

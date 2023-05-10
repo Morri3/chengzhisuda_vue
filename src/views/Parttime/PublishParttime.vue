@@ -288,21 +288,24 @@ export default {
 
               state.active = 2 // 更新时间线进度
 
-              // 跳转到兼职首页
-              router.push({
-                path: '/parttime',
-                query: {
-                  refresh: true
-                }
-              })
+              // 先显示时间线更新进度，隔0.4s再跳转路由
+              setTimeout(() => {
+                // 跳转到兼职首页
+                router.push({
+                  path: '/parttime',
+                  query: {
+                    refresh: true
+                  }
+                })
 
-              ElNotification({
-                title: '成功啦',
-                message: '发布成功',
-                type: 'success',
-                position: 'top-right', // 右上
-                offset: 60
-              })
+                ElNotification({
+                  title: '成功啦',
+                  message: '发布成功',
+                  type: 'success',
+                  position: 'top-right', // 右上
+                  offset: 60
+                })
+              }, 400)
             }
           })
           .catch(err => {

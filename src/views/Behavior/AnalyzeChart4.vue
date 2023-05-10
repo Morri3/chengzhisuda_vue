@@ -7,7 +7,6 @@
 <script>
 import { reactive, toRefs, onMounted, onBeforeMount, nextTick, watch } from 'vue'
 import * as echarts from 'echarts' // 引入
-// import moment from 'moment'
 
 export default {
   name: 'AnalyzeChart4',
@@ -53,6 +52,7 @@ export default {
       nextTick(() => {
         const myChart = echarts.init(document.getElementById('chart4')) // 声明组件
 
+        // step1
         let stuNames = [] // 数组
         let numNames = [] // 数组
         for (let i = 0; i < (JSON.parse(props.data)).length; i++) {
@@ -67,11 +67,11 @@ export default {
         // 颜色数组
         const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#60E4FD', '#6A60FD', '#FD60AC']
 
-        // 生成不重复随机数
+        // step2：生成不重复随机数
         const numArr = []
         random(numArr, 0, 7, 4)
 
-        // 构造堆叠柱状图数据
+        // step3：构造堆叠柱状图数据
         const series = []
         for (let i = 0; i < numNames.length; i++) {
           const obj = {
@@ -91,7 +91,7 @@ export default {
           series.push(obj)
         }
 
-        // 处理series的data，按照相同stuName进行堆叠
+        // step4：处理series的data，嵌套for循环遍历传来的数组+series，按照相同stuName对指标数值进行堆叠
         JSON.parse(props.data).forEach((v1) => {
           series.forEach((v2) => {
             // series中遍历的v2的数量名称 与 当前遍历的源数据中的数量名称相同，
@@ -103,7 +103,7 @@ export default {
           })
         })
 
-        // 先把每个学生的数据放在一个对象中
+        // step5：先把每个学生的数据放在一个对象中，分别遍历原数组，将该学生的三指标值加入numArr数组
         const dataInfo = {}
         JSON.parse(props.data).forEach((item, index) => {
           const { stuName } = item // 解构，等价于const obj = item; const stuName = obj.stuName;
@@ -116,8 +116,8 @@ export default {
           }
           dataInfo[stuName].numArr.push(item) // 数据加入数组
         })
-        const list = Object.values(dataInfo) // list为处理后的数据
-        // console.log('list', list)
+        const list = Object.values(dataInfo) // 对象dataInfo中找到可枚举属性值，构造成数组list
+        console.log('list', list)
 
         // 构造折线图数据
         const percent = [] // 存放每个学生的录用率的对象数组（包含姓名+录用率）
@@ -139,7 +139,7 @@ export default {
                 }
                 percent.push(obj)
               } else {
-                // 总和为0
+                // 总和为0，则百分比为0，否则会显示NaN
                 const obj = {
                   stuName: list[i].stuName,
                   percent: 0
@@ -168,6 +168,7 @@ export default {
           yAxisIndex: 0 // 指定y轴，默认左侧是0
         }
         series.push(lineObj)
+        // console.log('series', series)
 
         // 选项
         const options = {
@@ -185,36 +186,25 @@ export default {
             axisPointer: {
               type: 'shadow'
             },
-            // padding: [10, 110, 10, 10], // 内边距
-            // formatter: function (params) {
-            //   let res = `
-            //               <div>
-            //                 <div style='display: inline-block; width: 10px; height: 20px;
-            //                   color: #F7A82B;'>
-            //                   ${params[0].name}
-            //                 </div>
-            //               </div>
-            //             `
-            //   let idx = 0
-            //   params.forEach(v => {
-            //     const nameArr = ['报名数', '录用数', '取消数', '录用率']
-            //     res += `
-            //             <div>
-            //               <div style='display: inline-block; width: 10px; height: 20px;
-            //                 color: ${color[numArr[idx]]}'>
-            //                 ● ${nameArr[idx]}：${v.value}
-            //               </div>
-            //             </div>
-            //            `
-            //     idx = (idx + 1) % 4 // idx取下一个位置的
-            //   })
-            //   return res
-            // },
             // 悬浮框中文字的样式
             textStyle: {
               fontSize: 13,
               fontFamily: 'DingTalk_JinBuTi_Regular'
             }
+          },
+          // 图例
+          legend: {
+            bottom: 0,
+            left: 'center',
+            icon: 'circle',
+            // 文字样式
+            textStyle: {
+              color: '#000000',
+              fontSize: 12
+            },
+            itemWidth: 8,
+            itemHeight: 8,
+            itemGap: 30 // 图例间隙
           },
           // 宫格
           grid: {
@@ -223,20 +213,6 @@ export default {
             bottom: '62',
             right: '45',
             left: '55'
-          },
-          // 图例
-          legend: {
-            bottom: 0,
-            left: 'center',
-            // 文字样式
-            textStyle: {
-              color: '#000000',
-              fontSize: 12
-            },
-            icon: 'circle',
-            itemWidth: 8,
-            itemHeight: 8,
-            itemGap: 30 // 图例间隙
           },
           // x轴
           xAxis: [{

@@ -7,7 +7,6 @@
 <script>
 import { reactive, toRefs, onMounted, onBeforeMount, nextTick, watch } from 'vue'
 import * as echarts from 'echarts' // 引入
-// import moment from 'moment'
 
 export default {
   name: 'AnalyzeChart1',
@@ -136,8 +135,17 @@ export default {
         }
         myChart.setOption(options)
 
-        // 定时器
+        // 定时器，每3s元素循环右移一位
         setInterval(() => {
+          // 1.日期数组循环右移
+          const first1 = time.shift() // 弹出第一个元素，并返回该元素
+          time.push(first1) // 原来的第一个元素加入数组最后
+
+          // 2.发布数数组循环右移
+          const first2 = num.shift() // 弹出第一个元素，并返回该元素
+          num.push(first2) // 原来的第一个元素加入数组最后
+
+          // 3.设置x轴标签、series数据
           myChart.setOption({
             xAxis: [{ data: time }],
             series: [{ data: num }]
@@ -147,7 +155,8 @@ export default {
     }
 
     onMounted(() => {
-      SetChart()
+      // 这里若加setchart，echart图数据会多加载一次undefined
+      // SetChart()
     })
 
     return {

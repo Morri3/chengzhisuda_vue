@@ -494,77 +494,16 @@ export default {
                   }
                 }
 
-                // 处理校园经历
+                // 创建校园经历等四个栏目的空内容
                 const list1 = []
-                // if (res.data.data[i].campusExpList.length > 0) {
-                //   for (let j = 0; j < res.data.data[i].campusExpList.length; j++) {
-                //     if ((res.data.data[i].campusExpList)[j].hasContent === 1) {
-                //       list1.push({
-                //         time: (res.data.data[i].campusExpList)[j].time,
-                //         title: (res.data.data[i].campusExpList)[j].title,
-                //         content: (res.data.data[i].campusExpList)[j].content
-                //       })
-                //     }
-                //   }
-                // }
-
-                // 处理教育背景
                 const list2 = {}
-                // if (res.data.data[i].educationBgList.length > 0) {
-                //   // 有数据
-                //   for (let j = 0; j < res.data.data[i].educationBgList.length; j++) {
-                //     if ((res.data.data[i].educationBgList)[j].hasContent === 1) {
-                //       list2 = {
-                //         time: (res.data.data[i].educationBgList)[j].time,
-                //         title: (res.data.data[i].educationBgList)[j].title,
-                //         content: (res.data.data[i].educationBgList)[j].content
-                //       }
-                //     }
-                //   }
-                // }
-
-                // 处理项目经历
                 const list3 = []
-                // if (res.data.data[i].projectExpList.length > 0) {
-                //   // 有数据
-                //   for (let j = 0; j < res.data.data[i].projectExpList.length; j++) {
-                //     if ((res.data.data[i].projectExpList)[j].hasContent === 1) {
-                //       list3.push({
-                //         time: (res.data.data[i].projectExpList)[j].time,
-                //         title: (res.data.data[i].projectExpList)[j].title,
-                //         content: (res.data.data[i].projectExpList)[j].content
-                //       })
-                //     }
-                //   }
-                // }
-
-                // 处理专业技能
                 const list4 = []
-                // if (res.data.data[i].professionalSkillList.length > 0) {
-                //   // 有数据
-                //   for (let j = 0; j < res.data.data[i].professionalSkillList.length; j++) {
-                //     if ((res.data.data[i].professionalSkillList)[j].hasContent === 1) {
-                //       list4.push({
-                //         content: (res.data.data[i].professionalSkillList)[j].content
-                //       })
-                //     }
-                //   }
-                // }
 
                 // 处理简历图片【若简历未上传=没有简历图片，后端没有setUrl这个字段】
                 const url = ''
                 const urls = []
                 const hasUrl = 0 // 是否有简历图片
-                // if (res.data.data[i].memo !== '简历为空') {
-                //   console.log('url', res.data.data[i].url)
-                //   if (res.data.data[i].url !== null) {
-                //     // 有简历图片
-                //     hasUrl = 1
-                //     console.log('可预览URL', (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4))
-                //     url = (res.data.data[i].url).substring(0, (res.data.data[i].url).indexOf('.jpg') + 4) // 获取可访问部分的url，在minio中设置public的桶访问权限
-                //     urls.push(url)
-                //   }
-                // }
 
                 list.push({
                   name: res.data.data[i].p_name,

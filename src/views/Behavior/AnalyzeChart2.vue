@@ -7,7 +7,6 @@
 <script>
 import { reactive, toRefs, onMounted, onBeforeMount, nextTick, watch } from 'vue'
 import * as echarts from 'echarts' // 引入
-// import moment from 'moment'
 
 export default {
   name: 'AnalyzeChart2',
@@ -67,12 +66,12 @@ export default {
         // 颜色数组
         const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#60E4FD', '#6A60FD', '#FD60AC']
 
-        // 构造series
-        const series = []
         // 生成不重复随机数
         const numArr = []
         random(numArr, 0, 7, 3)
 
+        // 构造series
+        const series = []
         for (let i = 0; i < numNames.length; i++) {
           const obj = {
             name: numNames[i],
