@@ -67,11 +67,11 @@ export default {
         // console.log('指标名称', numNames)
 
         // 颜色数组
-        const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#60E4FD', '#6A60FD', '#FD60AC']
+        const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#22CEFC', '#60E4FD', '#6A60FD', '#FD60AC', '#FC2266']
 
         // step2：生成不重复随机数
         const numArr = []
-        random(numArr, 0, 7, 4)
+        random(numArr, 0, 9, 4) // 9个颜色中选4个
 
         // step3：构造堆叠柱状图数据
         const series = []

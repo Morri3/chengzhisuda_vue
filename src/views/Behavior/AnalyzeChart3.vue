@@ -60,11 +60,11 @@ export default {
         }
 
         // 颜色数组
-        const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#60E4FD', '#6A60FD', '#FD60AC']
+        const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#22CEFC', '#60E4FD', '#6A60FD', '#FD60AC', '#FC2266']
 
         // 构造随机数
         const numArr = []
-        random(numArr, 0, 7, 3)
+        random(numArr, 0, 9, 9) // 9个颜色中选9个
 
         const data = []
         for (let i = 0; i < (JSON.parse(props.data)).length; i++) {
@@ -85,7 +85,7 @@ export default {
             },
             // 两个item的间隙
             {
-              value: 0.5,
+              value: 0.3,
               name: '',
               tooltip: { // 不显示悬浮框
                 show: false
@@ -194,17 +194,29 @@ export default {
           },
           // 图例
           legend: {
-            bottom: 0,
+            bottom: 15,
             left: 'center',
+            // 图例滚动显示
+            type: 'scroll',
+            // 图例控制块
+            pageButtonGap: 10, // 图例控制块与图例的间距
+            pageFormatter: '{current} / {total}', // 图例控制块的格式
+            pageIconColor: '#7F83F7', // 翻页按钮颜色
+            pageIconInactiveColor: '#BEBEBE', // 翻页按钮未激活时颜色
+            pageIconSize: 13, // 翻页按钮大小
+            pageTextStyle: { // 图例控制块文本的样式
+              fontFamily: 'DingTalk_JinBuTi_Regular'
+            },
             // 文字样式
             textStyle: {
               color: '#000000',
               fontSize: 12
             },
             icon: 'circle',
-            itemWidth: 8,
-            itemHeight: 8,
-            itemGap: 5 // 图例间隙
+            padding: [4, 0, 0, 0], // 图例内边距
+            itemWidth: 8, // 图例宽度
+            itemHeight: 14, // 图例高度
+            itemGap: 10 // 图例间隙
           },
           // 数据
           series: series
