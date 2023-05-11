@@ -63,6 +63,8 @@ export default {
         // 数组去重
         stuNames = [...new Set(stuNames)]
         numNames = [...new Set(numNames)]
+        // console.log('学生姓名', stuNames)
+        // console.log('指标名称', numNames)
 
         // 颜色数组
         const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#60E4FD', '#6A60FD', '#FD60AC']
@@ -94,9 +96,10 @@ export default {
         // step4：处理series的data，嵌套for循环遍历传来的数组+series，按照相同stuName对指标数值进行堆叠
         JSON.parse(props.data).forEach((v1) => {
           series.forEach((v2) => {
-            // series中遍历的v2的数量名称 与 当前遍历的源数据中的数量名称相同，
+            // series中遍历的v2的指标名称 与 当前遍历的源数据中的指标名称相同，
             // 且当前遍历的源数据中的学生姓名在stuNames数组中，
-            // 就把其所在数组中的位置上的数据设置为遍历的v1的num值
+            // 就遍历的v1的指标值赋值给数组的指定位置
+            // 相当于从源数组中，获取所有的报名数，构造成一个数组，赋值给series中报名数所在对象的data数组
             if (v2.name === v1.numName && stuNames.indexOf(v1.stuName) > -1) {
               v2.data[stuNames.indexOf(v1.stuName)] = v1.num
             }
@@ -168,7 +171,7 @@ export default {
           yAxisIndex: 0 // 指定y轴，默认左侧是0
         }
         series.push(lineObj)
-        // console.log('series', series)
+        console.log('series', series)
 
         // 选项
         const options = {

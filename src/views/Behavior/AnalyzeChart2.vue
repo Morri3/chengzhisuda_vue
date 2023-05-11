@@ -59,18 +59,20 @@ export default {
           numNames.push((JSON.parse(props.data))[i].numName)
         }
 
-        // 数组去重
+        // 1.数组去重
+        // step1：...new Set(XXX)实现去重操作，结果是'a' 'b' ...
+        // step2：外面套一层[]转变为数组
         pNames = [...new Set(pNames)]
         numNames = [...new Set(numNames)]
 
         // 颜色数组
         const color = ['#9459FD', '#FDD760', '#FD8460', '#99FD60', '#60E4FD', '#6A60FD', '#FD60AC']
 
-        // 生成不重复随机数
+        // 2.生成不重复随机数
         const numArr = []
         random(numArr, 0, 7, 3)
 
-        // 构造series
+        // 3.构造堆叠柱状图数据
         const series = []
         for (let i = 0; i < numNames.length; i++) {
           const obj = {
@@ -89,19 +91,20 @@ export default {
           series.push(obj)
         }
 
-        // 处理series的data，按照相同pName进行堆叠
+        // 3-2.按照相同兼职名称对指标数值进行堆叠
         JSON.parse(props.data).forEach((v1) => {
           series.forEach((v2) => {
-            // series中遍历的v2的数量名称 与 当前遍历的源数据中的数量名称相同，
-            // 且当前遍历的源数据中的兼职名称在pNames数组中，
-            // 就把其所在数组中的位置上的数据设置为遍历的v1的num值
+            // series中遍历的v2的指标名称 与 当前遍历的源数据中的指标名称相同，
+            // 且当前遍历的源数据中的学生姓名在stuNames数组中，
+            // 就遍历的v1的指标值赋值给数组的指定位置
+            // 相当于从源数组中，获取所有的报名数，构造成一个数组，赋值给series中报名数所在对象的data数组
             if (v2.name === v1.numName && pNames.indexOf(v1.pName) > -1) {
               v2.data[pNames.indexOf(v1.pName)] = v1.num
             }
           })
         })
 
-        // 选项
+        // 4.构造echarts图的选项
         const options = {
           // 标题
           title: {
