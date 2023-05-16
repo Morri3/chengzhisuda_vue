@@ -83,7 +83,7 @@ export default {
             emphasis: { // 鼠标悬停在柱子上时的高亮样式
               focus: 'series'
             },
-            itemStyle: { // 折线+图例的颜色
+            itemStyle: { // 堆叠柱状图柱子颜色
               color: color[numArr[i]] // 随机颜色
             },
             data: [],

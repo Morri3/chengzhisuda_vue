@@ -83,7 +83,7 @@ export default {
               focus: 'series'
             },
             barWidth: '30%',
-            itemStyle: { // 折线+图例的颜色
+            itemStyle: { // 堆叠柱状图柱子颜色
               color: color[numArr[i]] // 随机颜色
             },
             data: []
