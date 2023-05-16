@@ -124,7 +124,7 @@ export default {
     height: calc( 100% - 54px - 40px );
     // 超出自动换行
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row wrap; // 水平换行
     justify-content: center;
     align-content: center;
 
