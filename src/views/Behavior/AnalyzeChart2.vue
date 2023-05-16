@@ -79,7 +79,7 @@ export default {
             name: numNames[i],
             type: 'bar', // 柱状图
             stack: 'As', // 堆叠
-            emphasis: {
+            emphasis: { // 鼠标悬停在柱子上时的高亮样式
               focus: 'series'
             },
             barWidth: '30%',
