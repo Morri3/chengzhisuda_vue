@@ -1,9 +1,9 @@
 # chengzhisuda_vue
-毕设“城职速达”vue管理后台
+Graduation Thesis: Design and Development of Campus Part-time Platform Based on Android Studio (Vue)
 
 
 
-1、安装依赖
+1、install dependencies
 
 `npm i`
 
@@ -11,7 +11,7 @@
 
 
 
-2、运行项目
+2. run the project
 
 `npm run serve`
 
